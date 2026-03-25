@@ -1,0 +1,73 @@
+RQ1 notes support summary
+Purpose: preserve the full narrative notes used to document coding decisions,
+algorithm adjudication, and methodological clarification for the paper.
+
+Notes column: notes_coding
+Total analyzed rows: 280
+Rows with non-empty notes: 180
+Full note trail file: rq1_supporting/rq1_notes_full_context.csv
+
+Detected issue patterns in the prose notes:
+- Algorithm not explicit or unspecified: 60
+- Needs full-text confirmation: 60
+- Outside codebook or forced mapping: 65
+- Multiple models compared: 39
+- Primary model chosen from comparisons: 39
+- Hybrid or fusion architecture: 9
+- Explainability or validation detail: 2
+
+Representative examples by issue pattern:
+
+Algorithm not explicit or unspecified (60)
+- Study 109: Identifying autism from neural representations of social interactions: Neurocognitive markers of autism
+  Note: Algoritmo principal no explícito o fuera del codebook; Confirmar algoritmo principal en full-text
+- Study 254: Low-Rank Representation for Multi-center Autism Spectrum Disorder Identification.
+  Note: Algoritmo principal no explícito o fuera del codebook; Confirmar algoritmo principal en full-text; Se comparan varios modelos; se eligió el principal/mejor reportado
+- Study 267: Risk assessment for parents who suspect their child has autism spectrum disorder: Machine learning approach
+  Note: Algoritmo principal no explícito o fuera del codebook; Confirmar algoritmo principal en full-text
+
+Needs full-text confirmation (60)
+- Study 109: Identifying autism from neural representations of social interactions: Neurocognitive markers of autism
+  Note: Algoritmo principal no explícito o fuera del codebook; Confirmar algoritmo principal en full-text
+- Study 254: Low-Rank Representation for Multi-center Autism Spectrum Disorder Identification.
+  Note: Algoritmo principal no explícito o fuera del codebook; Confirmar algoritmo principal en full-text; Se comparan varios modelos; se eligió el principal/mejor reportado
+- Study 267: Risk assessment for parents who suspect their child has autism spectrum disorder: Machine learning approach
+  Note: Algoritmo principal no explícito o fuera del codebook; Confirmar algoritmo principal en full-text
+
+Outside codebook or forced mapping (65)
+- Study 109: Identifying autism from neural representations of social interactions: Neurocognitive markers of autism
+  Note: Algoritmo principal no explícito o fuera del codebook; Confirmar algoritmo principal en full-text
+- Study 254: Low-Rank Representation for Multi-center Autism Spectrum Disorder Identification.
+  Note: Algoritmo principal no explícito o fuera del codebook; Confirmar algoritmo principal en full-text; Se comparan varios modelos; se eligió el principal/mejor reportado
+- Study 267: Risk assessment for parents who suspect their child has autism spectrum disorder: Machine learning approach
+  Note: Algoritmo principal no explícito o fuera del codebook; Confirmar algoritmo principal en full-text
+
+Multiple models compared (39)
+- Study 108: Identification of neural connectivity signatures of autism using machine learning
+  Note: Se comparan varios modelos; se eligió el principal/mejor reportado
+- Study 254: Low-Rank Representation for Multi-center Autism Spectrum Disorder Identification.
+  Note: Algoritmo principal no explícito o fuera del codebook; Confirmar algoritmo principal en full-text; Se comparan varios modelos; se eligió el principal/mejor reportado
+- Study 95: Physician Versus Large Language Model Chatbot Responses to Web-Based Questions From Autistic Patients in Chinese: Cross-Sectional Comparative Analysis
+  Note: Compara respuestas de médicos vs LLMs a preguntas web; no mapea claramente a una etapa clínica RQ1.
+
+Primary model chosen from comparisons (39)
+- Study 108: Identification of neural connectivity signatures of autism using machine learning
+  Note: Se comparan varios modelos; se eligió el principal/mejor reportado
+- Study 254: Low-Rank Representation for Multi-center Autism Spectrum Disorder Identification.
+  Note: Algoritmo principal no explícito o fuera del codebook; Confirmar algoritmo principal en full-text; Se comparan varios modelos; se eligió el principal/mejor reportado
+- Study 292: Performance of case-control rare copy number variation annotation in classification of autism
+  Note: Clasificación basada en rare CNV; conditional inference forest rinde mejor.
+
+Hybrid or fusion architecture (9)
+- Study 82: Autism Spectrum Disorder detection framework for children based on federated learning integrated CNN-LSTM
+  Note: Marco federado CNN-LSTM con datasets multimodales de cribado; arquitectura híbrida fuera del codebook.
+- Study 282: DeepASDPred: a CNN-LSTM-based deep learning method for Autism spectrum disorders risk RNA identification
+  Note: Predicción de RNAs de riesgo ASD con arquitectura CNN-LSTM; se marca prescreening/risk.
+- Study 9: An automated assessment framework for atypical prosody and stereotyped idiosyncratic phrases related to autism spectrum disorder
+  Note: “End-to-end models: CNN, RNN(BLSTM), CNN+RNN(GRU/LSTM) on spectrograms; baseline OpenSMILE+linear SVM; text task uses linear SVM with n-gram/dep-treebank/TF-IDF/LIWC; score-level fusion.
+
+Explainability or validation detail (2)
+- Study 38: Machine learning analysis of pregnancy data enables early identification of a subpopulation of newborns with ASD
+  Note: “Main classifier: Gradient Boosting Decision Trees implemented with XGBoost; feature selection via Lasso (automatic / semi-automatic) + SHAP interpretability; nested CV.
+- Study 1: A Clinically Interpretable Approach for Early Detection of Autism Using Machine Learning With Explainable AI
+  Note: “Comparative ML study: Naive Bayes, SVM, Random Forest; RF best; explainability via SHAP; 5-fold CV.”

@@ -1,0 +1,136 @@
+stage,algorithm_display,source_modality_display,count
+Diagnosis,CNN,Audio / Voice,1
+Diagnosis,CNN,Image,8
+Diagnosis,CNN,Multimodal,1
+Diagnosis,CNN,Not specified,6
+Diagnosis,CNN,Physiological signals,8
+Diagnosis,Clustering (k-means / GMM / ...),Multimodal,1
+Diagnosis,Clustering (k-means / GMM / ...),Not specified,4
+Diagnosis,Clustering (k-means / GMM / ...),Physiological signals,1
+Diagnosis,Clustering (k-means / GMM / ...),Text / NLP,2
+Diagnosis,Decision Tree,Image,1
+Diagnosis,Decision Tree,Not specified,3
+Diagnosis,Decision Tree,Physiological signals,3
+Diagnosis,Decision Tree,Text / NLP,2
+Diagnosis,Logistic Regression,Image,2
+Diagnosis,Logistic Regression,Not specified,5
+Diagnosis,Logistic Regression,Physiological signals,2
+Diagnosis,Logistic Regression,Text / NLP,1
+Diagnosis,MLP,Image,4
+Diagnosis,MLP,Not specified,4
+Diagnosis,MLP,Physiological signals,4
+Diagnosis,Other / unclear,Audio / Voice,3
+Diagnosis,Other / unclear,Image,12
+Diagnosis,Other / unclear,Multimodal,11
+Diagnosis,Other / unclear,Not specified,14
+Diagnosis,Other / unclear,Physiological signals,18
+Diagnosis,Other / unclear,Text / NLP,5
+Diagnosis,Other algorithms,Image,10
+Diagnosis,Other algorithms,Multimodal,1
+Diagnosis,Other algorithms,Not specified,2
+Diagnosis,Other algorithms,Physiological signals,2
+Diagnosis,Other algorithms,Text / NLP,2
+Diagnosis,Random Forest,Image,1
+Diagnosis,Random Forest,Not specified,7
+Diagnosis,Random Forest,Physiological signals,2
+Diagnosis,Random Forest,Text / NLP,2
+Diagnosis,SVM,Image,4
+Diagnosis,SVM,Not specified,7
+Diagnosis,SVM,Physiological signals,5
+Diagnosis,SVM,Text / NLP,1
+Diagnosis,Transformer,Image,2
+Diagnosis,Transformer,Physiological signals,3
+Diagnosis,Transformer,Text / NLP,1
+Monitoring/intervention,CNN,Image,5
+Monitoring/intervention,CNN,Physiological signals,1
+Monitoring/intervention,CNN,Text / NLP,1
+Monitoring/intervention,Clustering (k-means / GMM / ...),Physiological signals,1
+Monitoring/intervention,Clustering (k-means / GMM / ...),Text / NLP,1
+Monitoring/intervention,Decision Tree,Image,1
+Monitoring/intervention,Decision Tree,Not specified,1
+Monitoring/intervention,Decision Tree,Physiological signals,1
+Monitoring/intervention,Logistic Regression,Image,3
+Monitoring/intervention,Logistic Regression,Physiological signals,1
+Monitoring/intervention,Logistic Regression,Text / NLP,1
+Monitoring/intervention,MLP,Image,2
+Monitoring/intervention,MLP,Not specified,3
+Monitoring/intervention,MLP,Physiological signals,2
+Monitoring/intervention,Other / unclear,Audio / Voice,1
+Monitoring/intervention,Other / unclear,Image,5
+Monitoring/intervention,Other / unclear,Multimodal,6
+Monitoring/intervention,Other / unclear,Not specified,10
+Monitoring/intervention,Other / unclear,Physiological signals,6
+Monitoring/intervention,Other / unclear,Text / NLP,5
+Monitoring/intervention,Other algorithms,Image,2
+Monitoring/intervention,Other algorithms,Physiological signals,1
+Monitoring/intervention,Other algorithms,Text / NLP,1
+Monitoring/intervention,Random Forest,Image,1
+Monitoring/intervention,Random Forest,Multimodal,2
+Monitoring/intervention,Random Forest,Not specified,3
+Monitoring/intervention,Random Forest,Physiological signals,1
+Monitoring/intervention,SVM,Image,1
+Monitoring/intervention,SVM,Not specified,3
+Monitoring/intervention,SVM,Physiological signals,2
+Monitoring/intervention,Transformer,Image,1
+Monitoring/intervention,Transformer,Physiological signals,1
+Monitoring/intervention,Transformer,Text / NLP,2
+Prescreening,CNN,Text / NLP,1
+Prescreening,Decision Tree,Text / NLP,1
+Prescreening,Logistic Regression,Not specified,2
+Prescreening,MLP,Physiological signals,1
+Prescreening,Other / unclear,Not specified,1
+Prescreening,Other / unclear,Text / NLP,1
+Prescreening,Random Forest,Image,1
+Prescreening,Random Forest,Not specified,1
+Prescreening,SVM,Image,1
+Prescreening,SVM,Not specified,1
+Prescreening,Transformer,Not specified,1
+Prognosis,CNN,Image,2
+Prognosis,Clustering (k-means / GMM / ...),Text / NLP,1
+Prognosis,Decision Tree,Not specified,1
+Prognosis,Decision Tree,Physiological signals,2
+Prognosis,Logistic Regression,Image,1
+Prognosis,Logistic Regression,Not specified,1
+Prognosis,MLP,Image,1
+Prognosis,MLP,Not specified,1
+Prognosis,MLP,Physiological signals,2
+Prognosis,Other / unclear,Audio / Voice,1
+Prognosis,Other / unclear,Image,5
+Prognosis,Other / unclear,Multimodal,3
+Prognosis,Other / unclear,Not specified,3
+Prognosis,Other / unclear,Physiological signals,3
+Prognosis,Other / unclear,Text / NLP,4
+Prognosis,Other algorithms,Image,2
+Prognosis,Other algorithms,Not specified,1
+Prognosis,Random Forest,Not specified,4
+Prognosis,Random Forest,Physiological signals,2
+Prognosis,SVM,Image,3
+Prognosis,SVM,Not specified,2
+Prognosis,SVM,Physiological signals,2
+Screening,CNN,Image,5
+Screening,CNN,Not specified,3
+Screening,CNN,Physiological signals,1
+Screening,Clustering (k-means / GMM / ...),Not specified,1
+Screening,Decision Tree,Not specified,3
+Screening,Decision Tree,Physiological signals,1
+Screening,Logistic Regression,Image,2
+Screening,Logistic Regression,Not specified,1
+Screening,Logistic Regression,Text / NLP,1
+Screening,MLP,Audio / Voice,1
+Screening,MLP,Not specified,3
+Screening,MLP,Physiological signals,1
+Screening,Other / unclear,Audio / Voice,1
+Screening,Other / unclear,Image,12
+Screening,Other / unclear,Multimodal,1
+Screening,Other / unclear,Not specified,7
+Screening,Other / unclear,Physiological signals,5
+Screening,Other / unclear,Text / NLP,3
+Screening,Other algorithms,Audio / Voice,1
+Screening,Other algorithms,Image,3
+Screening,Random Forest,Image,1
+Screening,Random Forest,Not specified,3
+Screening,SVM,Image,3
+Screening,SVM,Not specified,3
+Screening,SVM,Physiological signals,4
+Screening,Transformer,Image,1
+Screening,Transformer,Not specified,1

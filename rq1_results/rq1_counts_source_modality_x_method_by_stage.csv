@@ -1,0 +1,83 @@
+stage,source_modality_display,ai_method_display,count
+Diagnosis,Audio / Voice,Deep Learning,1
+Diagnosis,Audio / Voice,Hybrid,1
+Diagnosis,Audio / Voice,Machine Learning,2
+Diagnosis,Image,Deep Learning,20
+Diagnosis,Image,Hybrid,7
+Diagnosis,Image,Machine Learning,14
+Diagnosis,Image,Not specified,3
+Diagnosis,Multimodal,Deep Learning,7
+Diagnosis,Multimodal,Hybrid,4
+Diagnosis,Multimodal,Machine Learning,2
+Diagnosis,Multimodal,Not specified,1
+Diagnosis,Not specified,Deep Learning,21
+Diagnosis,Not specified,Hybrid,4
+Diagnosis,Not specified,Machine Learning,25
+Diagnosis,Not specified,Not specified,2
+Diagnosis,Physiological signals,Deep Learning,28
+Diagnosis,Physiological signals,Hybrid,5
+Diagnosis,Physiological signals,Machine Learning,15
+Diagnosis,Text / NLP,Deep Learning,5
+Diagnosis,Text / NLP,Hybrid,2
+Diagnosis,Text / NLP,Machine Learning,7
+Diagnosis,Text / NLP,Not specified,2
+Monitoring/intervention,Audio / Voice,Machine Learning,1
+Monitoring/intervention,Image,Deep Learning,11
+Monitoring/intervention,Image,Hybrid,2
+Monitoring/intervention,Image,Machine Learning,7
+Monitoring/intervention,Image,Not specified,1
+Monitoring/intervention,Multimodal,Deep Learning,3
+Monitoring/intervention,Multimodal,Hybrid,1
+Monitoring/intervention,Multimodal,Machine Learning,3
+Monitoring/intervention,Multimodal,Not specified,1
+Monitoring/intervention,Not specified,Deep Learning,7
+Monitoring/intervention,Not specified,Hybrid,1
+Monitoring/intervention,Not specified,Machine Learning,10
+Monitoring/intervention,Not specified,Not specified,2
+Monitoring/intervention,Physiological signals,Deep Learning,8
+Monitoring/intervention,Physiological signals,Hybrid,5
+Monitoring/intervention,Physiological signals,Machine Learning,4
+Monitoring/intervention,Text / NLP,Deep Learning,7
+Monitoring/intervention,Text / NLP,Hybrid,1
+Monitoring/intervention,Text / NLP,Machine Learning,2
+Monitoring/intervention,Text / NLP,Not specified,1
+Prescreening,Image,Machine Learning,2
+Prescreening,Not specified,Deep Learning,2
+Prescreening,Not specified,Hybrid,1
+Prescreening,Not specified,Machine Learning,3
+Prescreening,Physiological signals,Deep Learning,1
+Prescreening,Text / NLP,Hybrid,1
+Prescreening,Text / NLP,Machine Learning,2
+Prognosis,Audio / Voice,Deep Learning,1
+Prognosis,Image,Deep Learning,5
+Prognosis,Image,Hybrid,2
+Prognosis,Image,Machine Learning,5
+Prognosis,Image,Not specified,2
+Prognosis,Multimodal,Deep Learning,1
+Prognosis,Multimodal,Machine Learning,2
+Prognosis,Not specified,Deep Learning,4
+Prognosis,Not specified,Machine Learning,9
+Prognosis,Physiological signals,Deep Learning,4
+Prognosis,Physiological signals,Hybrid,3
+Prognosis,Physiological signals,Machine Learning,4
+Prognosis,Text / NLP,Deep Learning,3
+Prognosis,Text / NLP,Hybrid,1
+Prognosis,Text / NLP,Not specified,1
+Screening,Audio / Voice,Deep Learning,2
+Screening,Audio / Voice,Machine Learning,1
+Screening,Image,Deep Learning,13
+Screening,Image,Hybrid,5
+Screening,Image,Machine Learning,8
+Screening,Image,Not specified,1
+Screening,Multimodal,Machine Learning,1
+Screening,Not specified,Deep Learning,9
+Screening,Not specified,Hybrid,5
+Screening,Not specified,Machine Learning,10
+Screening,Not specified,Not specified,1
+Screening,Physiological signals,Deep Learning,4
+Screening,Physiological signals,Hybrid,1
+Screening,Physiological signals,Machine Learning,6
+Screening,Physiological signals,Not specified,1
+Screening,Text / NLP,Deep Learning,1
+Screening,Text / NLP,Hybrid,1
+Screening,Text / NLP,Machine Learning,2

@@ -1,0 +1,15 @@
+algorithm_raw,algorithm_plot
+CNN,CNN
+Clustering (k-means / GMM / ...),Clustering (k-means / GMM / ...)
+Decision Tree,Decision Tree
+Logistic Regression,Logistic Regression
+MLP,MLP
+Other / unclear,Other / unclear
+Autoencoder,Other algorithms
+Naive Bayes,Other algorithms
+RNN/LSTM/GRU,Other algorithms
+XGBoost / GBDT,Other algorithms
+k-NN,Other algorithms
+Random Forest,Random Forest
+SVM,SVM
+Transformer,Transformer

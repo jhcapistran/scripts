@@ -1,9 +1,9 @@
 """
 RQ1 plots generator (no argparse).
 
-This version keeps the legacy overview outputs and adds new stage-faceted
-heatmaps that directly answer the RQ1 wording about the distribution of
-AI methods and algorithms across source modalities and clinical stages.
+This version generates only the stage-resolved outputs that directly answer
+the RQ1 wording about the distribution of AI methods and algorithms across
+source modalities and clinical stages.
 
 Edit the CONFIG section only.
 """
@@ -18,6 +18,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from rich.console import Console
 from rich.table import Table
 
@@ -31,11 +33,13 @@ INPUT_FILES = [
 ]
 SHEET_NAME = 0  # 0 = first sheet
 OUTPUT_DIR = "rq1_results"
+SUPPORTING_DIR = "rq1_supporting"
 
 MODALITY_COL = "modalidad"
 STAGE_COL = "stage_primary"
 AI_METHOD_COL = "tipo_IA"
 ALGORITHM_COL = "AI_algorithm_main"
+NOTES_COL = "notes_coding"
 
 STAGE_FLAG_COLS = {
     "stage_prescreening": "Prescreening",
@@ -45,10 +49,8 @@ STAGE_FLAG_COLS = {
     "stage_monitoring_intervention": "Monitoring/intervention",
 }
 
-AUDIT_NOTES = True
-NOTES_COL = "notes_coding"
-NOTES_TOPK = 40
 ALGORITHM_TOPK = 8
+PAPER_ALGORITHM_TOPK = 5
 # ----------------------------
 
 
@@ -116,6 +118,43 @@ UNCLEAR_ALGORITHM_KEYS = {
     "other",
     "no especificado",
     "not specified",
+}
+
+CORE_OUTPUT_FILES = {
+    "rq1_counts_source_modality_x_method_by_stage.csv",
+    "rq1_counts_algorithm_x_source_modality_by_stage.csv",
+    "rq1_heatmap_source_modality_x_method_by_stage.png",
+    "rq1_heatmap_algorithm_x_source_modality_by_stage.png",
+    "rq1_algorithm_plot_mapping.csv",
+    "rq1_candidate_alluvial.png",
+    "rq1_candidate_panel.png",
+}
+
+SUPPORTING_OUTPUT_FILES = {
+    "rq1_notes_summary.txt",
+    "rq1_notes_full_context.csv",
+}
+
+METHOD_COLORS = {
+    "Machine Learning": "#1f77b4",
+    "Deep Learning": "#d62728",
+    "Hybrid": "#2ca02c",
+    "Not specified": "#7f7f7f",
+}
+STAGE_COLORS = {
+    "Prescreening": "#4c78a8",
+    "Screening": "#f58518",
+    "Diagnosis": "#54a24b",
+    "Prognosis": "#e45756",
+    "Monitoring/intervention": "#72b7b2",
+}
+NEUTRAL_NODE_COLOR = "#d9dde3"
+PLOT_LABELS = {
+    "Physiological signals": "Physiological<br>signals",
+    "Monitoring/intervention": "Monitoring/<br>intervention",
+    "Logistic Regression": "Logistic<br>Regression",
+    "Clustering (k-means / GMM / ...)": "Clustering<br>(k-means/GMM)",
+    "Other algorithms": "Other<br>algorithms",
 }
 
 
@@ -259,34 +298,6 @@ def draw_heatmap(
     return im
 
 
-def save_heatmap(
-    table: pd.DataFrame,
-    outpath: Path,
-    xlabel: str,
-    ylabel: str,
-    title: str,
-    cmap: str = "Blues",
-) -> None:
-    fig_w = max(8, 1.2 * table.shape[1] + 4)
-    fig_h = max(6, 0.65 * table.shape[0] + 3)
-    vmax = int(table.to_numpy().max()) if table.size else 1
-
-    fig, ax = plt.subplots(figsize=(fig_w, fig_h))
-    im = draw_heatmap(
-        ax=ax,
-        table=table,
-        title=title,
-        xlabel=xlabel,
-        ylabel=ylabel,
-        cmap=cmap,
-        vmax=vmax,
-    )
-    fig.colorbar(im, ax=ax, fraction=0.03, pad=0.02)
-    fig.tight_layout()
-    fig.savefig(outpath, dpi=300)
-    plt.close(fig)
-
-
 def save_faceted_heatmaps(
     tables_by_stage: dict[str, pd.DataFrame],
     outpath: Path,
@@ -342,81 +353,434 @@ def save_faceted_heatmaps(
     plt.close(fig)
 
 
-def save_bar(series: pd.Series, outpath: Path, xlabel: str, ylabel: str = "Count") -> None:
-    fig_w = max(8, 0.7 * len(series) + 4)
-    fig, ax = plt.subplots(figsize=(fig_w, 5))
-    ax.bar(series.index.astype(str), series.values)
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
-    ax.tick_params(axis="x", rotation=35)
-    fig.tight_layout()
-    fig.savefig(outpath, dpi=300)
-    plt.close(fig)
+def rgba_from_hex(hex_color: str, alpha: float) -> str:
+    hex_color = hex_color.lstrip("#")
+    r = int(hex_color[0:2], 16)
+    g = int(hex_color[2:4], 16)
+    b = int(hex_color[4:6], 16)
+    return f"rgba({r},{g},{b},{alpha})"
 
 
-# ----------------------------
-# Notes audit helpers
-# ----------------------------
-STOPWORDS = {
-    "the", "a", "an", "and", "or", "of", "to", "in", "on", "for", "with", "by", "from",
-    "as", "at", "is", "are", "was", "were", "be", "been", "being", "this", "that", "these",
-    "those", "it", "its", "we", "they", "their", "our", "not", "no", "yes", "na", "n/a",
-    "el", "la", "los", "las", "un", "una", "unos", "unas", "y", "o", "de", "del", "al",
-    "para", "con", "por", "en", "es", "son", "fue", "eran", "ser", "como", "este", "esta",
-    "estos", "estas", "su", "sus", "no", "si",
-}
-TOKEN_RE = re.compile(r"[a-zA-Z0-9]+(?:'[a-zA-Z0-9]+)?")
+def plot_label(label: str) -> str:
+    return PLOT_LABELS.get(label, label)
+
+
+def sorted_flow_df(flow_df: pd.DataFrame, dim_orders: dict[str, list[str]]) -> pd.DataFrame:
+    ordered = flow_df.copy()
+    sort_cols: list[str] = []
+    for dim, order in dim_orders.items():
+        order_map = {value: idx for idx, value in enumerate(order)}
+        sort_col = f"_{dim}_sort"
+        ordered[sort_col] = ordered[dim].map(order_map).fillna(len(order_map))
+        sort_cols.append(sort_col)
+    return ordered.sort_values(sort_cols + ["count"], ascending=[True] * len(sort_cols) + [False])
+
+
+def build_sankey_trace(
+    flow_df: pd.DataFrame,
+    dim_orders: dict[str, list[str]],
+    link_color_dim: str | None = None,
+) -> go.Sankey:
+    dims = list(dim_orders.keys())
+    present_by_dim = {
+        dim: [value for value in order if value in set(flow_df[dim].dropna().astype(str))]
+        for dim, order in dim_orders.items()
+    }
+
+    node_index: dict[tuple[str, str], int] = {}
+    node_labels: list[str] = []
+    node_colors: list[str] = []
+    node_x: list[float] = []
+    node_y: list[float] = []
+
+    x_positions = np.linspace(0.03, 0.97, len(dims))
+    for x, dim in zip(x_positions, dims):
+        values = present_by_dim[dim]
+        y_positions = [0.5] if len(values) == 1 else np.linspace(0.04, 0.96, len(values))
+        for y, value in zip(y_positions, values):
+            node_index[(dim, value)] = len(node_labels)
+            node_labels.append(plot_label(value))
+            if dim == "ai_method_display":
+                node_colors.append(METHOD_COLORS.get(value, NEUTRAL_NODE_COLOR))
+            elif dim == "stage":
+                node_colors.append(STAGE_COLORS.get(value, NEUTRAL_NODE_COLOR))
+            else:
+                node_colors.append(NEUTRAL_NODE_COLOR)
+            node_x.append(float(x))
+            node_y.append(float(y))
+
+    ordered_flow = sorted_flow_df(flow_df, dim_orders)
+    link_buckets: dict[tuple[int, int, str], int] = {}
+
+    for row in ordered_flow.itertuples(index=False):
+        row_dict = row._asdict()
+        if link_color_dim is None:
+            color = rgba_from_hex("#9aa3ad", 0.28)
+        else:
+            color_key = str(row_dict[link_color_dim])
+            color = rgba_from_hex(METHOD_COLORS.get(color_key, "#9aa3ad"), 0.30)
+        for left_dim, right_dim in zip(dims, dims[1:]):
+            source = node_index[(left_dim, str(row_dict[left_dim]))]
+            target = node_index[(right_dim, str(row_dict[right_dim]))]
+            bucket_key = (source, target, color)
+            link_buckets[bucket_key] = link_buckets.get(bucket_key, 0) + int(row_dict["count"])
+
+    sources: list[int] = []
+    targets: list[int] = []
+    values: list[int] = []
+    colors: list[str] = []
+    for (source, target, color), value in link_buckets.items():
+        sources.append(source)
+        targets.append(target)
+        values.append(value)
+        colors.append(color)
+
+    return go.Sankey(
+        arrangement="fixed",
+        node=dict(
+            pad=16,
+            thickness=18,
+            line=dict(color="white", width=0.8),
+            label=node_labels,
+            color=node_colors,
+            x=node_x,
+            y=node_y,
+            hovertemplate="%{label}<extra></extra>",
+        ),
+        link=dict(
+            source=sources,
+            target=targets,
+            value=values,
+            color=colors,
+            hovertemplate="Count: %{value}<extra></extra>",
+        ),
+    )
+
+
+def save_candidate_alluvial(
+    flow_df: pd.DataFrame,
+    modality_order: list[str],
+    method_order: list[str],
+    algorithm_order: list[str],
+    outpath: Path,
+) -> None:
+    dim_orders = {
+        "stage": STAGE_ORDER,
+        "source_modality_display": modality_order,
+        "ai_method_display": method_order,
+        "algorithm_paper": algorithm_order,
+    }
+    trace = build_sankey_trace(
+        flow_df=flow_df,
+        dim_orders=dim_orders,
+        link_color_dim="ai_method_display",
+    )
+    fig = go.Figure(trace)
+    fig.update_layout(
+        width=1800,
+        height=950,
+        font=dict(size=11, family="Arial"),
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        margin=dict(l=40, r=40, t=90, b=30),
+        title=dict(
+            text="RQ1 Candidate A. Consolidated alluvial: stage -> source modality -> AI method -> algorithm family",
+            x=0.5,
+        ),
+    )
+    for x, label in zip(
+        np.linspace(0.03, 0.97, 4),
+        ["Clinical stage", "Source modality", "AI method", "Algorithm family"],
+    ):
+        fig.add_annotation(
+            x=x,
+            y=1.08,
+            xref="paper",
+            yref="paper",
+            text=f"<b>{label}</b>",
+            showarrow=False,
+            font=dict(size=12),
+        )
+    fig.write_image(outpath, scale=2)
+
+
+def save_candidate_panel(
+    flow_df: pd.DataFrame,
+    modality_order: list[str],
+    method_order: list[str],
+    algorithm_order: list[str],
+    outpath: Path,
+) -> None:
+    left_dim_orders = {
+        "stage": STAGE_ORDER,
+        "source_modality_display": modality_order,
+        "ai_method_display": method_order,
+    }
+    left_trace = build_sankey_trace(
+        flow_df=flow_df,
+        dim_orders=left_dim_orders,
+        link_color_dim="ai_method_display",
+    )
+
+    fig = make_subplots(
+        rows=1,
+        cols=2,
+        specs=[[{"type": "domain"}, {"type": "xy"}]],
+        column_widths=[0.62, 0.38],
+        subplot_titles=(
+            "A. Flow from stage to modality and AI method",
+            "B. Algorithms by stage (bubble size = count)",
+        ),
+        horizontal_spacing=0.12,
+    )
+    fig.add_trace(left_trace, row=1, col=1)
+
+    alg_stage = (
+        flow_df.groupby(["algorithm_paper", "stage"])["count"]
+        .sum()
+        .reset_index()
+    )
+    max_count = int(alg_stage["count"].max()) if not alg_stage.empty else 1
+    y_order = [plot_label(value) for value in algorithm_order]
+
+    for stage in STAGE_ORDER:
+        subset = alg_stage[alg_stage["stage"] == stage].copy()
+        subset["algorithm_plot"] = subset["algorithm_paper"].map(plot_label)
+        subset = subset[subset["count"] > 0]
+        subset["marker_size"] = subset["count"].map(
+            lambda value: 12 + (value / max_count) * 30
+        )
+        subset["label"] = subset["count"].map(lambda value: str(int(value)) if value >= 8 else "")
+        fig.add_trace(
+            go.Scatter(
+                x=[stage] * len(subset),
+                y=subset["algorithm_plot"],
+                mode="markers+text",
+                text=subset["label"],
+                customdata=subset["count"],
+                textposition="middle center",
+                textfont=dict(color="white", size=10),
+                marker=dict(
+                    size=subset["marker_size"],
+                    color=STAGE_COLORS.get(stage, "#888888"),
+                    line=dict(color="white", width=0.8),
+                    opacity=0.88,
+                ),
+                name=stage,
+                hovertemplate="<b>%{y}</b><br>Stage: %{x}<br>Count: %{customdata}<extra></extra>",
+                showlegend=True,
+            ),
+            row=1,
+            col=2,
+        )
+
+    fig.update_xaxes(
+        title_text="Clinical stage",
+        categoryorder="array",
+        categoryarray=STAGE_ORDER,
+        row=1,
+        col=2,
+    )
+    fig.update_yaxes(
+        title_text="Algorithm family",
+        categoryorder="array",
+        categoryarray=list(reversed(y_order)),
+        row=1,
+        col=2,
+    )
+    fig.update_layout(
+        width=1900,
+        height=950,
+        font=dict(size=11, family="Arial"),
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        margin=dict(l=40, r=40, t=100, b=40),
+        title=dict(
+            text="RQ1 Candidate B. Editorial two-panel figure",
+            x=0.5,
+        ),
+        legend=dict(
+            title="Stage",
+            orientation="h",
+            yanchor="bottom",
+            y=1.03,
+            xanchor="center",
+            x=0.78,
+        ),
+    )
+    fig.write_image(outpath, scale=2)
+
+
 console = Console()
 
+NOTE_TAG_RULES: list[tuple[str, tuple[str, ...]]] = [
+    (
+        "Algorithm not explicit or unspecified",
+        (
+            r"no explícito",
+            r"no explicito",
+            r"no especificado",
+            r"not specified",
+            r"not explicit",
+        ),
+    ),
+    (
+        "Needs full-text confirmation",
+        (
+            r"full[- ]text",
+            r"confirmar",
+        ),
+    ),
+    (
+        "Outside codebook or forced mapping",
+        (
+            r"fuera del codebook",
+            r"outside (the )?codebook",
+            r"\bmapped to\b",
+            r"\bmapea\b",
+            r"allowed categories",
+        ),
+    ),
+    (
+        "Multiple models compared",
+        (
+            r"compara",
+            r"comparative",
+            r"varios modelos",
+            r"multiple .* models",
+            r"17 supervised models",
+        ),
+    ),
+    (
+        "Primary model chosen from comparisons",
+        (
+            r"\bmejor\b",
+            r"\bbest\b",
+            r"highest test accuracy",
+            r"reported as highest",
+        ),
+    ),
+    (
+        "Hybrid or fusion architecture",
+        (
+            r"hybrid",
+            r"fusion",
+            r"late-fusion",
+            r"cnn\+rnn",
+            r"\bvit\b",
+            r"\blstm\b",
+            r"\bgru\b",
+        ),
+    ),
+    (
+        "Explainability or validation detail",
+        (
+            r"\bshap\b",
+            r"5-fold",
+            r"cross-validation",
+            r"explainability",
+            r"\bcv\b",
+        ),
+    ),
+]
 
-def tokenize(text: str) -> list[str]:
-    tokens = [t.lower() for t in TOKEN_RE.findall(text)]
-    return [t for t in tokens if len(t) >= 3 and t not in STOPWORDS]
+
+def classify_note_tags(note: str) -> list[str]:
+    tags: list[str] = []
+    for label, patterns in NOTE_TAG_RULES:
+        if any(re.search(pattern, note, flags=re.IGNORECASE) for pattern in patterns):
+            tags.append(label)
+    return tags
 
 
-def top_bigrams(tokens: list[str]) -> list[tuple[str, str]]:
-    return list(zip(tokens, tokens[1:])) if len(tokens) >= 2 else []
+def build_notes_support_df(df: pd.DataFrame) -> pd.DataFrame:
+    if NOTES_COL not in df.columns:
+        return pd.DataFrame()
+
+    notes_df = df.copy()
+    notes_df[NOTES_COL] = notes_df[NOTES_COL].fillna("").astype(str).str.strip()
+    notes_df = notes_df[notes_df[NOTES_COL].astype(bool)].copy()
+    if notes_df.empty:
+        return notes_df
+
+    notes_df["stage_assignments_display"] = notes_df["stage_assignments"].map(
+        lambda values: " | ".join(values) if values else ""
+    )
+    notes_df["notes_issue_tags"] = notes_df[NOTES_COL].map(
+        lambda note: " | ".join(classify_note_tags(note))
+    )
+
+    preferred_cols = [
+        "study_id",
+        "title",
+        "year",
+        "doi",
+        "assigned_to",
+        "source_file",
+        "source_modality_display",
+        "stage_assignments_display",
+        "stage_assignment_origin",
+        "ai_method_display",
+        "algorithm_display_raw",
+        "notes_issue_tags",
+        NOTES_COL,
+    ]
+    existing_cols = [col for col in preferred_cols if col in notes_df.columns]
+    return notes_df[existing_cols].sort_values(
+        by=[col for col in ["assigned_to", "year", "study_id", "title"] if col in notes_df.columns],
+        na_position="last",
+    )
 
 
 def run_notes_audit(df: pd.DataFrame, outdir: Path) -> None:
-    if NOTES_COL not in df.columns:
+    notes_df = build_notes_support_df(df)
+    if notes_df.empty:
         return
 
-    notes = df[NOTES_COL].dropna().astype(str)
-    notes = notes[notes.str.strip().astype(bool)]
+    notes_df.to_csv(outdir / "rq1_notes_full_context.csv", index=False)
 
-    all_tokens: list[str] = []
-    all_bigrams: list[tuple[str, str]] = []
-
-    for s in notes:
-        toks = tokenize(s)
-        all_tokens.extend(toks)
-        all_bigrams.extend(top_bigrams(toks))
-
-    tok_counts = Counter(all_tokens).most_common(NOTES_TOPK)
-    bigram_counts = Counter(all_bigrams).most_common(NOTES_TOPK)
-
-    pd.DataFrame(tok_counts, columns=["token", "count"]).to_csv(
-        outdir / "rq1_notes_top_tokens.csv", index=False
-    )
-    pd.DataFrame(
-        [(f"{a} {b}", c) for (a, b), c in bigram_counts],
-        columns=["bigram", "count"],
-    ).to_csv(outdir / "rq1_notes_top_bigrams.csv", index=False)
+    tag_counts: list[tuple[str, int]] = []
+    for label, _ in NOTE_TAG_RULES:
+        count = int(notes_df["notes_issue_tags"].str.contains(label, regex=False).sum())
+        if count > 0:
+            tag_counts.append((label, count))
 
     summary_lines = [
+        "RQ1 notes support summary",
+        "Purpose: preserve the full narrative notes used to document coding decisions,",
+        "algorithm adjudication, and methodological clarification for the paper.",
+        "",
         f"Notes column: {NOTES_COL}",
         f"Total analyzed rows: {len(df)}",
-        f"Non-empty notes: {len(notes)}",
-        f"Unique tokens: {len(set(all_tokens))}",
-        f"Unique bigrams: {len(set(all_bigrams))}",
+        f"Rows with non-empty notes: {len(notes_df)}",
+        f"Full note trail file: {outdir / 'rq1_notes_full_context.csv'}",
         "",
-        f"Top {min(NOTES_TOPK, len(tok_counts))} tokens (token,count):",
-        *[f"{t},{c}" for t, c in tok_counts],
-        "",
-        f"Top {min(NOTES_TOPK, len(bigram_counts))} bigrams (bigram,count):",
-        *[f"{a} {b},{c}" for (a, b), c in bigram_counts],
+        "Detected issue patterns in the prose notes:",
     ]
+    if tag_counts:
+        summary_lines.extend([f"- {label}: {count}" for label, count in tag_counts])
+    else:
+        summary_lines.append("- No recurrent issue patterns detected by heuristic tagging.")
+
+    summary_lines.extend(
+        [
+            "",
+            "Representative examples by issue pattern:",
+        ]
+    )
+    for label, count in tag_counts:
+        summary_lines.append("")
+        summary_lines.append(f"{label} ({count})")
+        matching_rows = notes_df[
+            notes_df["notes_issue_tags"].str.contains(label, regex=False)
+        ].head(3)
+        for row in matching_rows.itertuples(index=False):
+            study_id = getattr(row, "study_id", "")
+            title = getattr(row, "title", "")
+            note_text = getattr(row, NOTES_COL, "")
+            summary_lines.append(f"- Study {study_id}: {title}")
+            summary_lines.append(f"  Note: {note_text}")
+
     (outdir / "rq1_notes_summary.txt").write_text("\n".join(summary_lines), encoding="utf-8")
 
 
@@ -464,8 +828,6 @@ def build_stage_long_df(df: pd.DataFrame) -> pd.DataFrame:
         "algorithm_display_raw",
         "stage_assignment_origin",
     ]
-    if NOTES_COL in df.columns:
-        carry_cols.append(NOTES_COL)
 
     for row in df[carry_cols + ["stage_assignments"]].to_dict("records"):
         stages = row.pop("stage_assignments")
@@ -477,14 +839,16 @@ def build_stage_long_df(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(records)
 
 
-def crosstab_with_order(
-    index_series: pd.Series,
-    column_series: pd.Series,
-    index_order: list[str],
-    column_order: list[str],
-) -> pd.DataFrame:
-    table = pd.crosstab(index_series, column_series)
-    return table.reindex(index=index_order, columns=column_order, fill_value=0).astype(int)
+def cleanup_previous_outputs(outdir: Path) -> None:
+    for path in outdir.glob("rq1_*"):
+        if path.is_file() and path.name not in CORE_OUTPUT_FILES:
+            path.unlink()
+
+
+def cleanup_supporting_outputs(outdir: Path) -> None:
+    for path in outdir.glob("rq1_*"):
+        if path.is_file() and path.name not in SUPPORTING_OUTPUT_FILES:
+            path.unlink()
 
 
 # ----------------------------
@@ -493,6 +857,8 @@ def crosstab_with_order(
 def main() -> None:
     outdir = Path(OUTPUT_DIR)
     outdir.mkdir(parents=True, exist_ok=True)
+    support_dir = Path(SUPPORTING_DIR)
+    support_dir.mkdir(parents=True, exist_ok=True)
 
     df = load_reviewer_inputs()
 
@@ -508,36 +874,9 @@ def main() -> None:
     df["ai_method_clean"] = unify_case_variants(df[AI_METHOD_COL].apply(clean_cell_value))
     df["algorithm_clean"] = unify_case_variants(df[ALGORITHM_COL].apply(clean_cell_value))
     df["source_modality_display"] = translate_to_english(df["modality_clean"], MODALITY_TRANSLATIONS)
-    df["stage_display_primary"] = df["stage_clean"].map(normalize_stage_value)
     df["ai_method_display"] = translate_to_english(df["ai_method_clean"], METHOD_TRANSLATIONS)
     df["ai_method_display"] = df["ai_method_display"].fillna("Not specified")
     df["algorithm_display_raw"] = df["algorithm_clean"].map(normalize_algorithm_value)
-    df["modality_display"] = translate_to_english(
-        df["modality_clean"],
-        {
-            "imagen": "Image",
-            "señales fisiológicas": "Physiological signals",
-            "senales fisiologicas": "Physiological signals",
-            "texto · nlp": "Text / NLP",
-            "texto / nlp": "Text / NLP",
-            "audio · voz": "Audio / Voice",
-            "audio / voz": "Audio / Voice",
-            "no especificado": "Not specified",
-            "no especificada": "Not specified",
-        },
-    )
-    df["stage_display"] = translate_to_english(
-        df["stage_clean"],
-        {
-            "monitoring_intervention": "Monitoring/intervention",
-            "monitoring/intervention": "Monitoring/intervention",
-            "diagnosis": "Diagnosis",
-            "screening": "Screening",
-            "prognosis": "Prognosis",
-            "prescreening": "Prescreening",
-            "not clear": "Not clear",
-        },
-    )
 
     stage_assignments = df.apply(extract_stage_assignments, axis=1, result_type="expand")
     df["stage_assignments"] = stage_assignments[0]
@@ -559,8 +898,9 @@ def main() -> None:
         stage_long_df["algorithm_display_raw"],
         topk=ALGORITHM_TOPK,
     )
-    df_analyzed["algorithm_display"] = df_analyzed["algorithm_display_raw"].map(
-        lambda x: x if x in algorithm_order or x == UNCLEAR_ALGORITHM_LABEL else OTHER_ALGORITHM_LABEL
+    stage_long_df["algorithm_paper"], paper_algorithm_order = compress_algorithm_labels(
+        stage_long_df["algorithm_display_raw"],
+        topk=PAPER_ALGORITHM_TOPK,
     )
 
     modality_order = ordered_categories(
@@ -571,91 +911,28 @@ def main() -> None:
         stage_long_df["ai_method_display"].dropna().astype(str).unique().tolist(),
         METHOD_ORDER,
     )
-    primary_stage_order = ordered_categories(
-        df["stage_display_primary"].dropna().astype(str).unique().tolist(),
-        STAGE_ORDER + ["Not clear"],
+    publication_flow_df = (
+        stage_long_df.groupby(
+            ["stage", "source_modality_display", "ai_method_display", "algorithm_paper"]
+        )
+        .size()
+        .reset_index(name="count")
     )
 
-    legacy_mask = df["source_modality_display"].notna() & df["stage_display_primary"].notna()
-    df_legacy = df[legacy_mask].copy()
-    legacy_table = crosstab_with_order(
-        df_legacy["source_modality_display"],
-        df_legacy["stage_display_primary"],
-        modality_order,
-        primary_stage_order,
+    save_candidate_alluvial(
+        flow_df=publication_flow_df,
+        modality_order=modality_order,
+        method_order=method_order,
+        algorithm_order=paper_algorithm_order,
+        outpath=outdir / "rq1_candidate_alluvial.png",
     )
-    legacy_table.to_csv(outdir / "rq1_table_modality_x_stage.csv", index=True)
-    save_heatmap(
-        table=legacy_table,
-        outpath=outdir / "rq1_heatmap_modality_x_stage.png",
-        xlabel="Clinical functional stage (primary coding)",
-        ylabel="Source modality",
-        title="RQ1 overview: source modality x primary clinical stage",
-        cmap="Blues",
+    save_candidate_panel(
+        flow_df=publication_flow_df,
+        modality_order=modality_order,
+        method_order=method_order,
+        algorithm_order=paper_algorithm_order,
+        outpath=outdir / "rq1_candidate_panel.png",
     )
-
-    stage_dist = df_legacy["stage_display_primary"].value_counts().reindex(primary_stage_order, fill_value=0)
-    modality_dist = df_legacy["source_modality_display"].value_counts().reindex(modality_order, fill_value=0)
-
-    save_bar(
-        stage_dist,
-        outdir / "rq1_stage_distribution.png",
-        xlabel="Clinical functional stage (primary coding)",
-    )
-    save_bar(
-        modality_dist,
-        outdir / "rq1_modality_distribution.png",
-        xlabel="Source modality",
-    )
-
-    stage_assignment_table = crosstab_with_order(
-        stage_long_df["source_modality_display"],
-        stage_long_df["stage"],
-        modality_order,
-        STAGE_ORDER,
-    )
-    stage_assignment_table.to_csv(
-        outdir / "rq1_table_source_modality_x_stage_assignments.csv",
-        index=True,
-    )
-    save_heatmap(
-        table=stage_assignment_table,
-        outpath=outdir / "rq1_heatmap_source_modality_x_stage_assignments.png",
-        xlabel="Clinical functional stage (all coded assignments)",
-        ylabel="Source modality",
-        title="RQ1 stage-resolved overview: source modality x clinical stage",
-        cmap="YlGnBu",
-    )
-
-    method_source_table = crosstab_with_order(
-        df_analyzed["source_modality_display"],
-        df_analyzed["ai_method_display"],
-        modality_order,
-        method_order,
-    )
-    method_stage_table = crosstab_with_order(
-        stage_long_df["ai_method_display"],
-        stage_long_df["stage"],
-        method_order,
-        STAGE_ORDER,
-    )
-    algorithm_source_table = crosstab_with_order(
-        df_analyzed["algorithm_display"],
-        df_analyzed["source_modality_display"],
-        algorithm_order,
-        modality_order,
-    )
-    algorithm_stage_table = crosstab_with_order(
-        stage_long_df["algorithm_display"],
-        stage_long_df["stage"],
-        algorithm_order,
-        STAGE_ORDER,
-    )
-
-    method_source_table.to_csv(outdir / "rq1_table_method_x_source_modality.csv", index=True)
-    method_stage_table.to_csv(outdir / "rq1_table_method_x_stage.csv", index=True)
-    algorithm_source_table.to_csv(outdir / "rq1_table_algorithm_x_source_modality.csv", index=True)
-    algorithm_stage_table.to_csv(outdir / "rq1_table_algorithm_x_stage.csv", index=True)
 
     method_counts = (
         stage_long_df.groupby(["stage", "source_modality_display", "ai_method_display"])
@@ -718,8 +995,6 @@ def main() -> None:
         cmap="PuBuGn",
     )
 
-    df_analyzed.to_csv(outdir / "rq1_review_rows_analyzed.csv", index=False)
-    stage_long_df.to_csv(outdir / "rq1_stage_assignments_long.csv", index=False)
     pd.DataFrame(
         [
             {"algorithm_raw": raw, "algorithm_plot": plot}
@@ -731,70 +1006,9 @@ def main() -> None:
             )
         ]
     ).to_csv(outdir / "rq1_algorithm_plot_mapping.csv", index=False)
-
-    report_df = pd.DataFrame(
-        [
-            {
-                "field": MODALITY_COL,
-                "n_total": len(df),
-                "n_empty_raw": int(df["modality_clean"].isna().sum()),
-                "n_resolved_for_plot": int(df["source_modality_display"].notna().sum()),
-                "n_omitted_from_stage_analysis": int(df_omitted.shape[0]),
-            },
-            {
-                "field": STAGE_COL,
-                "n_total": len(df),
-                "n_empty_raw": int(df["stage_clean"].isna().sum()),
-                "n_resolved_for_plot": int(df["n_stage_assignments"].gt(0).sum()),
-                "n_omitted_from_stage_analysis": int(df["n_stage_assignments"].eq(0).sum()),
-            },
-            {
-                "field": AI_METHOD_COL,
-                "n_total": len(df),
-                "n_empty_raw": int(df["ai_method_clean"].isna().sum()),
-                "n_resolved_for_plot": int(df["ai_method_display"].notna().sum()),
-                "n_omitted_from_stage_analysis": int(df_omitted.shape[0]),
-            },
-            {
-                "field": ALGORITHM_COL,
-                "n_total": len(df),
-                "n_empty_raw": int(df["algorithm_clean"].isna().sum()),
-                "n_resolved_for_plot": int(df["algorithm_display_raw"].notna().sum()),
-                "n_omitted_from_stage_analysis": int(df_omitted.shape[0]),
-            },
-        ]
-    )
-    report_df.to_csv(outdir / "rq1_missingness_report.csv", index=False)
-
-    preferred_cols = [
-        "study_id",
-        "title",
-        "year",
-        "doi",
-        "assigned_to",
-        MODALITY_COL,
-        "source_modality_display",
-        STAGE_COL,
-        "stage_display_primary",
-        "stage_assignment_origin",
-        "n_stage_assignments",
-        AI_METHOD_COL,
-        "ai_method_display",
-        ALGORITHM_COL,
-        "algorithm_display_raw",
-    ]
-    if NOTES_COL in df_omitted.columns:
-        preferred_cols.append(NOTES_COL)
-    preferred_cols = [c for c in preferred_cols if c in df_omitted.columns]
-    omitted_rows = df_omitted[preferred_cols] if preferred_cols else df_omitted
-    omitted_rows.to_csv(outdir / "rq1_rows_omitted.csv", index=False)
-
-    if AUDIT_NOTES:
-        run_notes_audit(df_analyzed, outdir)
-
-    notes_non_empty = 0
-    if NOTES_COL in df_analyzed.columns:
-        notes_non_empty = int(df_analyzed[NOTES_COL].dropna().astype(str).str.strip().astype(bool).sum())
+    cleanup_previous_outputs(outdir)
+    run_notes_audit(df_analyzed, support_dir)
+    cleanup_supporting_outputs(support_dir)
 
     summary = Table(title="RQ1 Summary")
     summary.add_column("Metric", style="cyan")
@@ -806,53 +1020,23 @@ def main() -> None:
     summary.add_row("Resolved from explicit stage flags", f"{int((df['stage_assignment_origin'] == 'stage_flags').sum())}")
     summary.add_row("Resolved from primary-stage fallback", f"{int((df['stage_assignment_origin'] == 'stage_primary_fallback').sum())}")
     summary.add_row("Unresolved stages", f"{int((df['stage_assignment_origin'] == 'unresolved').sum())}")
-    if NOTES_COL in df_analyzed.columns:
-        summary.add_row("Non-empty notes in analyzed rows", f"{notes_non_empty}")
-    summary.add_row("Input files combined", f"{len(INPUT_FILES)}")
+    summary.add_row("Core outputs kept", f"{len(CORE_OUTPUT_FILES)}")
     console.print(summary)
 
-    stage_origin_summary = Table(title="Stage Resolution Summary")
-    stage_origin_summary.add_column("Resolution", style="cyan")
-    stage_origin_summary.add_column("Rows", justify="right", style="bold")
-    for origin, count in (
-        df["stage_assignment_origin"].value_counts().reindex(
-            ["stage_flags", "stage_primary_fallback", "unresolved"],
-            fill_value=0,
-        ).items()
-    ):
-        stage_origin_summary.add_row(origin, str(int(count)))
-    console.print(stage_origin_summary)
+    outputs_table = Table(title="RQ1 Outputs")
+    outputs_table.add_column("File", style="cyan")
+    for filename in sorted(CORE_OUTPUT_FILES):
+        outputs_table.add_row(filename)
+    console.print(outputs_table)
 
-    if "assigned_to" in df.columns:
-        reviewer_summary = Table(title="Reviewer Assignment Summary")
-        reviewer_summary.add_column("Reviewer", style="cyan")
-        reviewer_summary.add_column("Assigned", justify="right", style="bold")
-        reviewer_summary.add_column("Analyzed", justify="right", style="bold green")
-        reviewer_summary.add_column("Omitted", justify="right", style="bold red")
-
-        reviewer_df = df.assign(analyzed=analysis_mask, omitted=~analysis_mask)
-        reviewer_counts = (
-            reviewer_df.groupby("assigned_to", dropna=False)
-            .agg(
-                assigned=("assigned_to", "size"),
-                analyzed=("analyzed", "sum"),
-                omitted=("omitted", "sum"),
-            )
-            .reset_index()
-        )
-
-        for row in reviewer_counts.itertuples(index=False):
-            reviewer_name = row.assigned_to if pd.notna(row.assigned_to) else "Missing reviewer"
-            reviewer_summary.add_row(
-                str(reviewer_name),
-                str(int(row.assigned)),
-                str(int(row.analyzed)),
-                str(int(row.omitted)),
-            )
-
-        console.print(reviewer_summary)
+    supporting_table = Table(title="RQ1 Supporting Outputs")
+    supporting_table.add_column("File", style="cyan")
+    for filename in sorted(SUPPORTING_OUTPUT_FILES):
+        supporting_table.add_row(filename)
+    console.print(supporting_table)
 
     console.print(f"[green]RQ1 outputs saved to:[/green] {outdir.resolve()}")
+    console.print(f"[green]RQ1 supporting files saved to:[/green] {support_dir.resolve()}")
 
 
 if __name__ == "__main__":
