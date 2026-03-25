@@ -61,6 +61,13 @@ STAGE_ORDER = [
     "Prognosis",
     "Monitoring/intervention",
 ]
+STAGE_DISPLAY = {
+    "Prescreening": "Prescreening",
+    "Screening": "Screening",
+    "Diagnosis": "Diagnosis",
+    "Prognosis": "Prognosis",
+    "Monitoring/intervention": "Monitoring<br>intervention",
+}
 MODALITY_ORDER = [
     "Image",
     "Physiological signals",
@@ -151,9 +158,10 @@ STAGE_COLORS = {
 NEUTRAL_NODE_COLOR = "#d9dde3"
 PLOT_LABELS = {
     "Physiological signals": "Physiological<br>signals",
-    "Monitoring/intervention": "Monitoring/<br>intervention",
+    "Monitoring/intervention": "Monitoring<br>intervention",
     "Logistic Regression": "Logistic<br>Regression",
-    "Clustering (k-means / GMM / ...)": "Clustering<br>(k-means/GMM)",
+    "Clustering (k-means / GMM / ...)": "Clustering",
+    "XGBoost / GBDT": "Gradient<br>boosting",
     "Other algorithms": "Other<br>algorithms",
 }
 
@@ -251,6 +259,14 @@ def compress_algorithm_labels(series: pd.Series, topk: int) -> tuple[pd.Series, 
         order.append(UNCLEAR_ALGORITHM_LABEL)
 
     return grouped, order
+
+
+def keep_all_algorithm_labels(series: pd.Series) -> tuple[pd.Series, list[str]]:
+    specific = series[series != UNCLEAR_ALGORITHM_LABEL]
+    order = specific.value_counts().index.tolist()
+    if (series == UNCLEAR_ALGORITHM_LABEL).any():
+        order.append(UNCLEAR_ALGORITHM_LABEL)
+    return series.copy(), order
 
 
 # ----------------------------
@@ -483,10 +499,6 @@ def save_candidate_alluvial(
         paper_bgcolor="white",
         plot_bgcolor="white",
         margin=dict(l=40, r=40, t=90, b=30),
-        title=dict(
-            text="RQ1 Candidate A. Consolidated alluvial: stage -> source modality -> AI method -> algorithm family",
-            x=0.5,
-        ),
     )
     for x, label in zip(
         np.linspace(0.03, 0.97, 4),
@@ -504,6 +516,23 @@ def save_candidate_alluvial(
     fig.write_image(outpath, scale=2)
 
 
+def scale_bubble_sizes(
+    counts: pd.Series,
+    min_size: float = 50,
+    max_size: float = 92,
+) -> pd.Series:
+    if counts.empty:
+        return counts.astype(float)
+
+    counts = counts.astype(float)
+    max_count = counts.max()
+    if max_count <= 0:
+        return pd.Series(min_size, index=counts.index, dtype=float)
+
+    normalized = np.sqrt(counts / max_count)
+    return min_size + normalized * (max_size - min_size)
+
+
 def save_candidate_panel(
     flow_df: pd.DataFrame,
     modality_order: list[str],
@@ -511,103 +540,265 @@ def save_candidate_panel(
     algorithm_order: list[str],
     outpath: Path,
 ) -> None:
-    left_dim_orders = {
-        "stage": STAGE_ORDER,
-        "source_modality_display": modality_order,
-        "ai_method_display": method_order,
-    }
-    left_trace = build_sankey_trace(
-        flow_df=flow_df,
-        dim_orders=left_dim_orders,
-        link_color_dim="ai_method_display",
-    )
+    stage_labels = [STAGE_DISPLAY.get(stage, stage) for stage in STAGE_ORDER]
+    modality_labels = [plot_label(value) for value in modality_order]
 
     fig = make_subplots(
-        rows=1,
-        cols=2,
-        specs=[[{"type": "domain"}, {"type": "xy"}]],
-        column_widths=[0.62, 0.38],
+        rows=3,
+        cols=1,
+        specs=[[{"type": "xy"}], [{"type": "heatmap"}], [{"type": "xy"}]],
+        row_heights=[0.24, 0.30, 0.46],
+        vertical_spacing=0.10,
         subplot_titles=(
-            "A. Flow from stage to modality and AI method",
-            "B. Algorithms by stage (bubble size = count)",
+            "A. AI method mix within each clinical stage",
+            "B. Source modalities used to support decisions at each stage",
+            "C. Algorithm families most frequently used across stages",
         ),
-        horizontal_spacing=0.12,
     )
-    fig.add_trace(left_trace, row=1, col=1)
 
-    alg_stage = (
-        flow_df.groupby(["algorithm_paper", "stage"])["count"]
+    stage_method = (
+        flow_df.groupby(["stage", "ai_method_display"])["count"]
         .sum()
         .reset_index()
     )
-    max_count = int(alg_stage["count"].max()) if not alg_stage.empty else 1
-    y_order = [plot_label(value) for value in algorithm_order]
-
-    for stage in STAGE_ORDER:
-        subset = alg_stage[alg_stage["stage"] == stage].copy()
-        subset["algorithm_plot"] = subset["algorithm_paper"].map(plot_label)
-        subset = subset[subset["count"] > 0]
-        subset["marker_size"] = subset["count"].map(
-            lambda value: 12 + (value / max_count) * 30
-        )
-        subset["label"] = subset["count"].map(lambda value: str(int(value)) if value >= 8 else "")
+    stage_totals = (
+        stage_method.groupby("stage")["count"]
+        .sum()
+        .reindex(STAGE_ORDER, fill_value=0)
+    )
+    for method in method_order:
+        subset = stage_method[stage_method["ai_method_display"] == method]
+        counts_map = {
+            row["stage"]: int(row["count"])
+            for _, row in subset.iterrows()
+        }
+        counts = [counts_map.get(stage, 0) for stage in STAGE_ORDER]
         fig.add_trace(
-            go.Scatter(
-                x=[stage] * len(subset),
-                y=subset["algorithm_plot"],
-                mode="markers+text",
-                text=subset["label"],
-                customdata=subset["count"],
-                textposition="middle center",
-                textfont=dict(color="white", size=10),
-                marker=dict(
-                    size=subset["marker_size"],
-                    color=STAGE_COLORS.get(stage, "#888888"),
-                    line=dict(color="white", width=0.8),
-                    opacity=0.88,
+            go.Bar(
+                x=stage_labels,
+                y=counts,
+                name=method,
+                marker_color=METHOD_COLORS.get(method, "#9aa3ad"),
+                text=[str(v) if v > 0 else "" for v in counts],
+                textposition="inside",
+                textfont=dict(color="white", size=11),
+                hovertemplate=(
+                    "<b>%{x}</b><br>AI method: "
+                    + method
+                    + "<br>Count: %{y}<extra></extra>"
                 ),
-                name=stage,
-                hovertemplate="<b>%{y}</b><br>Stage: %{x}<br>Count: %{customdata}<extra></extra>",
-                showlegend=True,
             ),
             row=1,
-            col=2,
+            col=1,
         )
+
+    fig.add_trace(
+        go.Scatter(
+            x=stage_labels,
+            y=stage_totals.tolist(),
+            mode="text",
+            text=[f"n={int(v)}" if v > 0 else "" for v in stage_totals.tolist()],
+            textposition="top center",
+            textfont=dict(color="#23364d", size=12),
+            hoverinfo="skip",
+            showlegend=False,
+        ),
+        row=1,
+        col=1,
+    )
+
+    stage_modality = (
+        flow_df.groupby(["source_modality_display", "stage"])["count"]
+        .sum()
+        .reset_index()
+    )
+    modality_matrix = (
+        stage_modality.pivot(
+            index="source_modality_display",
+            columns="stage",
+            values="count",
+        )
+        .reindex(index=modality_order, columns=STAGE_ORDER, fill_value=0)
+        .astype(int)
+    )
+    fig.add_trace(
+        go.Heatmap(
+            z=modality_matrix.to_numpy(),
+            x=stage_labels,
+            y=modality_labels,
+            text=modality_matrix.to_numpy(),
+            texttemplate="%{text}",
+            textfont=dict(size=11),
+            colorscale=[
+                [0.0, "#f3efe6"],
+                [0.25, "#f0c987"],
+                [0.50, "#df8f44"],
+                [0.75, "#b75b31"],
+                [1.0, "#7a2e1f"],
+            ],
+            zmin=0,
+            zmax=float(modality_matrix.to_numpy().max()) if not modality_matrix.empty else 1.0,
+            colorbar=dict(
+                title="Studies",
+                thickness=16,
+                len=0.28,
+                x=1.01,
+                y=0.515,
+            ),
+            hovertemplate="<b>%{y}</b><br>Stage: %{x}<br>Count: %{z}<extra></extra>",
+        ),
+        row=2,
+        col=1,
+    )
+
+    algorithm_totals = (
+        flow_df.groupby("algorithm_paper")["count"]
+        .sum()
+        .sort_values(ascending=False)
+    )
+    top_specific_algorithms = [
+        alg
+        for alg in algorithm_totals.index
+        if alg != UNCLEAR_ALGORITHM_LABEL
+    ][:10]
+    panel_algorithm_order = top_specific_algorithms.copy()
+    if UNCLEAR_ALGORITHM_LABEL in algorithm_totals.index:
+        panel_algorithm_order.append(UNCLEAR_ALGORITHM_LABEL)
+
+    alg_stage = (
+        flow_df[flow_df["algorithm_paper"].isin(panel_algorithm_order)]
+        .groupby(["algorithm_paper", "stage"])["count"]
+        .sum()
+        .reset_index()
+    )
+    alg_stage["stage_plot"] = alg_stage["stage"].map(lambda value: STAGE_DISPLAY.get(value, value))
+    alg_stage["algorithm_plot"] = alg_stage["algorithm_paper"].map(plot_label)
+    alg_stage["marker_size"] = scale_bubble_sizes(alg_stage["count"], min_size=18, max_size=56)
+    alg_stage["label"] = alg_stage["count"].map(lambda value: str(int(value)) if value >= 3 else "")
+    y_order = [plot_label(value) for value in panel_algorithm_order]
+    fig.add_trace(
+        go.Scatter(
+            x=alg_stage["stage_plot"],
+            y=alg_stage["algorithm_plot"],
+            mode="markers+text",
+            text=alg_stage["label"],
+            customdata=alg_stage["count"],
+            textposition="middle center",
+            textfont=dict(color="white", size=11, family="Arial Black"),
+            marker=dict(
+                size=alg_stage["marker_size"],
+                color=alg_stage["count"],
+                colorscale="magma",
+                cmin=0,
+                cmax=float(alg_stage["count"].max()) if not alg_stage.empty else 1.0,
+                opacity=0.90,
+                line=dict(color="white", width=1.2),
+                showscale=False,
+            ),
+            hovertemplate="<b>%{y}</b><br>Stage: %{x}<br>Count: %{customdata}<extra></extra>",
+            showlegend=False,
+        ),
+        row=3,
+        col=1,
+    )
+
+    fig.update_layout(
+        barmode="stack",
+        width=1250,
+        height=1280,
+        font=dict(size=13, family="Arial"),
+        paper_bgcolor="#f5f1e8",
+        plot_bgcolor="#fffaf2",
+        margin=dict(l=80, r=80, t=120, b=60),
+        legend=dict(
+            title="AI method",
+            orientation="h",
+            yanchor="bottom",
+            y=1.03,
+            xanchor="left",
+            x=0.0,
+        ),
+        title=dict(
+            text=(
+                "RQ1. How AI approaches are integrated across the clinical workflow in ASD"
+                "<br><sup>Stage volume, source modality, and dominant algorithm families</sup>"
+            ),
+            x=0.5,
+        ),
+        uniformtext_minsize=10,
+        uniformtext_mode="hide",
+    )
+
+    fig.update_xaxes(
+        categoryorder="array",
+        categoryarray=stage_labels,
+        showgrid=False,
+        row=1,
+        col=1,
+    )
+    fig.update_yaxes(
+        title_text="Number of stage assignments",
+        showgrid=True,
+        gridcolor="#e2d8c8",
+        zeroline=False,
+        row=1,
+        col=1,
+    )
+
+    fig.update_xaxes(
+        categoryorder="array",
+        categoryarray=stage_labels,
+        tickangle=0,
+        row=2,
+        col=1,
+    )
+    fig.update_yaxes(
+        categoryorder="array",
+        categoryarray=list(reversed(modality_labels)),
+        row=2,
+        col=1,
+    )
 
     fig.update_xaxes(
         title_text="Clinical stage",
         categoryorder="array",
-        categoryarray=STAGE_ORDER,
-        row=1,
-        col=2,
+        categoryarray=stage_labels,
+        showgrid=True,
+        gridcolor="#e2d8c8",
+        zeroline=False,
+        row=3,
+        col=1,
     )
     fig.update_yaxes(
         title_text="Algorithm family",
         categoryorder="array",
         categoryarray=list(reversed(y_order)),
-        row=1,
-        col=2,
+        showgrid=True,
+        gridcolor="#e2d8c8",
+        zeroline=False,
+        row=3,
+        col=1,
     )
-    fig.update_layout(
-        width=1900,
-        height=950,
-        font=dict(size=11, family="Arial"),
-        paper_bgcolor="white",
-        plot_bgcolor="white",
-        margin=dict(l=40, r=40, t=100, b=40),
-        title=dict(
-            text="RQ1 Candidate B. Editorial two-panel figure",
-            x=0.5,
-        ),
-        legend=dict(
-            title="Stage",
-            orientation="h",
-            yanchor="bottom",
-            y=1.03,
-            xanchor="center",
-            x=0.78,
-        ),
+
+    fig.add_annotation(
+        x=0.5,
+        y=0.705,
+        xref="paper",
+        yref="paper",
+        text="Heatmap cells show counts of studies by source modality within each clinical stage",
+        showarrow=False,
+        font=dict(size=11, color="#5a4630"),
     )
+    fig.add_annotation(
+        x=0.5,
+        y=0.02,
+        xref="paper",
+        yref="paper",
+        text="Bubble size and color encode frequency; labels are shown for counts >= 3",
+        showarrow=False,
+        font=dict(size=11, color="#5a4630"),
+    )
+
     fig.write_image(outpath, scale=2)
 
 
@@ -898,9 +1089,8 @@ def main() -> None:
         stage_long_df["algorithm_display_raw"],
         topk=ALGORITHM_TOPK,
     )
-    stage_long_df["algorithm_paper"], paper_algorithm_order = compress_algorithm_labels(
+    stage_long_df["algorithm_paper"], paper_algorithm_order = keep_all_algorithm_labels(
         stage_long_df["algorithm_display_raw"],
-        topk=PAPER_ALGORITHM_TOPK,
     )
 
     modality_order = ordered_categories(

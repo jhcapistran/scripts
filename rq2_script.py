@@ -24,7 +24,10 @@ import re
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from matplotlib.cm import ScalarMappable
+from matplotlib import patches
 import pandas as pd
+import scienceplots
 
 
 # =========================================================
@@ -50,6 +53,8 @@ YEAR_COL = "year"
 DOI_COL = "doi"
 MODALITY_COL = "modalidad"
 # =========================================================
+
+plt.style.use(["science", "no-latex"])
 
 
 def norm_text(x: object) -> str:
@@ -365,102 +370,74 @@ def draw_tripartite_figure(df: pd.DataFrame, outpath: Path) -> None:
         "No clear integration",
         "Not specified",
     ]
-    timing_order = ["Pre-decision", "In-decision", "Post-decision", "Unspecified"]
-
     stage_labels = [x for x in stage_order if x in set(df["stage_norm"])]
     approach_labels = [x for x in approach_order if x in set(df["integration_approach"])]
-    timing_labels = [x for x in timing_order if x in set(df["decision_timing"])]
 
-    x_positions = {"stage": 0.12, "approach": 0.5, "timing": 0.88}
-    y_stage = compute_node_positions(stage_labels)
-    y_approach = compute_node_positions(approach_labels)
-    y_timing = compute_node_positions(timing_labels)
-
-    fig, ax = plt.subplots(figsize=(16, 10))
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.axis("off")
-
-    stage_to_approach = (
-        df.groupby(["stage_norm", "integration_approach"])
-        .size()
-        .reset_index(name="count")
+    counts = (
+        pd.crosstab(df["integration_approach"], df["stage_norm"])
+        .reindex(index=approach_labels, columns=stage_labels, fill_value=0)
     )
-    approach_to_timing = (
-        df.groupby(["integration_approach", "decision_timing"])
-        .size()
-        .reset_index(name="count")
-    )
+    shares = counts.div(counts.sum(axis=0), axis=1).fillna(0)
+    stage_totals = counts.sum(axis=0)
+    max_count = max(int(counts.to_numpy().max()), 1)
+    cmap = plt.cm.YlGnBu
+    norm = plt.Normalize(vmin=0, vmax=max_count)
 
-    max_edge = max(
-        stage_to_approach["count"].max() if not stage_to_approach.empty else 1,
-        approach_to_timing["count"].max() if not approach_to_timing.empty else 1,
-    )
+    fig, heat_ax = plt.subplots(figsize=(12.3, 8.2), facecolor="white")
+    heat_ax.set_facecolor("white")
 
-    for row in stage_to_approach.itertuples(index=False):
-        ax.plot(
-            [x_positions["stage"], x_positions["approach"]],
-            [y_stage[row.stage_norm], y_approach[row.integration_approach]],
-            color="#7aa6c2",
-            linewidth=1.5 + 8 * (row.count / max_edge),
-            alpha=0.45,
-            solid_capstyle="round",
-            zorder=1,
-        )
-
-    for row in approach_to_timing.itertuples(index=False):
-        ax.plot(
-            [x_positions["approach"], x_positions["timing"]],
-            [y_approach[row.integration_approach], y_timing[row.decision_timing]],
-            color="#d28f5a",
-            linewidth=1.5 + 8 * (row.count / max_edge),
-            alpha=0.45,
-            solid_capstyle="round",
-            zorder=1,
-        )
-
-    stage_sizes = df["stage_norm"].value_counts()
-    approach_sizes = df["integration_approach"].value_counts()
-    timing_sizes = df["decision_timing"].value_counts()
-    max_node = max(stage_sizes.max(), approach_sizes.max(), timing_sizes.max())
-
-    def draw_layer(labels: list[str], x: float, y_map: dict[str, float], counts: pd.Series, color: str) -> None:
-        for label in labels:
-            size = 1200 + 4200 * (counts[label] / max_node)
-            ax.scatter(
-                [x],
-                [y_map[label]],
-                s=size,
-                color=color,
-                alpha=0.95,
-                zorder=3,
-                edgecolors="white",
-                linewidths=1.8,
+    for row_idx, approach in enumerate(approach_labels):
+        for col_idx, stage in enumerate(stage_labels):
+            value = int(counts.loc[approach, stage])
+            share = shares.loc[approach, stage]
+            base = cmap(norm(value)) if value else "#fbf8f1"
+            rect = patches.FancyBboxPatch(
+                (col_idx, row_idx),
+                1,
+                1,
+                boxstyle="round,pad=0.02,rounding_size=0.08",
+                linewidth=1.5 if value else 0.7,
+                edgecolor="#e6e6e6" if value else "#f0f0f0",
+                facecolor=base if value else "white",
             )
-            offset = -0.035 if x > 0.5 else 0.035
-            align = "right" if x > 0.5 else "left"
-            if x == x_positions["approach"]:
-                offset = 0
-                align = "center"
-            ax.text(
-                x + offset,
-                y_map[label],
-                f"{wrap_label(label)}\n(n={int(counts[label])})",
-                ha=align,
+            heat_ax.add_patch(rect)
+            label = f"{value}"
+            if value:
+                label += f"\n{share * 100:.1f}%"
+            heat_ax.text(
+                col_idx + 0.5,
+                row_idx + 0.5,
+                label,
+                ha="center",
                 va="center",
                 fontsize=10,
-                zorder=4,
+                fontweight="bold" if value == max_count else "normal",
+                color="#1f2933" if norm(value) < 0.55 else "white",
             )
 
-    draw_layer(stage_labels, x_positions["stage"], y_stage, stage_sizes, "#355070")
-    draw_layer(approach_labels, x_positions["approach"], y_approach, approach_sizes, "#6d597a")
-    draw_layer(timing_labels, x_positions["timing"], y_timing, timing_sizes, "#b56576")
+    heat_ax.set_xlim(0, len(stage_labels))
+    heat_ax.set_ylim(len(approach_labels), 0)
+    heat_ax.set_xticks([x + 0.5 for x in range(len(stage_labels))])
+    heat_ax.set_xticklabels(
+        [f"{wrap_label(label, 14)}\n(n={int(stage_totals[label])})" for label in stage_labels],
+        fontsize=11,
+    )
+    heat_ax.set_yticks([y + 0.5 for y in range(len(approach_labels))])
+    heat_ax.set_yticklabels([wrap_label(label, 24) for label in approach_labels], fontsize=10)
+    heat_ax.tick_params(length=0)
+    for spine in heat_ax.spines.values():
+        spine.set_visible(False)
+    heat_ax.set_xlabel("Clinical functional stage", fontsize=11, labelpad=12)
+    heat_ax.set_ylabel("Integration approach", fontsize=11, labelpad=12)
 
-    ax.text(x_positions["stage"], 0.98, "Clinical stage", ha="center", va="top", fontsize=13, fontweight="bold")
-    ax.text(x_positions["approach"], 0.98, "Integration approach", ha="center", va="top", fontsize=13, fontweight="bold")
-    ax.text(x_positions["timing"], 0.98, "Decision timing", ha="center", va="top", fontsize=13, fontweight="bold")
+    sm = ScalarMappable(norm=norm, cmap=cmap)
+    sm.set_array([])
+    cbar = fig.colorbar(sm, ax=heat_ax, fraction=0.03, pad=0.02)
+    cbar.set_label("Frequency (n)", fontsize=10)
+    cbar.ax.tick_params(labelsize=9)
+    cbar.outline.set_visible(False)
 
-    fig.tight_layout()
+    fig.subplots_adjust(top=0.98, bottom=0.18, left=0.22, right=0.93)
     fig.savefig(outpath, dpi=300, bbox_inches="tight")
     plt.close(fig)
 
