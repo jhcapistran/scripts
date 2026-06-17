@@ -3,12 +3,14 @@ from __future__ import annotations
 from pathlib import Path
 import re
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scienceplots
 
 
+matplotlib.use("Agg")
 plt.style.use(["science", "no-latex"])
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -206,15 +208,15 @@ def build_reference_algorithm_bubble(counts_df: pd.DataFrame, out_stem: Path) ->
     work["x_pos"] = work["stage"].map(x_map)
     work["y_pos"] = work["algorithm_display"].map(y_map)
     work["size"] = scale_bubble_sizes(work["count"])
-    fig, ax = plt.subplots(figsize=(11.2, 10.2), facecolor="white")
+    fig, ax = plt.subplots(figsize=(11.6, 10.4), facecolor="white")
     ax.scatter(work["x_pos"], work["y_pos"], s=work["size"], c=work["count"], cmap="viridis", alpha=0.82, edgecolors="none")
     for _, row in work.iterrows():
-        ax.text(row["x_pos"], row["y_pos"], str(int(row["count"])), ha="center", va="center", fontsize=12, color="white", fontweight="bold")
+        ax.text(row["x_pos"], row["y_pos"], str(int(row["count"])), ha="center", va="center", fontsize=13, color="white", fontweight="bold")
     ax.set_xticks(range(len(stage_order)), [wrap_stage_label(stage) for stage in stage_order])
     ax.set_yticks(range(len(algorithm_order)), [wrap_algorithm_label(label) for label in algorithm_order])
-    ax.set_xlabel("Clinical stage", fontsize=15)
-    ax.set_ylabel("Algorithm family", fontsize=15)
-    ax.tick_params(axis="both", labelsize=12, length=0)
+    ax.set_xlabel("Clinical stage", fontsize=16)
+    ax.set_ylabel("Algorithm family", fontsize=16)
+    ax.tick_params(axis="both", labelsize=13, length=0)
     ax.grid(True, color="#e5e7eb", linewidth=1.0)
     ax.set_axisbelow(True)
     for spine in ax.spines.values():
@@ -252,26 +254,27 @@ def build_method_source_stage_heatmaps(counts_df: pd.DataFrame, out_stem: Path) 
             stage_boundaries.append(current_col - 0.5)
     full_matrix = np.concatenate(matrix_blocks, axis=1)
     vmax = int(full_matrix.max()) if full_matrix.size else 0
-    fig, ax = plt.subplots(figsize=(14.5, 6.8), facecolor="white")
+    fig, ax = plt.subplots(figsize=(14.8, 7.0), facecolor="white")
     im = ax.imshow(full_matrix, cmap="YlGnBu", vmin=0, vmax=vmax, aspect="auto")
     for row_idx in range(full_matrix.shape[0]):
         for col_idx in range(full_matrix.shape[1]):
             value = int(full_matrix[row_idx, col_idx])
             color = "white" if value >= max(vmax * 0.45, 1) else "#16324f"
-            ax.text(col_idx, row_idx, str(value), ha="center", va="center", fontsize=9.5, color=color, fontweight="bold" if value > 0 else None)
+            ax.text(col_idx, row_idx, str(value), ha="center", va="center", fontsize=10.5, color=color, fontweight="bold" if value > 0 else None)
     ax.set_xticks(xtick_positions, xtick_labels, rotation=35, ha="right")
     ax.set_yticks(range(len(modality_order)), modality_order)
-    ax.tick_params(axis="both", labelsize=10.5, length=0)
+    ax.tick_params(axis="both", labelsize=11.5, length=0)
     for spine in ax.spines.values():
         spine.set_visible(False)
     for boundary in stage_boundaries:
         ax.axvline(boundary, color="#94a3b8", linewidth=1.7)
     for center, stage in stage_centers:
-        ax.text(center, 1.06, wrap_stage_label(stage).replace("\n", " "), transform=ax.get_xaxis_transform(), ha="center", va="bottom", fontsize=12, color="#243b5a", fontweight="bold")
-    ax.set_xlabel("AI method grouped by clinical stage", fontsize=15, labelpad=20)
-    ax.set_ylabel("Data source", fontsize=15)
-    fig.colorbar(im, ax=ax, fraction=0.025, pad=0.02)
-    fig.subplots_adjust(left=0.17, right=0.9, bottom=0.22, top=0.88)
+        ax.text(center, 1.06, wrap_stage_label(stage).replace("\n", " "), transform=ax.get_xaxis_transform(), ha="center", va="bottom", fontsize=13, color="#243b5a", fontweight="bold")
+    ax.set_xlabel("AI method grouped by clinical stage", fontsize=16, labelpad=20)
+    ax.set_ylabel("Data source", fontsize=16)
+    cbar = fig.colorbar(im, ax=ax, fraction=0.025, pad=0.02)
+    cbar.ax.tick_params(labelsize=11)
+    fig.subplots_adjust(left=0.18, right=0.91, bottom=0.23, top=0.89)
     save_figure_variants(fig, out_stem)
 
 

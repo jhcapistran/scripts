@@ -3,12 +3,14 @@ from __future__ import annotations
 from pathlib import Path
 import re
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scienceplots
 
 
+matplotlib.use("Agg")
 plt.style.use(["science", "no-latex"])
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -25,6 +27,17 @@ STAGE_ORDER = [
     "Monitoring/intervention",
     "Not specified",
 ]
+
+INTEGRATION_LABELS = {
+    "Triage / questionnaires": "Triage /\nquestionnaires",
+    "Mobile screening": "Mobile\nscreening",
+    "Feature extraction": "Feature\nextraction",
+    "Second-reader decision support": "Second-reader\ndecision support",
+    "Risk stratification": "Risk\nstratification",
+    "Longitudinal dashboards": "Longitudinal\ndashboards",
+    "Adaptive intervention": "Adaptive\nintervention",
+    "Assistive tools": "Assistive\ntools",
+}
 STAGE_TRANSLATIONS = {
     "prescreening": "Prescreening",
     "screening": "Screening",
@@ -104,6 +117,10 @@ def save_figure_variants(fig: plt.Figure, stem: Path) -> None:
 
 def write_caption(path: Path, text: str) -> None:
     path.write_text(text.strip() + "\n", encoding="utf-8")
+
+
+def wrap_integration_label(label: str) -> str:
+    return INTEGRATION_LABELS.get(label, label)
 
 
 def ordered_categories(observed: list[str], preferred: list[str]) -> list[str]:
@@ -248,7 +265,7 @@ def main() -> None:
             }
         )
     pd.DataFrame(denominator_rows).to_csv(OUTPUT_DIR / "rq2_denominators_q1_v2.csv", index=False)
-    fig, heat_ax = plt.subplots(figsize=(13.5, 6.8), facecolor="white")
+    fig, heat_ax = plt.subplots(figsize=(14.2, 7.4), facecolor="white")
     heat_values = stage_integration.to_numpy(dtype=float)
     img = heat_ax.imshow(heat_values, cmap="Blues", aspect="auto")
     # Determine threshold for switching annotation colour (white on dark, black on light)
@@ -268,20 +285,20 @@ def main() -> None:
             heat_ax.text(
                 col_idx, row_idx, label,
                 ha="center", va="center",
-                fontsize=8.5, fontweight="bold",
+                fontsize=10.4, fontweight="bold",
                 color=font_color,
                 linespacing=1.4,
             )
     heat_ax.set_xticks(range(len(stage_integration.columns)))
-    heat_ax.set_xticklabels(stage_integration.columns, rotation=40, ha="right", fontsize=9)
+    heat_ax.set_xticklabels([wrap_integration_label(col) for col in stage_integration.columns], rotation=32, ha="right", fontsize=12)
     heat_ax.set_yticks(range(len(stage_integration.index)))
-    heat_ax.set_yticklabels(stage_integration.index, fontsize=9)
-    heat_ax.set_xlabel("Integration approach", fontsize=11, fontweight="bold", labelpad=10)
-    heat_ax.set_ylabel("Clinical stage", fontsize=11, fontweight="bold", labelpad=10)
+    heat_ax.set_yticklabels(stage_integration.index, fontsize=11.5)
+    heat_ax.set_xlabel("Integration approach", fontsize=14.5, fontweight="bold", labelpad=14)
+    heat_ax.set_ylabel("Clinical stage", fontsize=14, fontweight="bold", labelpad=12)
     # Add a colourbar for scale reference
     cbar = fig.colorbar(img, ax=heat_ax, shrink=0.7, pad=0.02)
-    cbar.set_label("Study count", fontsize=9)
-    cbar.ax.tick_params(labelsize=8)
+    cbar.set_label("Study count", fontsize=11.5)
+    cbar.ax.tick_params(labelsize=10.5)
     fig.tight_layout()
     save_figure_variants(fig, OUTPUT_DIR / "rq2_heatmap_and_timing_q1_v2")
     write_caption(

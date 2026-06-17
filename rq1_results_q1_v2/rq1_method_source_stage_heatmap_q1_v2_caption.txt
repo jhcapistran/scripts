@@ -1,5 +1,3 @@
 RQ1 companion figure. Faceted heatmaps showing the distribution of AI methods across data sources within
-            each functional stage of the clinical process in ASD. Each panel corresponds to one clinical stage; rows
-            represent data sources, columns represent AI methods, cell color encodes the number of studies, and cell
-            labels report counts directly. This figure complements the algorithm-by-stage bubble plot by covering the
-            remaining RQ1 dimensions: AI methods, data sources, and clinical stages.
+        each functional stage of the clinical process in ASD. Each panel corresponds to one clinical stage; rows
+        represent data sources, columns represent AI methods, and cell labels report counts directly.
