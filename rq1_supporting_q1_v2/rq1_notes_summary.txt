@@ -3,16 +3,16 @@ Purpose: preserve the full narrative notes used to document coding decisions,
 algorithm adjudication, and methodological clarification for the paper.
 
 Notes column: notes_coding
-Total analyzed rows: 280
-Rows with non-empty notes: 180
-Full note trail file: rq1_supporting/rq1_notes_full_context.csv
+Total analyzed rows: 300
+Rows with non-empty notes: 201
+Full note trail file: rq1_supporting_q1_v2\rq1_notes_full_context.csv
 
 Detected issue patterns in the prose notes:
 - Algorithm not explicit or unspecified: 60
 - Needs full-text confirmation: 60
 - Outside codebook or forced mapping: 65
 - Multiple models compared: 39
-- Primary model chosen from comparisons: 39
+- Primary model chosen from comparisons: 40
 - Hybrid or fusion architecture: 9
 - Explainability or validation detail: 2
 
@@ -50,7 +50,7 @@ Multiple models compared (39)
 - Study 95: Physician Versus Large Language Model Chatbot Responses to Web-Based Questions From Autistic Patients in Chinese: Cross-Sectional Comparative Analysis
   Note: Compara respuestas de médicos vs LLMs a preguntas web; no mapea claramente a una etapa clínica RQ1.
 
-Primary model chosen from comparisons (39)
+Primary model chosen from comparisons (40)
 - Study 108: Identification of neural connectivity signatures of autism using machine learning
   Note: Se comparan varios modelos; se eligió el principal/mejor reportado
 - Study 254: Low-Rank Representation for Multi-center Autism Spectrum Disorder Identification.

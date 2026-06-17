@@ -1,0 +1,5 @@
+RQ2. Stage-by-integration heatmap. The heatmap shows study counts by primary clinical stage and derived
+        integration approach among studies with an explicit integration signal. Workflow-oriented categories are assigned
+        using keyword and stage fallback rules. Cell annotations report the count and the within-stage percentage. Study-level
+        classifications are stored in rq2_tripartite_dataset_q1_v2.csv and denominators are listed in
+        rq2_denominators_q1_v2.csv.

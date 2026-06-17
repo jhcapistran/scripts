@@ -1,0 +1,2 @@
+RQ3C (monitoring/intervention). Companion dot plot for monitoring/intervention profiles using the same
+        aggregation rule as the other RQ3 figures.

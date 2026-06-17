@@ -1,3 +1,9 @@
 .venv
 __pycache__/
 .vscode/
+*.xlsx
+*.png
+*.pdf
+*.svg
+*.jpg
+*.csv

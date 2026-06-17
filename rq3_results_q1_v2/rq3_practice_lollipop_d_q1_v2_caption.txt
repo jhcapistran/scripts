@@ -1,0 +1,5 @@
+RQ3D (prognosis and unspecified stage). Companion dot plot for prognosis and unspecified clinical stage
+        profiles. The same aggregation rule was used as in the other RQ3 figures:
+        fully specified profiles are shown individually, while partially specified profiles were collapsed into compact
+        classes to preserve the counts without overextending the figure height. Marker position encodes within-profile
+        frequency, and adjacent labels report raw counts as n/N.

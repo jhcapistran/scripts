@@ -1,523 +1,306 @@
-"""
-RQ2 tripartite integration model generator.
-
-Builds a three-layer view of how AI systems are integrated into the
-clinical workflow for autism spectrum disorder (ASD):
-- Clinical functional stage
-- Integration approach
-- Decision timing
-
-Inputs are reviewer-specific coded Excel files. Each file is filtered to the
-corresponding reviewer in `assigned_to`, then all selected rows are combined.
-
-Outputs:
-- rq2_tripartite_integration_model.png
-- rq2_stage_x_approach.csv
-- rq2_approach_x_timing.csv
-- rq2_tripartite_dataset.csv
-- rq2_review_rows.csv
-"""
-
 from __future__ import annotations
 
-import re
 from pathlib import Path
+import re
 
 import matplotlib.pyplot as plt
-from matplotlib.cm import ScalarMappable
-from matplotlib import patches
+import numpy as np
 import pandas as pd
 import scienceplots
 
 
-# =========================================================
-# CONFIGURATION
-# =========================================================
-INPUT_FILES = [
-    {"path": "aceptados_300_v2_codificado_RA.xlsx", "reviewer": "Revisor A"},
-    {"path": "aceptados_300_codificado_RB.xlsx", "reviewer": "Revisor B"},
-]
-SHEET_NAME = 0
-OUTPUT_DIR = "rq2_results"
-
-STAGE_COL = "stage_primary"
-Q2_ABSTRACT_COL = "q2_candidate_abstract"
-Q2_TERMS_COL = "q2_candidate_terms"
-AI_TASK_COL = "AI_task_type"
-TITLE_COL = "title"
-ABSTRACT_COL = "abstract"
-NOTES_COL = "notes_coding"
-
-STUDY_ID_COL = "study_id"
-YEAR_COL = "year"
-DOI_COL = "doi"
-MODALITY_COL = "modalidad"
-# =========================================================
-
 plt.style.use(["science", "no-latex"])
 
+BASE_DIR = Path(__file__).resolve().parent
+INPUT_FILE = BASE_DIR / "consolidado_RA_RB_Q3_completado_RQ2_final.xlsx"
+SHEET_NAME = "Consolidado_por_asignacion"
+OUTPUT_DIR = BASE_DIR / "rq2_results_q1_v2"
+MASTER_DENOMINATOR_FILE = BASE_DIR / "rq_denominators_q1_v2.csv"
 
-def norm_text(x: object) -> str:
-    if pd.isna(x):
+STAGE_ORDER = [
+    "Prescreening",
+    "Screening",
+    "Diagnosis",
+    "Prognosis",
+    "Monitoring/intervention",
+    "Not specified",
+]
+STAGE_TRANSLATIONS = {
+    "prescreening": "Prescreening",
+    "screening": "Screening",
+    "diagnosis": "Diagnosis",
+    "prognosis": "Prognosis",
+    "monitoring/intervention": "Monitoring/intervention",
+    "monitoring_intervention": "Monitoring/intervention",
+    "not clear": "Not specified",
+    "not specified": "Not specified",
+    "no especificado": "Not specified",
+}
+
+
+def clean_text(value: object) -> object:
+    if pd.isna(value):
+        return pd.NA
+    text = str(value).strip()
+    return text if text else pd.NA
+
+
+def norm_text(value: object) -> str:
+    cleaned = clean_text(value)
+    if pd.isna(cleaned):
         return ""
-    s = str(x).strip().lower()
-    s = s.replace("\n", " ")
-    s = re.sub(r"\s+", " ", s)
-    return s
+    return re.sub(r"\s+", " ", str(cleaned).casefold().replace("\n", " "))
 
 
-def normalize_bool_signal(x: object) -> bool | None:
-    if pd.isna(x):
+def normalize_category(value: object, mapping: dict[str, str], fallback: str = "Not specified") -> str:
+    cleaned = clean_text(value)
+    if pd.isna(cleaned):
+        return fallback
+    return mapping.get(str(cleaned).casefold(), str(cleaned))
+
+
+def normalize_stage(value: object) -> str:
+    stage = normalize_category(value, STAGE_TRANSLATIONS)
+    return stage if stage in STAGE_ORDER else "Not specified"
+
+
+def normalize_bool_signal(value: object) -> bool | None:
+    if pd.isna(value):
         return None
-    s = norm_text(x)
-    if s in {"verdadero", "true", "1", "yes", "y"}:
+    if isinstance(value, (int, float, np.integer, np.floating)) and not isinstance(value, bool):
+        if float(value) > 0:
+            return True
+        if float(value) == 0:
+            return False
+    text = norm_text(value)
+    if text in {"verdadero", "true", "1", "1.0", "yes", "y"}:
         return True
-    if s in {"falso", "false", "0", "no", "n"}:
+    if text in {"falso", "false", "0", "0.0", "no", "n"}:
         return False
     return None
 
 
-def normalize_stage(x: object) -> str:
-    s = norm_text(x)
-    if s in {"", "na", "n/a", "none", "null"}:
-        return "Not specified"
-    if "not spec" in s or "no especific" in s or "unclear" in s or "not clear" in s:
-        return "Not specified"
-    if "prescreen" in s:
-        return "Prescreening"
-    if "monitor" in s or "intervention" in s:
-        return "Monitoring/intervention"
-    if "diagnos" in s:
-        return "Diagnosis"
-    if "prognos" in s:
-        return "Prognosis"
-    if "screen" in s:
-        return "Screening"
-    return "Not specified"
+def status_from_bool(value: bool | None) -> str:
+    if value is True:
+        return "Present"
+    if value is False:
+        return "Absent"
+    return "Uncoded"
 
 
-def load_reviewer_inputs() -> pd.DataFrame:
-    frames: list[pd.DataFrame] = []
-
-    for spec in INPUT_FILES:
-        path = spec["path"]
-        reviewer = spec["reviewer"]
-
-        df_or_sheets = pd.read_excel(path, sheet_name=SHEET_NAME)
-        if isinstance(df_or_sheets, dict):
-            if not df_or_sheets:
-                raise ValueError(f"Excel file has no sheets: {path}")
-            df_part = next(iter(df_or_sheets.values()))
-        else:
-            df_part = df_or_sheets
-
-        if "assigned_to" not in df_part.columns:
-            raise ValueError(f"Missing required column 'assigned_to' in: {path}")
-
-        filtered = df_part[df_part["assigned_to"].astype(str).str.strip() == reviewer].copy()
-        filtered["source_file"] = path
-        frames.append(filtered)
-
-    if not frames:
-        raise ValueError("No input data was loaded.")
-
-    return pd.concat(frames, ignore_index=True)
+def ensure_dir(path: Path) -> None:
+    path.mkdir(parents=True, exist_ok=True)
 
 
-def derive_integration_approach(row: pd.Series) -> str:
+def save_figure_variants(fig: plt.Figure, stem: Path) -> None:
+    for suffix in (".png", ".pdf", ".svg"):
+        outpath = stem.with_suffix(suffix)
+        kwargs = {"bbox_inches": "tight"}
+        if suffix == ".png":
+            kwargs["dpi"] = 600
+        fig.savefig(outpath, **kwargs)
+    plt.close(fig)
+
+
+def write_caption(path: Path, text: str) -> None:
+    path.write_text(text.strip() + "\n", encoding="utf-8")
+
+
+def ordered_categories(observed: list[str], preferred: list[str]) -> list[str]:
+    ordered = [item for item in preferred if item in observed]
+    extras = sorted(item for item in observed if item not in preferred)
+    return ordered + extras
+
+
+def load_base_df() -> pd.DataFrame:
+    df = pd.read_excel(INPUT_FILE, sheet_name=SHEET_NAME).copy()
+    df["row_id"] = range(1, len(df) + 1)
+    return df
+
+
+def normalize_common_fields(df: pd.DataFrame) -> pd.DataFrame:
+    work = df.copy()
+    work["stage_norm"] = work["stage_primary"].apply(normalize_stage)
+    return work
+
+
+def derive_q2_signal_state(row: pd.Series) -> str:
+    abs_signal = normalize_bool_signal(row.get("q2_candidate_abstract"))
+    terms_signal = normalize_bool_signal(row.get("q2_candidate_terms"))
+    if abs_signal is True or terms_signal is True:
+        return "Present"
+    if abs_signal is False or terms_signal is False:
+        return "Absent"
+    return "Uncoded"
+
+
+def derive_integration_approach_positive(row: pd.Series) -> str:
     stage = row["stage_norm"]
-    q2_abs = row["q2_abstract_bool"]
-    q2_terms = row["q2_terms_bool"]
-
-    title = row["title_norm"]
-    abstract = row["abstract_norm"]
-    ai_task = row["ai_task_norm"]
-    notes = row["notes_norm"]
-    text = " ".join([title, abstract, ai_task, notes])
-
-    if q2_abs is False and q2_terms is False:
-        return "No clear integration"
-
-    if any(k in text for k in [
-        "questionnaire", "checklist", "triage", "referral prioritization",
-        "refer", "pre-screen", "prescreen", "screening form"
-    ]):
+    text = " ".join(
+        [
+            norm_text(row.get("title")),
+            norm_text(row.get("abstract")),
+            norm_text(row.get("AI_task_type")),
+            norm_text(row.get("notes_coding")),
+        ]
+    )
+    if any(token in text for token in ["questionnaire", "checklist", "triage", "refer", "prescreen", "pre-screen"]):
         return "Triage / questionnaires"
-
-    if any(k in text for k in [
-        "mobile", "smartphone", "app-based", "m-health", "mhealth", "tablet-based"
-    ]):
+    if any(token in text for token in ["mobile", "smartphone", "app-based", "tablet-based", "mhealth", "m-health"]):
         return "Mobile screening"
-
-    if any(k in text for k in [
-        "feature extraction", "feature selection", "marker extraction",
-        "biomarker extraction", "representation learning", "signal feature"
-    ]):
+    if any(token in text for token in ["feature extraction", "feature selection", "biomarker extraction", "marker extraction"]):
         return "Feature extraction"
-
-    if any(k in text for k in [
-        "second reader", "second-reader", "decision support", "computer-aided",
-        "computer aided", "reader support", "clinician support", "classification"
-    ]):
+    if any(token in text for token in ["decision support", "computer-aided", "computer aided", "second reader", "second-reader", "clinician support"]):
         return "Second-reader decision support"
-
-    if stage == "Prognosis" or any(k in text for k in [
-        "risk stratification", "risk", "predictor", "prediction model",
-        "prenatal", "perinatal", "maternal"
-    ]):
+    if stage == "Prognosis" or any(token in text for token in ["risk stratification", "predictor", "prediction model", "prenatal", "perinatal", "maternal"]):
         return "Risk stratification"
-
-    if any(k in text for k in [
-        "dashboard", "longitudinal", "long-term follow-up", "follow-up",
-        "trajectory", "progress tracking", "monitoring dashboard"
-    ]):
+    if any(token in text for token in ["dashboard", "longitudinal", "follow-up", "trajectory", "progress tracking"]):
         return "Longitudinal dashboards"
-
-    if any(k in text for k in [
-        "intervention", "therapy", "adaptive", "personalized", "personalisation",
-        "personalization", "robot-assisted", "serious game", "virtual reality"
-    ]):
+    if any(token in text for token in ["intervention", "therapy", "adaptive", "personalized", "virtual reality", "serious game", "robot-assisted"]):
         return "Adaptive intervention"
-
-    if any(k in text for k in [
-        "assistive", "educational", "education", "school", "communication aid",
-        "support tool", "caregiver support"
-    ]):
+    if any(token in text for token in ["assistive", "educational", "school", "communication aid", "caregiver support"]):
         return "Assistive tools"
-
     if stage in {"Prescreening", "Screening"}:
         return "Triage / questionnaires"
     if stage == "Diagnosis":
         return "Second-reader decision support"
     if stage == "Monitoring/intervention":
         return "Adaptive intervention"
-
-    if q2_abs is True or q2_terms is True:
-        return "Unspecified integration"
-
-    return "Not specified"
-
-
-def explain_integration_approach(row: pd.Series) -> str:
-    stage = row["stage_norm"]
-    q2_abs = row["q2_abstract_bool"]
-    q2_terms = row["q2_terms_bool"]
-    text = " ".join([row["title_norm"], row["abstract_norm"], row["ai_task_norm"], row["notes_norm"]])
-
-    if q2_abs is False and q2_terms is False:
-        return "Both q2 candidate signals are explicitly false"
-    if any(k in text for k in [
-        "questionnaire", "checklist", "triage", "referral prioritization",
-        "refer", "pre-screen", "prescreen", "screening form"
-    ]):
-        return "Keyword rule matched triage/questionnaire workflow"
-    if any(k in text for k in [
-        "mobile", "smartphone", "app-based", "m-health", "mhealth", "tablet-based"
-    ]):
-        return "Keyword rule matched mobile screening workflow"
-    if any(k in text for k in [
-        "feature extraction", "feature selection", "marker extraction",
-        "biomarker extraction", "representation learning", "signal feature"
-    ]):
-        return "Keyword rule matched feature extraction workflow"
-    if any(k in text for k in [
-        "second reader", "second-reader", "decision support", "computer-aided",
-        "computer aided", "reader support", "clinician support", "classification"
-    ]):
-        return "Keyword rule matched second-reader decision support"
-    if stage == "Prognosis" or any(k in text for k in [
-        "risk stratification", "risk", "predictor", "prediction model",
-        "prenatal", "perinatal", "maternal"
-    ]):
-        return "Stage or keywords matched risk stratification"
-    if any(k in text for k in [
-        "dashboard", "longitudinal", "long-term follow-up", "follow-up",
-        "trajectory", "progress tracking", "monitoring dashboard"
-    ]):
-        return "Keyword rule matched longitudinal dashboard workflow"
-    if any(k in text for k in [
-        "intervention", "therapy", "adaptive", "personalized", "personalisation",
-        "personalization", "robot-assisted", "serious game", "virtual reality"
-    ]):
-        return "Keyword rule matched adaptive intervention workflow"
-    if any(k in text for k in [
-        "assistive", "educational", "education", "school", "communication aid",
-        "support tool", "caregiver support"
-    ]):
-        return "Keyword rule matched assistive tool workflow"
-    if stage in {"Prescreening", "Screening"}:
-        return "Fallback assigned from prescreening/screening stage"
-    if stage == "Diagnosis":
-        return "Fallback assigned from diagnosis stage"
-    if stage == "Monitoring/intervention":
-        return "Fallback assigned from monitoring/intervention stage"
-    if q2_abs is True or q2_terms is True:
-        return "Q2 signal is positive but no specific integration workflow was matched"
-    return "No keyword or stage fallback matched; kept as Not specified"
+    return "Unspecified integration"
 
 
 def derive_decision_timing(row: pd.Series) -> str:
+    if row["q2_signal_state"] != "Present":
+        return "Not applicable"
     approach = row["integration_approach"]
-    stage = row["stage_norm"]
-    text = " ".join([row["title_norm"], row["abstract_norm"], row["ai_task_norm"], row["notes_norm"]])
-
+    text = " ".join(
+        [
+            norm_text(row.get("title")),
+            norm_text(row.get("abstract")),
+            norm_text(row.get("AI_task_type")),
+            norm_text(row.get("notes_coding")),
+        ]
+    )
     if approach in {"Triage / questionnaires", "Mobile screening", "Feature extraction", "Risk stratification"}:
         return "Pre-decision"
-
     if approach == "Second-reader decision support":
-        if any(k in text for k in ["triage", "prioritization", "pre-read", "pre read", "feature extraction"]):
-            return "Pre-decision"
-        return "In-decision"
-
+        return "Pre-decision" if any(token in text for token in ["triage", "pre-read", "feature extraction"]) else "In-decision"
     if approach in {"Longitudinal dashboards", "Adaptive intervention", "Assistive tools"}:
         return "Post-decision"
-
-    if approach == "No clear integration":
-        return "Unspecified"
-
-    if stage in {"Prescreening", "Screening", "Prognosis"}:
-        return "Pre-decision"
-    if stage == "Diagnosis":
-        return "In-decision"
-    if stage == "Monitoring/intervention":
-        return "Post-decision"
-
     return "Unspecified"
 
 
-def explain_decision_timing(row: pd.Series) -> str:
-    approach = row["integration_approach"]
-    stage = row["stage_norm"]
-    text = " ".join([row["title_norm"], row["abstract_norm"], row["ai_task_norm"], row["notes_norm"]])
-
-    if approach in {"Triage / questionnaires", "Mobile screening", "Feature extraction", "Risk stratification"}:
-        return "Approach maps directly to pre-decision support"
-    if approach == "Second-reader decision support":
-        if any(k in text for k in ["triage", "prioritization", "pre-read", "pre read", "feature extraction"]):
-            return "Second-reader pattern was re-routed to pre-decision by text cue"
-        return "Second-reader pattern maps to in-decision support"
-    if approach in {"Longitudinal dashboards", "Adaptive intervention", "Assistive tools"}:
-        return "Approach maps directly to post-decision support"
-    if approach == "No clear integration":
-        return "No clear integration cannot be placed on the decision timeline"
-    if stage in {"Prescreening", "Screening", "Prognosis"}:
-        return "Fallback assigned from stage to pre-decision"
-    if stage == "Diagnosis":
-        return "Fallback assigned from stage to in-decision"
-    if stage == "Monitoring/intervention":
-        return "Fallback assigned from stage to post-decision"
-    return "No approach or stage fallback matched; kept as Unspecified"
+def refresh_master_denominator_table() -> None:
+    path = OUTPUT_DIR / "rq2_denominators_q1_v2.csv"
+    if path.exists():
+        pd.read_csv(path).to_csv(MASTER_DENOMINATOR_FILE, index=False)
 
 
-def build_review_reasons(row: pd.Series) -> str:
-    reasons: list[str] = []
-    if row["integration_approach"] in {"Unspecified integration", "No clear integration", "Not specified"}:
-        reasons.append(f"integration_approach={row['integration_approach']}")
-    if row["decision_timing"] == "Unspecified":
-        reasons.append("decision_timing=Unspecified")
-    if row["stage_norm"] == "Not specified":
-        reasons.append("stage_norm=Not specified")
-    if pd.isna(row["q2_abstract_bool"]):
-        reasons.append("q2_abstract_bool=missing")
-    if pd.isna(row["q2_terms_bool"]):
-        reasons.append("q2_terms_bool=missing")
-    return "; ".join(reasons)
-
-
-def wrap_label(label: str, width: int = 22) -> str:
-    words = label.split()
-    lines: list[str] = []
-    current = ""
-    for word in words:
-        candidate = word if not current else f"{current} {word}"
-        if len(candidate) <= width:
-            current = candidate
-        else:
-            if current:
-                lines.append(current)
-            current = word
-    if current:
-        lines.append(current)
-    return "\n".join(lines)
-
-
-def compute_node_positions(labels: list[str], top: float = 0.92, bottom: float = 0.08) -> dict[str, float]:
-    if len(labels) == 1:
-        return {labels[0]: 0.5}
-    step = (top - bottom) / (len(labels) - 1)
-    return {label: top - i * step for i, label in enumerate(labels)}
-
-
-def draw_tripartite_figure(df: pd.DataFrame, outpath: Path) -> None:
-    stage_order = [
-        "Prescreening",
-        "Screening",
-        "Diagnosis",
-        "Prognosis",
-        "Monitoring/intervention",
-        "Not specified",
-    ]
-    approach_order = [
+def main() -> None:
+    ensure_dir(OUTPUT_DIR)
+    stale_timing_table = OUTPUT_DIR / "rq2_timing_table_q1_v2.csv"
+    if stale_timing_table.exists():
+        stale_timing_table.unlink()
+    df = normalize_common_fields(load_base_df())
+    df["q2_abstract_bool"] = df["q2_candidate_abstract"].map(normalize_bool_signal)
+    df["q2_terms_bool"] = df["q2_candidate_terms"].map(normalize_bool_signal)
+    df["q2_signal_state"] = df.apply(derive_q2_signal_state, axis=1)
+    df["integration_approach"] = pd.NA
+    positive_mask = df["q2_signal_state"].eq("Present")
+    df.loc[positive_mask, "integration_approach"] = df.loc[positive_mask].apply(derive_integration_approach_positive, axis=1)
+    df["decision_timing"] = df.apply(derive_decision_timing, axis=1)
+    df["q2_signal_pattern"] = df.apply(
+        lambda row: f"abstract={status_from_bool(row['q2_abstract_bool'])}; terms={status_from_bool(row['q2_terms_bool'])}",
+        axis=1,
+    )
+    positive_df = df.loc[positive_mask].copy()
+    integration_order = [
         "Triage / questionnaires",
         "Mobile screening",
-        "Second-reader decision support",
         "Feature extraction",
+        "Second-reader decision support",
         "Risk stratification",
         "Longitudinal dashboards",
         "Adaptive intervention",
         "Assistive tools",
         "Unspecified integration",
-        "No clear integration",
-        "Not specified",
     ]
-    stage_labels = [x for x in stage_order if x in set(df["stage_norm"])]
-    approach_labels = [x for x in approach_order if x in set(df["integration_approach"])]
-
-    counts = (
-        pd.crosstab(df["integration_approach"], df["stage_norm"])
-        .reindex(index=approach_labels, columns=stage_labels, fill_value=0)
+    stage_integration = (
+        pd.crosstab(positive_df["stage_norm"], positive_df["integration_approach"])
+        .reindex(index=ordered_categories(df["stage_norm"].unique().tolist(), STAGE_ORDER), columns=integration_order, fill_value=0)
     )
-    shares = counts.div(counts.sum(axis=0), axis=1).fillna(0)
-    stage_totals = counts.sum(axis=0)
-    max_count = max(int(counts.to_numpy().max()), 1)
-    cmap = plt.cm.YlGnBu
-    norm = plt.Normalize(vmin=0, vmax=max_count)
-
-    fig, heat_ax = plt.subplots(figsize=(12.3, 8.2), facecolor="white")
-    heat_ax.set_facecolor("white")
-
-    for row_idx, approach in enumerate(approach_labels):
-        for col_idx, stage in enumerate(stage_labels):
-            value = int(counts.loc[approach, stage])
-            share = shares.loc[approach, stage]
-            base = cmap(norm(value)) if value else "#fbf8f1"
-            rect = patches.FancyBboxPatch(
-                (col_idx, row_idx),
-                1,
-                1,
-                boxstyle="round,pad=0.02,rounding_size=0.08",
-                linewidth=1.5 if value else 0.7,
-                edgecolor="#e6e6e6" if value else "#f0f0f0",
-                facecolor=base if value else "white",
-            )
-            heat_ax.add_patch(rect)
-            label = f"{value}"
-            if value:
-                label += f"\n{share * 100:.1f}%"
-            heat_ax.text(
-                col_idx + 0.5,
-                row_idx + 0.5,
-                label,
-                ha="center",
-                va="center",
-                fontsize=10,
-                fontweight="bold" if value == max_count else "normal",
-                color="#1f2933" if norm(value) < 0.55 else "white",
-            )
-
-    heat_ax.set_xlim(0, len(stage_labels))
-    heat_ax.set_ylim(len(approach_labels), 0)
-    heat_ax.set_xticks([x + 0.5 for x in range(len(stage_labels))])
-    heat_ax.set_xticklabels(
-        [f"{wrap_label(label, 14)}\n(n={int(stage_totals[label])})" for label in stage_labels],
-        fontsize=11,
-    )
-    heat_ax.set_yticks([y + 0.5 for y in range(len(approach_labels))])
-    heat_ax.set_yticklabels([wrap_label(label, 24) for label in approach_labels], fontsize=10)
-    heat_ax.tick_params(length=0)
-    for spine in heat_ax.spines.values():
-        spine.set_visible(False)
-    heat_ax.set_xlabel("Clinical functional stage", fontsize=11, labelpad=12)
-    heat_ax.set_ylabel("Integration approach", fontsize=11, labelpad=12)
-
-    sm = ScalarMappable(norm=norm, cmap=cmap)
-    sm.set_array([])
-    cbar = fig.colorbar(sm, ax=heat_ax, fraction=0.03, pad=0.02)
-    cbar.set_label("Frequency (n)", fontsize=10)
-    cbar.ax.tick_params(labelsize=9)
-    cbar.outline.set_visible(False)
-
-    fig.subplots_adjust(top=0.98, bottom=0.18, left=0.22, right=0.93)
-    fig.savefig(outpath, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
-
-def main() -> None:
-    outdir = Path(OUTPUT_DIR)
-    outdir.mkdir(parents=True, exist_ok=True)
-
-    df = load_reviewer_inputs()
-
-    required_cols = [
-        STAGE_COL,
-        Q2_ABSTRACT_COL,
-        Q2_TERMS_COL,
-        AI_TASK_COL,
-        TITLE_COL,
-        ABSTRACT_COL,
+    stage_integration = stage_integration.loc[(stage_integration.sum(axis=1) > 0), (stage_integration.sum(axis=0) > 0)]
+    stage_integration.to_csv(OUTPUT_DIR / "rq2_stage_x_integration_q1_v2.csv")
+    df.to_csv(OUTPUT_DIR / "rq2_tripartite_dataset_q1_v2.csv", index=False)
+    review_rows = positive_df[positive_df["integration_approach"].eq("Unspecified integration") | positive_df["decision_timing"].eq("Unspecified")].copy()
+    review_rows.to_csv(OUTPUT_DIR / "rq2_review_rows_q1_v2.csv", index=False)
+    denominator_rows = [
+        {"rq": "RQ2", "subset": "all_rows", "group": "All studies", "denominator_n": int(len(df)), "notes": "Unique studies in the consolidated sheet."}
     ]
-    missing_cols = [c for c in required_cols if c not in df.columns]
-    if missing_cols:
-        raise ValueError(
-            f"Missing required columns: {missing_cols}\nAvailable columns: {list(df.columns)}"
+    for state, count in df["q2_signal_state"].value_counts(dropna=False).reindex(["Present", "Absent", "Uncoded"], fill_value=0).items():
+        denominator_rows.append(
+            {
+                "rq": "RQ2",
+                "subset": "integration_signal_state",
+                "group": state,
+                "denominator_n": int(count),
+                "notes": "Derived from q2_candidate_abstract and q2_candidate_terms.",
+            }
         )
+    pd.DataFrame(denominator_rows).to_csv(OUTPUT_DIR / "rq2_denominators_q1_v2.csv", index=False)
+    fig, heat_ax = plt.subplots(figsize=(13.5, 6.8), facecolor="white")
+    heat_values = stage_integration.to_numpy(dtype=float)
+    img = heat_ax.imshow(heat_values, cmap="Blues", aspect="auto")
+    # Determine threshold for switching annotation colour (white on dark, black on light)
+    vmin, vmax = heat_values.min(), heat_values.max()
+    threshold = vmin + (vmax - vmin) * 0.55
+    row_totals = heat_values.sum(axis=1)
+    for row_idx in range(heat_values.shape[0]):
+        for col_idx in range(heat_values.shape[1]):
+            value = int(heat_values[row_idx, col_idx])
+            share = 0.0 if row_totals[row_idx] == 0 else value / row_totals[row_idx]
+            if value == 0:
+                label = "0"
+                font_color = "#888888"
+            else:
+                label = f"{value}\n{share:.0%}"
+                font_color = "white" if heat_values[row_idx, col_idx] >= threshold else "#1a1a2e"
+            heat_ax.text(
+                col_idx, row_idx, label,
+                ha="center", va="center",
+                fontsize=8.5, fontweight="bold",
+                color=font_color,
+                linespacing=1.4,
+            )
+    heat_ax.set_xticks(range(len(stage_integration.columns)))
+    heat_ax.set_xticklabels(stage_integration.columns, rotation=40, ha="right", fontsize=9)
+    heat_ax.set_yticks(range(len(stage_integration.index)))
+    heat_ax.set_yticklabels(stage_integration.index, fontsize=9)
+    heat_ax.set_xlabel("Integration approach", fontsize=11, fontweight="bold", labelpad=10)
+    heat_ax.set_ylabel("Clinical stage", fontsize=11, fontweight="bold", labelpad=10)
+    # Add a colourbar for scale reference
+    cbar = fig.colorbar(img, ax=heat_ax, shrink=0.7, pad=0.02)
+    cbar.set_label("Study count", fontsize=9)
+    cbar.ax.tick_params(labelsize=8)
+    fig.tight_layout()
+    save_figure_variants(fig, OUTPUT_DIR / "rq2_heatmap_and_timing_q1_v2")
+    write_caption(
+        OUTPUT_DIR / "rq2_heatmap_and_timing_q1_v2_caption.txt",
+        """
+        RQ2. Stage-by-integration heatmap. The heatmap shows study counts by primary clinical stage and derived
+        integration approach among studies with an explicit integration signal. Workflow-oriented categories are assigned
+        using keyword and stage fallback rules. Cell annotations report the count and the within-stage percentage. Study-level
+        classifications are stored in rq2_tripartite_dataset_q1_v2.csv and denominators are listed in
+        rq2_denominators_q1_v2.csv.
+        """,
+    )
+    refresh_master_denominator_table()
 
-    df["stage_norm"] = df[STAGE_COL].apply(normalize_stage)
-    df["q2_abstract_bool"] = df[Q2_ABSTRACT_COL].apply(normalize_bool_signal)
-    df["q2_terms_bool"] = df[Q2_TERMS_COL].apply(normalize_bool_signal)
 
-    df["title_norm"] = df[TITLE_COL].apply(norm_text)
-    df["abstract_norm"] = df[ABSTRACT_COL].apply(norm_text)
-    df["ai_task_norm"] = df[AI_TASK_COL].apply(norm_text)
-    df["notes_norm"] = df[NOTES_COL].apply(norm_text) if NOTES_COL in df.columns else ""
-
-    df["integration_approach"] = df.apply(derive_integration_approach, axis=1)
-    df["integration_trace"] = df.apply(explain_integration_approach, axis=1)
-    df["decision_timing"] = df.apply(derive_decision_timing, axis=1)
-    df["decision_timing_trace"] = df.apply(explain_decision_timing, axis=1)
-    df["review_trace"] = df.apply(build_review_reasons, axis=1)
-
-    df.to_csv(outdir / "rq2_tripartite_dataset.csv", index=False)
-
-    stage_approach = pd.crosstab(df["stage_norm"], df["integration_approach"])
-    approach_timing = pd.crosstab(df["integration_approach"], df["decision_timing"])
-    stage_approach.to_csv(outdir / "rq2_stage_x_approach.csv")
-    approach_timing.to_csv(outdir / "rq2_approach_x_timing.csv")
-
-    draw_tripartite_figure(df, outdir / "rq2_tripartite_integration_model.png")
-
-    review_rows = df[
-        df["integration_approach"].isin(["Unspecified integration", "No clear integration", "Not specified"])
-        | df["decision_timing"].eq("Unspecified")
-        | df["stage_norm"].eq("Not specified")
-        | df["q2_abstract_bool"].isna()
-        | df["q2_terms_bool"].isna()
-    ].copy()
-
-    preferred_cols = [
-        STUDY_ID_COL,
-        YEAR_COL,
-        DOI_COL,
-        MODALITY_COL,
-        TITLE_COL,
-        STAGE_COL,
-        "stage_norm",
-        Q2_ABSTRACT_COL,
-        Q2_TERMS_COL,
-        AI_TASK_COL,
-        NOTES_COL,
-        "integration_approach",
-        "integration_trace",
-        "decision_timing",
-        "decision_timing_trace",
-        "review_trace",
-    ]
-    preferred_cols = [c for c in preferred_cols if c in review_rows.columns]
-    review_rows = review_rows[preferred_cols]
-    review_rows.to_csv(outdir / "rq2_review_rows.csv", index=False)
-
-    print(f"RQ2 outputs saved to: {outdir.resolve()}")
+def _self_check() -> None:
+    assert derive_q2_signal_state(pd.Series({"q2_candidate_abstract": "true", "q2_candidate_terms": pd.NA})) == "Present"
 
 
 if __name__ == "__main__":
+    _self_check()
     main()
