@@ -327,14 +327,20 @@ def draw_compact_dotplot(combo: pd.DataFrame, outpath: Path, panel_specs: list[t
     for ax in axes[len(panel_data):]:
         ax.axis("off")
 
+    visible_practices = [
+        (col, label, color, marker)
+        for col, (label, color, marker) in PRACTICE_COLS.items()
+        if any(int(row[f"{col}_count"]) > 0 for _, df_stage in panel_data for _, row in df_stage.iterrows())
+    ]
     legend_handles = [
         Line2D([0], [0], color=color, marker=marker, linewidth=0, markersize=8, label=label)
-        for label, color, marker in PRACTICE_COLS.values()
+        for _, label, color, marker in visible_practices
     ]
     legend_y = 0.01 if n_panels == 1 else 0.02
     xlabel_y = 0.12 if n_panels == 1 else 0.08
     bottom_margin = 0.2 if n_panels == 1 else 0.14
-    fig.legend(handles=legend_handles, frameon=False, ncol=2, loc="lower center", bbox_to_anchor=(0.5, legend_y), fontsize=11)
+    legend_cols = 2 if len(legend_handles) > 2 else max(1, len(legend_handles))
+    fig.legend(handles=legend_handles, frameon=False, ncol=legend_cols, loc="lower center", bbox_to_anchor=(0.5, legend_y), fontsize=11)
     fig.supxlabel("Implementation frequency within each profile", fontsize=13, y=xlabel_y)
     fig.supylabel("Clinical stage | data source | AI technique", fontsize=13, x=0.02)
     fig.subplots_adjust(left=0.36, right=0.98, top=0.94, bottom=bottom_margin, hspace=0.18)
