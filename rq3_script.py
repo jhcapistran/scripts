@@ -281,10 +281,16 @@ def build_omitted_zero_profiles(combo: pd.DataFrame) -> pd.DataFrame:
     return combo[combo["positive_practice_total"] == 0].copy().reset_index(drop=True)
 
 
-def draw_compact_dotplot(combo: pd.DataFrame, outpath: Path, panel_specs: list[tuple[str, list[str]]]) -> None:
+def draw_compact_dotplot(
+    combo: pd.DataFrame,
+    outpath: Path,
+    panel_specs: list[tuple[str, list[str]]],
+    layout: dict[str, float] | None = None,
+) -> None:
     plot_df = select_plot_combos(combo)
     if plot_df.empty:
         raise ValueError("No positive Q3 combinations available to plot.")
+    layout = layout or {}
 
     panel_data = [(title, plot_df[plot_df["plot_stage"].isin(stages)].reset_index(drop=True)) for title, stages in panel_specs]
     panel_data = [(title, df_stage) for title, df_stage in panel_data if not df_stage.empty]
@@ -294,7 +300,10 @@ def draw_compact_dotplot(combo: pd.DataFrame, outpath: Path, panel_specs: list[t
     n_panels = len(panel_data)
     ncols = 1
     nrows = (n_panels + ncols - 1) // ncols
-    fig_height = max(7.0, 0.64 * total_rows + 1.55 * nrows)
+    row_height = layout.get("row_height", 0.5)
+    base_height = layout.get("base_height", 1.05)
+    min_height = layout.get("min_height", 5.9)
+    fig_height = max(min_height, row_height * total_rows + base_height * nrows)
     max_label_len = max(len(str(label)) for _, df_stage in panel_data for label in df_stage["plot_label"])
     fig_width = min(12.5, max(9.6, 7.2 + 0.055 * max_label_len))
     fig, axes = plt.subplots(nrows, ncols, figsize=(fig_width, fig_height), facecolor="white")
@@ -326,16 +335,18 @@ def draw_compact_dotplot(combo: pd.DataFrame, outpath: Path, panel_specs: list[t
                 row_labels.append(f"{points[0][3]}/{int(row['combo_n'])}")
 
             if row_labels:
-                ax.text(1.045, row_idx, ", ".join(row_labels), va="center", ha="left", fontsize=11)
+                ax.text(1.045, row_idx, ", ".join(row_labels), va="center", ha="left", fontsize=12)
 
-        ax.set_title(title, fontsize=15, loc="left")
+        ax.set_title(title, fontsize=16, loc="left")
         ax.set_xlim(0, 1.16)
         ax.set_ylim(-0.5, len(stage_df) - 0.5)
         ax.set_yticks(y_positions)
-        ax.set_yticklabels(stage_df["plot_label"], fontsize=11)
+        ax.set_yticklabels(stage_df["plot_label"], fontsize=12)
+        ax.set_ylabel("Stage | data source | AI technique", fontsize=15, labelpad=34)
         ax.invert_yaxis()
         ax.set_xticks([0, 0.25, 0.5, 0.75, 1.0], ["0%", "25%", "50%", "75%", "100%"])
-        ax.tick_params(axis="x", labelsize=12)
+        ax.tick_params(axis="x", labelsize=13)
+        ax.set_xlabel("Implementation frequency within each profile", fontsize=15, labelpad=12)
         ax.grid(axis="x", color="#e5e7eb", linewidth=0.9)
         ax.grid(axis="y", color="#f1f5f9", linewidth=0.8)
         ax.set_axisbelow(True)
@@ -351,17 +362,15 @@ def draw_compact_dotplot(combo: pd.DataFrame, outpath: Path, panel_specs: list[t
         if any(int(row[f"{col}_count"]) > 0 for _, df_stage in panel_data for _, row in df_stage.iterrows())
     ]
     legend_handles = [
-        Line2D([0], [0], color=color, marker=marker, linewidth=0, markersize=9, label=label)
+        Line2D([0], [0], color=color, marker=marker, linewidth=0, markersize=10, label=label)
         for _, label, color, marker in visible_practices
     ]
-    legend_y = 0.01 if n_panels == 1 else 0.02
-    xlabel_y = 0.12 if n_panels == 1 else 0.08
-    bottom_margin = 0.2 if n_panels == 1 else 0.14
+    legend_y = layout.get("legend_y", 0.01 if n_panels == 1 else 0.02)
+    xlabel_y = layout.get("xlabel_y", 0.12 if n_panels == 1 else 0.08)
+    bottom_margin = layout.get("bottom_margin", 0.2 if n_panels == 1 else 0.14)
     legend_cols = 2 if len(legend_handles) > 2 else max(1, len(legend_handles))
-    fig.legend(handles=legend_handles, frameon=False, ncol=legend_cols, loc="lower center", bbox_to_anchor=(0.5, legend_y), fontsize=12)
-    fig.supxlabel("Implementation frequency within each profile", fontsize=14, y=xlabel_y)
-    fig.supylabel("Clinical stage | data source | AI technique", fontsize=14, x=0.008)
-    fig.subplots_adjust(left=0.4, right=0.98, top=0.94, bottom=bottom_margin, hspace=0.18)
+    fig.legend(handles=legend_handles, frameon=False, ncol=legend_cols, loc="lower center", bbox_to_anchor=(0.5, legend_y), fontsize=13)
+    fig.subplots_adjust(left=0.42, right=0.98, top=0.95, bottom=bottom_margin, hspace=layout.get("hspace", 0.12))
     save_figure_variants(fig, outpath)
 
 
@@ -418,13 +427,13 @@ def main() -> None:
     omitted_studies_n = int(omitted_zero["combo_n"].sum()) if not omitted_zero.empty else 0
 
     figure_specs = [
-        ("rq3_practice_lollipop_a_q1_v2", "A. Prescreening and screening", ["Prescreening", "Screening"]),
-        ("rq3_practice_lollipop_b_q1_v2", "B. Diagnosis", ["Diagnosis"]),
-        ("rq3_practice_lollipop_c_q1_v2", "C. Monitoring/intervention", ["Monitoring/intervention"]),
-        ("rq3_practice_lollipop_d_q1_v2", "D. Prognosis and unspecified stage", ["Prognosis", "Clinical stage not specified"]),
+        ("rq3_practice_lollipop_a_q1_v2", "A. Prescreening and screening", ["Prescreening", "Screening"], {"row_height": 0.47, "base_height": 1.0, "min_height": 5.8}),
+        ("rq3_practice_lollipop_b_q1_v2", "B. Diagnosis", ["Diagnosis"], {"row_height": 0.48, "base_height": 1.02, "min_height": 6.0}),
+        ("rq3_practice_lollipop_c_q1_v2", "C. Monitoring/intervention", ["Monitoring/intervention"], {"row_height": 0.46, "base_height": 1.0, "min_height": 5.5}),
+        ("rq3_practice_lollipop_d_q1_v2", "D. Prognosis and unspecified stage", ["Prognosis", "Clinical stage not specified"], {"row_height": 0.34, "base_height": 0.8, "min_height": 4.1, "bottom_margin": 0.27, "xlabel_y": 0.105, "legend_y": 0.01}),
     ]
-    for stem, title, stages in figure_specs:
-        draw_compact_dotplot(combo, OUTPUT_DIR / stem, [(title, stages)])
+    for stem, title, stages, layout in figure_specs:
+        draw_compact_dotplot(combo, OUTPUT_DIR / stem, [(title, stages)], layout)
     write_caption(
         OUTPUT_DIR / "rq3_practice_lollipop_a_q1_v2_caption.txt",
         f"""
