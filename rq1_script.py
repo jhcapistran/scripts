@@ -14,10 +14,14 @@ matplotlib.use("Agg")
 plt.style.use(["science", "no-latex"])
 
 BASE_DIR = Path(__file__).resolve().parent
-INPUT_FILE = BASE_DIR / "consolidado_RA_RB_Q3_completado.xlsx"
+# Same corrected consolidated file used by RQ2/RQ3 (fixes stage_primary gaps present in the older file).
+INPUT_FILE = BASE_DIR / "consolidado_RA_RB_Q3_completado_RQ2_final.xlsx"
 SHEET_NAME = "Consolidado_por_asignacion"
 OUTPUT_DIR = BASE_DIR / "rq1_results_q1_v2"
 SUPPORTING_DIR = BASE_DIR / "rq1_supporting_q1_v2"
+MASTER_DENOMINATOR_FILE = BASE_DIR / "rq_denominators_q1_v2.csv"
+# Confirmed non-primary records (reviews/surveys/perspectives) shared across RQ1/RQ2/RQ3, see rq_eligibility_recheck_q1_v2.csv.
+EXCLUDED_STUDIES_FILE = BASE_DIR / "rq_excluded_studies_q1_v2.csv"
 
 MODALITY_COL = "modalidad"
 STAGE_COL = "stage_primary"
@@ -150,8 +154,16 @@ def write_caption(path: Path, text: str) -> None:
     path.write_text(text.strip() + "\n", encoding="utf-8")
 
 
+def load_excluded_study_ids() -> pd.DataFrame:
+    if not EXCLUDED_STUDIES_FILE.exists():
+        return pd.DataFrame(columns=["study_id", "tier", "title", "reason"])
+    return pd.read_csv(EXCLUDED_STUDIES_FILE)
+
+
 def load_base_df() -> pd.DataFrame:
-    return pd.read_excel(INPUT_FILE, sheet_name=SHEET_NAME).copy()
+    df = pd.read_excel(INPUT_FILE, sheet_name=SHEET_NAME).copy()
+    excluded = load_excluded_study_ids()
+    return df[~df["study_id"].isin(excluded["study_id"])].copy()
 
 
 def resolve_single_stage(row: pd.Series) -> tuple[str, str, int, str]:
@@ -326,6 +338,7 @@ def cleanup_outputs(directory: Path, prefix: str) -> None:
         "rq1_stage_assignment_summary.csv",
         "rq1_notes_full_context.csv",
         "rq1_notes_summary.txt",
+        "rq1_denominators_q1_v2.csv",
     }
     for path in directory.glob(f"{prefix}*"):
         if path.is_file() and path.name not in keep:
@@ -394,6 +407,15 @@ def main() -> None:
         algorithm_plot=lambda x: x["algorithm_raw"]
     ).to_csv(OUTPUT_DIR / "rq1_algorithm_plot_mapping.csv", index=False)
     run_notes_audit(analyzed, SUPPORTING_DIR)
+    stage_resolved_n = int((analyzed["resolved_stage_single"] != "Not specified").sum())
+    n_excluded = len(load_excluded_study_ids())
+    denominator_rows = [
+        {"rq": "RQ1", "subset": "all_rows", "group": "All studies", "denominator_n": int(len(df)), "notes": "Unique studies in the consolidated sheet, after excluding confirmed non-primary records."},
+        {"rq": "RQ1", "subset": "exclusions_applied", "group": "Tier1 non-primary (reviews/surveys/perspectives)", "denominator_n": n_excluded, "notes": "Excluded before analysis; see rq_excluded_studies_q1_v2.csv."},
+        {"rq": "RQ1", "subset": "stage_resolution", "group": "Stage resolved", "denominator_n": stage_resolved_n, "notes": "resolved_stage_single not equal to 'Not specified'."},
+        {"rq": "RQ1", "subset": "stage_resolution", "group": "Not specified", "denominator_n": int(len(df)) - stage_resolved_n, "notes": "resolved_stage_single equal to 'Not specified'."},
+    ]
+    pd.DataFrame(denominator_rows).to_csv(OUTPUT_DIR / "rq1_denominators_q1_v2.csv", index=False)
     cleanup_outputs(OUTPUT_DIR, "rq1_")
     cleanup_outputs(SUPPORTING_DIR, "rq1_")
 

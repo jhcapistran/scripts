@@ -17,7 +17,8 @@ BASE_DIR = Path(__file__).resolve().parent
 INPUT_FILE = BASE_DIR / "consolidado_RA_RB_Q3_completado_RQ2_final.xlsx"
 SHEET_NAME = "Consolidado_por_asignacion"
 OUTPUT_DIR = BASE_DIR / "rq2_results_q1_v2"
-MASTER_DENOMINATOR_FILE = BASE_DIR / "rq_denominators_q1_v2.csv"
+# Confirmed non-primary records (reviews/surveys/perspectives) shared across RQ1/RQ2/RQ3, see rq_eligibility_recheck_q1_v2.csv.
+EXCLUDED_STUDIES_FILE = BASE_DIR / "rq_excluded_studies_q1_v2.csv"
 
 STAGE_ORDER = [
     "Prescreening",
@@ -129,8 +130,16 @@ def ordered_categories(observed: list[str], preferred: list[str]) -> list[str]:
     return ordered + extras
 
 
+def load_excluded_study_ids() -> pd.DataFrame:
+    if not EXCLUDED_STUDIES_FILE.exists():
+        return pd.DataFrame(columns=["study_id", "tier", "title", "reason"])
+    return pd.read_csv(EXCLUDED_STUDIES_FILE)
+
+
 def load_base_df() -> pd.DataFrame:
     df = pd.read_excel(INPUT_FILE, sheet_name=SHEET_NAME).copy()
+    excluded = load_excluded_study_ids()
+    df = df[~df["study_id"].isin(excluded["study_id"])].copy()
     df["row_id"] = range(1, len(df) + 1)
     return df
 
@@ -207,11 +216,6 @@ def derive_decision_timing(row: pd.Series) -> str:
     return "Unspecified"
 
 
-def refresh_master_denominator_table() -> None:
-    path = OUTPUT_DIR / "rq2_denominators_q1_v2.csv"
-    if path.exists():
-        pd.read_csv(path).to_csv(MASTER_DENOMINATOR_FILE, index=False)
-
 
 def main() -> None:
     ensure_dir(OUTPUT_DIR)
@@ -252,7 +256,8 @@ def main() -> None:
     review_rows = positive_df[positive_df["integration_approach"].eq("Unspecified integration") | positive_df["decision_timing"].eq("Unspecified")].copy()
     review_rows.to_csv(OUTPUT_DIR / "rq2_review_rows_q1_v2.csv", index=False)
     denominator_rows = [
-        {"rq": "RQ2", "subset": "all_rows", "group": "All studies", "denominator_n": int(len(df)), "notes": "Unique studies in the consolidated sheet."}
+        {"rq": "RQ2", "subset": "all_rows", "group": "All studies", "denominator_n": int(len(df)), "notes": "Unique studies in the consolidated sheet, after excluding confirmed non-primary records."},
+        {"rq": "RQ2", "subset": "exclusions_applied", "group": "Tier1 non-primary (reviews/surveys/perspectives)", "denominator_n": len(load_excluded_study_ids()), "notes": "Excluded before analysis; see rq_excluded_studies_q1_v2.csv."},
     ]
     for state, count in df["q2_signal_state"].value_counts(dropna=False).reindex(["Present", "Absent", "Uncoded"], fill_value=0).items():
         denominator_rows.append(
@@ -311,7 +316,6 @@ def main() -> None:
         rq2_denominators_q1_v2.csv.
         """,
     )
-    refresh_master_denominator_table()
 
 
 def _self_check() -> None:

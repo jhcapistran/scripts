@@ -18,6 +18,8 @@ SHEET_NAME = "RQ3_graph_ready"
 OUTPUT_DIR = BASE_DIR / "rq3_results_q1_v2"
 SUPPLEMENT_DIR = OUTPUT_DIR / "supplement"
 MASTER_DENOMINATOR_FILE = BASE_DIR / "rq_denominators_q1_v2.csv"
+# Confirmed non-primary records (reviews/surveys/perspectives) shared across RQ1/RQ2/RQ3, see rq_eligibility_recheck_q1_v2.csv.
+EXCLUDED_STUDIES_FILE = BASE_DIR / "rq_excluded_studies_q1_v2.csv"
 
 METHOD_COL = "tipo_IA"
 MODALITY_COL = "modalidad"
@@ -133,8 +135,16 @@ def write_caption(path: Path, text: str) -> None:
     path.write_text(text.strip() + "\n", encoding="utf-8")
 
 
+def load_excluded_study_ids() -> pd.DataFrame:
+    if not EXCLUDED_STUDIES_FILE.exists():
+        return pd.DataFrame(columns=["study_id", "tier", "title", "reason"])
+    return pd.read_csv(EXCLUDED_STUDIES_FILE)
+
+
 def load_base_df() -> pd.DataFrame:
-    return pd.read_excel(INPUT_FILE, sheet_name=SHEET_NAME).copy()
+    df = pd.read_excel(INPUT_FILE, sheet_name=SHEET_NAME).copy()
+    excluded = load_excluded_study_ids()
+    return df[~df["study_id"].isin(excluded["study_id"])].copy()
 
 
 def build_combo_summary(df: pd.DataFrame) -> pd.DataFrame:
@@ -406,8 +416,15 @@ def main() -> None:
             "subset": "all_rows",
             "group": "All studies",
             "denominator_n": int(len(df)),
-            "notes": "All studies in the consolidated sheet.",
-        }
+            "notes": "All studies in the consolidated sheet, after excluding confirmed non-primary records.",
+        },
+        {
+            "rq": "RQ3",
+            "subset": "exclusions_applied",
+            "group": "Tier1 non-primary (reviews/surveys/perspectives)",
+            "denominator_n": len(load_excluded_study_ids()),
+            "notes": "Excluded before analysis; see rq_excluded_studies_q1_v2.csv.",
+        },
     ]
     for _, row in global_summary.iterrows():
         denominator_rows.append(
