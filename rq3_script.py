@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime as dt
 from pathlib import Path
 
 import matplotlib
@@ -13,8 +14,8 @@ matplotlib.use("Agg")
 plt.style.use(["science", "no-latex"])
 
 BASE_DIR = Path(__file__).resolve().parent
-INPUT_FILE = BASE_DIR / "RQ3_datos.xlsx"
-SHEET_NAME = "RQ3_graph_ready"
+INPUT_FILE = BASE_DIR / "cribado_maestro_276_actualizacion_2026-09-02.xlsx"
+SHEET_NAME = "RQ3_base_276"
 OUTPUT_DIR = BASE_DIR / "rq3_results_q1_v2"
 SUPPLEMENT_DIR = OUTPUT_DIR / "supplement"
 MASTER_DENOMINATOR_FILE = BASE_DIR / "rq_denominators_q1_v2.csv"
@@ -102,6 +103,10 @@ def normalize_category(value: object, mapping: dict[str, str], fallback: str = "
 
 def normalize_signal(value: object) -> int:
     if pd.isna(value):
+        return 0
+    if isinstance(value, dt.datetime):
+        return 1 if value.date() == dt.date(1900, 1, 1) else 0
+    if isinstance(value, dt.time):
         return 0
     try:
         return 1 if float(value) > 0 else 0
@@ -381,7 +386,35 @@ def refresh_master_denominator_table() -> None:
         if path.exists():
             frames.append(pd.read_csv(path))
     if frames:
-        pd.concat(frames, ignore_index=True).to_csv(MASTER_DENOMINATOR_FILE, index=False)
+        screening = pd.read_excel(INPUT_FILE, sheet_name="Actualizacion_430")
+        prior_final_n = int(len(pd.read_excel(INPUT_FILE, sheet_name="Base_276")))
+        provisional_new_n = int(screening["eligibility_bucket"].eq("Provisional include").sum())
+        screening_rows = pd.DataFrame(
+            [
+                {
+                    "rq": "Screening",
+                    "subset": "candidate_pool",
+                    "group": "Prior final corpus",
+                    "denominator_n": prior_final_n,
+                    "notes": "Definitive studies included before the 2026-09-02 update.",
+                },
+                {
+                    "rq": "Screening",
+                    "subset": "candidate_pool",
+                    "group": "New candidates passed title/abstract screening",
+                    "denominator_n": provisional_new_n,
+                    "notes": "All update records in the Provisional include bucket; counted for PRISMA/screening summaries.",
+                },
+                {
+                    "rq": "Screening",
+                    "subset": "candidate_pool",
+                    "group": "Combined provisional candidate pool",
+                    "denominator_n": prior_final_n + provisional_new_n,
+                    "notes": f"{prior_final_n} prior final studies plus new candidates that passed screening; not a final included-study denominator.",
+                },
+            ]
+        )
+        pd.concat([screening_rows, *frames], ignore_index=True).to_csv(MASTER_DENOMINATOR_FILE, index=False)
 
 
 def main() -> None:

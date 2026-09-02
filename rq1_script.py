@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime as dt
 from pathlib import Path
 import re
 
@@ -14,9 +15,8 @@ matplotlib.use("Agg")
 plt.style.use(["science", "no-latex"])
 
 BASE_DIR = Path(__file__).resolve().parent
-# Same corrected consolidated file used by RQ2/RQ3 (fixes stage_primary gaps present in the older file).
-INPUT_FILE = BASE_DIR / "consolidado_RA_RB_Q3_completado_RQ2_final.xlsx"
-SHEET_NAME = "Consolidado_por_asignacion"
+INPUT_FILE = BASE_DIR / "cribado_maestro_276_actualizacion_2026-09-02.xlsx"
+SHEET_NAME = "RQ1_RQ2_base_276"
 OUTPUT_DIR = BASE_DIR / "rq1_results_q1_v2"
 SUPPORTING_DIR = BASE_DIR / "rq1_supporting_q1_v2"
 MASTER_DENOMINATOR_FILE = BASE_DIR / "rq_denominators_q1_v2.csv"
@@ -122,6 +122,10 @@ def normalize_algorithm(value: object) -> str:
 
 
 def normalize_bool_signal(value: object) -> bool:
+    if isinstance(value, dt.datetime):
+        return value.date() == dt.date(1900, 1, 1)
+    if isinstance(value, dt.time):
+        return False
     try:
         return float(value) > 0
     except (TypeError, ValueError):

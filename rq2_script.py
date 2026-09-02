@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime as dt
 from pathlib import Path
 import re
 
@@ -14,8 +15,8 @@ matplotlib.use("Agg")
 plt.style.use(["science", "no-latex"])
 
 BASE_DIR = Path(__file__).resolve().parent
-INPUT_FILE = BASE_DIR / "consolidado_RA_RB_Q3_completado_RQ2_final.xlsx"
-SHEET_NAME = "Consolidado_por_asignacion"
+INPUT_FILE = BASE_DIR / "cribado_maestro_276_actualizacion_2026-09-02.xlsx"
+SHEET_NAME = "RQ1_RQ2_base_276"
 OUTPUT_DIR = BASE_DIR / "rq2_results_q1_v2"
 
 STAGE_ORDER = [
@@ -79,6 +80,10 @@ def normalize_stage(value: object) -> str:
 def normalize_bool_signal(value: object) -> bool | None:
     if pd.isna(value):
         return None
+    if isinstance(value, dt.datetime):
+        return value.date() == dt.date(1900, 1, 1)
+    if isinstance(value, dt.time):
+        return False
     if isinstance(value, (int, float, np.integer, np.floating)) and not isinstance(value, bool):
         if float(value) > 0:
             return True
