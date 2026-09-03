@@ -101,11 +101,30 @@ def add_traceability(df: pd.DataFrame, source: str) -> pd.DataFrame:
     return work
 
 
-def prepare_update_sheet(update: pd.DataFrame) -> pd.DataFrame:
+def prepare_update_sheet(update: pd.DataFrame, full_text: pd.DataFrame) -> pd.DataFrame:
     work = update.copy()
     for col in ["reviewer_1", "reviewer_2", "adjudicator", "decision_date"]:
         if col not in work.columns:
             work[col] = pd.NA
+    text_cols = [
+        "bib_index",
+        "full_text_status",
+        "integrity_status",
+        "full_text_decision",
+        "final_exclusion_reason",
+        "reviewer",
+        "decision_date",
+        "reviewer_1",
+        "reviewer_2",
+        "adjudicator",
+    ]
+    text = full_text[[col for col in text_cols if col in full_text.columns]].copy()
+    merged = work.merge(text, on="bib_index", how="left", suffixes=("", "_text"))
+    text_backed = merged["eligibility_bucket"].eq("Provisional include")
+    for col in [c for c in text_cols if c != "bib_index" and c in work.columns and f"{c}_text" in merged.columns]:
+        merged.loc[text_backed, col] = merged.loc[text_backed, f"{col}_text"].combine_first(merged.loc[text_backed, col])
+        merged = merged.drop(columns=[f"{col}_text"])
+    work = merged
     work["reviewer_trace"] = work.get("reviewer", pd.Series([pd.NA] * len(work))).fillna("Not recorded")
     work["decision_date_trace"] = work.get("decision_date", pd.Series([pd.NA] * len(work))).fillna("Not recorded")
     work["traceability_source"] = f"{MASTER_FILE.name}:Actualizacion_430"
@@ -223,7 +242,10 @@ def main() -> None:
     rq3 = add_traceability(restore_binary_columns(add_paper_order(rq3)), "RQ3_base_276 copied from master")
     if rq12["study_id"].tolist() != rq3["study_id"].tolist():
         raise ValueError("RQ1/RQ2 and RQ3 graph-ready study order differs.")
-    update = prepare_update_sheet(pd.read_excel(MASTER_FILE, sheet_name="Actualizacion_430"))
+    update = prepare_update_sheet(
+        pd.read_excel(MASTER_FILE, sheet_name="Actualizacion_430"),
+        pd.read_excel(MASTER_FILE, sheet_name="Texto_completo_192"),
+    )
     passed = update[update["eligibility_bucket"].eq("Provisional include")].copy()
     if len(passed) != PROVISIONAL_NEW_N:
         raise ValueError(f"Expected {PROVISIONAL_NEW_N} provisional new candidates, found {len(passed)}.")

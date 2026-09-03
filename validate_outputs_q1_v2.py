@@ -76,6 +76,33 @@ def main() -> None:
     wb = load_workbook(MASTER_FILE, data_only=False)
     require("Texto_completo_192" in str(wb["Resumen"]["B11"].value), "Resumen formulas do not reference Texto_completo_192")
     require("$J$2:$J$193" in str(wb["Resumen"]["B12"].value), "Resumen pending formula does not cover 192 text-complete rows")
+    for sheet in ["Texto_completo_192", "RQ1_RQ2_base_276", "RQ3_base_276"]:
+        header = {cell.value: cell.column for cell in wb[sheet][1]}
+        for col in ["reviewer_1", "reviewer_2", "adjudicator", "decision_date"]:
+            require(col in header, f"Master {sheet} is missing {col}")
+    for sheet in ["RQ1_RQ2_base_276", "RQ3_base_276"]:
+        ws = wb[sheet]
+        header = {cell.value: cell.column for cell in ws[1]}
+        for col in ["q2_candidate_abstract", "q2_candidate_terms"]:
+            c = header[col]
+            values = {ws.cell(row, c).value for row in range(2, ws.max_row + 1)}
+            formats = {ws.cell(row, c).number_format for row in range(2, ws.max_row + 1)}
+            require(values <= {0, 1}, f"Master {sheet}.{col} is not real 0/1")
+            require(formats == {"General"}, f"Master {sheet}.{col} is not formatted as General")
+    master_q12 = pd.read_excel(MASTER_FILE, sheet_name="RQ1_RQ2_base_276")
+    master_q3 = pd.read_excel(MASTER_FILE, sheet_name="RQ3_base_276")
+    terms = master_q12[["study_id", "q3_candidate_terms"]].merge(
+        master_q3[["study_id", "q3_candidate_terms"]],
+        on="study_id",
+        suffixes=("_rq12", "_rq3"),
+    )
+    require(
+        terms["q3_candidate_terms_rq12"].fillna("").astype(str).equals(terms["q3_candidate_terms_rq3"].fillna("").astype(str)),
+        "Master q3_candidate_terms differs between RQ1/RQ2 and RQ3",
+    )
+    for sheet_name, frame in [("RQ1_RQ2_base_276", master_q12), ("RQ3_base_276", master_q3)]:
+        stages = dict(zip(frame["study_id"], frame["stage_primary"]))
+        require(stages[236] == "Prescreening" and stages[266] == "Prescreening", f"Master {sheet_name} does not unify stages 236/266")
 
     rq12 = read("rq1_rq2_graph_ready")
     rq3 = read("rq3_graph_ready")
@@ -91,6 +118,9 @@ def main() -> None:
     row188 = candidates[candidates["bib_index"].eq(188)]
     require(len(row188) == 1, "bib_index 188 is not present exactly once among candidates")
     require(row188["full_text_decision"].iloc[0] == "Pending adjudication", "bib_index 188 has an inferred full-text decision")
+    row125 = candidates[candidates["bib_index"].eq(125)]
+    require(len(row125) == 1, "bib_index 125 is not present exactly once among candidates")
+    require(row125["full_text_decision"].iloc[0] == "Include with integrity flag", "bib_index 125 lost its full-text decision")
 
     for df, sheet in [(rq12, "rq1_rq2_graph_ready"), (rq3, "rq3_graph_ready")]:
         check_binary_columns(df, sheet)
@@ -131,6 +161,7 @@ def main() -> None:
     require(len(rq2_review) == 242, "RQ2 manual-review export does not contain 242 records")
     caption = (BASE_DIR / "rq2_results_q1_v2" / "rq2_heatmap_and_timing_q1_v2_caption.txt").read_text(encoding="utf-8")
     require("not be reported as confirmed clinical integration" in caption, "RQ2 caption does not warn against confirmed integration")
+    require("manual review" in caption, "RQ2 caption does not flag the 242 positives for manual review")
     require(not (BASE_DIR / "rq2_results_q1_v2" / "rq2_stage_x_integration_q1_v2.csv").exists(), "Stale RQ2 integration CSV still exists")
 
     not_spec = pd.read_csv(BASE_DIR / "rq1_results_q1_v2" / "rq1_denominators_q1_v2.csv")

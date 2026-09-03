@@ -21,7 +21,7 @@ Este repositorio genera el dataset analitico y las figuras RQ1-RQ3 desde el arch
 - Candidatos pendientes de adjudicacion de texto completo: 191.
 - Textos no recuperados: 0.
 - Pool candidato provisional: 276 + 192 = 468. No es el N final incluido.
-- RQ2 presenta solo 242 senales preliminares de titulo/resumen y 34 ausentes; no es integracion clinica confirmada. Los 242 registros positivos se exportan para revision manual.
+- RQ2 presenta solo 242 senales preliminares de titulo/resumen y 34 ausentes; no responde definitivamente sobre integracion clinica. Los 242 registros positivos se exportan para revision manual.
 - RQ3 muestra 37 perfiles / 262 estudios y omite 10 perfiles sin senales / 14 estudios desde la misma tabla agregada. A nivel individual: 110 estudios con alguna senal y 166 sin senales. La validacion externa es un indicador separado: 15 presentes y 261 ausentes.
 
 ## Correcciones auditadas
