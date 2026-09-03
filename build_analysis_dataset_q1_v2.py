@@ -30,7 +30,6 @@ BINARY_COLS = [
     "stage_monitoring_intervention",
     "q2_candidate_abstract",
     "q2_candidate_terms",
-    "q3_candidate_terms",
     "q3_external_validation_signal",
     "q3_explainability_signal",
     "q3_multisite_signal",
@@ -45,6 +44,7 @@ BINARY_COLS = [
     "q3_xai_partial_signal",
     "q3_multisource_data_signal",
 ]
+TEXT_COLS = ["q3_candidate_terms"]
 
 
 def add_paper_order(df: pd.DataFrame) -> pd.DataFrame:
@@ -81,6 +81,9 @@ def restore_binary_columns(df: pd.DataFrame) -> pd.DataFrame:
         if converted.map(lambda value: isinstance(value, str)).any():
             continue
         work[col] = converted.astype("int64")
+    for col in TEXT_COLS:
+        if col in work.columns:
+            work[col] = work[col].map(lambda value: pd.NA if pd.isna(value) else str(value))
     return work
 
 
@@ -88,6 +91,9 @@ def add_traceability(df: pd.DataFrame, source: str) -> pd.DataFrame:
     work = df.copy()
     reviewer = work.get("coder", work.get("assigned_to", pd.Series(["Not recorded"] * len(work))))
     work["reviewer_trace"] = reviewer.fillna("Not recorded")
+    for col in ["reviewer_1", "reviewer_2", "adjudicator", "decision_date"]:
+        if col not in work.columns:
+            work[col] = pd.NA
     if "assigned_to" in work.columns:
         work["reviewer_assignment_trace"] = work["assigned_to"].fillna("Not recorded")
     work["decision_date_trace"] = "Not recorded"
@@ -95,37 +101,11 @@ def add_traceability(df: pd.DataFrame, source: str) -> pd.DataFrame:
     return work
 
 
-def apply_deepasdpred_correction(df: pd.DataFrame) -> pd.DataFrame:
-    work = df.copy()
-    mask = work["title"].astype(str).str.contains("DeepASDPred", case=False, na=False)
-    if int(mask.sum()) != 1:
-        raise ValueError(f"Expected one DeepASDPred row, found {int(mask.sum())}.")
-    work.loc[mask, "modalidad"] = "Biological/omics"
-    work.loc[mask, "AI_task_type"] = "risk-RNA identification"
-    work.loc[mask, "stage_primary"] = "Not specified"
-    for col in ["stage_prescreening", "stage_screening", "stage_diagnosis", "stage_prognosis", "stage_monitoring_intervention"]:
-        if col in work.columns:
-            work.loc[mask, col] = 0
-    work.loc[mask, "traceability_source"] = work.loc[mask, "traceability_source"] + "; user-requested DeepASDPred correction"
-    work.loc[mask, "correction_date"] = CORRECTION_DATE
-    work.loc[mask, "correction_note"] = "Recoded as Biological/omics, risk-RNA identification, and Not specified without changing the 276-study corpus."
-    return work
-
-
-def corrected_update_sheet(update: pd.DataFrame) -> pd.DataFrame:
+def prepare_update_sheet(update: pd.DataFrame) -> pd.DataFrame:
     work = update.copy()
-    mask = work["bib_index"].eq(188)
-    if int(mask.sum()) != 1:
-        raise ValueError(f"Expected one bib_index 188 row, found {int(mask.sum())}.")
-    work.loc[mask, "decision_code"] = "include_after_title_abstract_screen"
-    work.loc[mask, "decision"] = "Incluir provisionalmente"
-    work.loc[mask, "eligibility_bucket"] = "Provisional include"
-    work.loc[mask, "agregar_como_estudio_nuevo"] = "Si"
-    work.loc[mask, "full_text_status"] = "Not recorded"
-    work.loc[mask, "full_text_decision"] = "Pending adjudication"
-    work.loc[mask, "final_exclusion_reason"] = pd.NA
-    work.loc[mask, "correction_date"] = CORRECTION_DATE
-    work.loc[mask, "correction_note"] = "Included as candidate only; no full-text decision was inferred."
+    for col in ["reviewer_1", "reviewer_2", "adjudicator", "decision_date"]:
+        if col not in work.columns:
+            work[col] = pd.NA
     work["reviewer_trace"] = work.get("reviewer", pd.Series([pd.NA] * len(work))).fillna("Not recorded")
     work["decision_date_trace"] = work.get("decision_date", pd.Series([pd.NA] * len(work))).fillna("Not recorded")
     work["traceability_source"] = f"{MASTER_FILE.name}:Actualizacion_430"
@@ -239,11 +219,11 @@ def build_included_studies(df: pd.DataFrame) -> pd.DataFrame:
 def main() -> None:
     rq12 = pd.read_excel(MASTER_FILE, sheet_name="RQ1_RQ2_base_276").drop(columns=["paper_order"], errors="ignore")
     rq3 = pd.read_excel(MASTER_FILE, sheet_name="RQ3_base_276").drop(columns=["paper_order"], errors="ignore")
-    rq12 = apply_deepasdpred_correction(add_traceability(restore_binary_columns(add_paper_order(rq12)), "RQ1_RQ2_base_276 copied from master"))
-    rq3 = apply_deepasdpred_correction(add_traceability(restore_binary_columns(add_paper_order(rq3)), "RQ3_base_276 copied from master"))
+    rq12 = add_traceability(restore_binary_columns(add_paper_order(rq12)), "RQ1_RQ2_base_276 copied from master")
+    rq3 = add_traceability(restore_binary_columns(add_paper_order(rq3)), "RQ3_base_276 copied from master")
     if rq12["study_id"].tolist() != rq3["study_id"].tolist():
         raise ValueError("RQ1/RQ2 and RQ3 graph-ready study order differs.")
-    update = corrected_update_sheet(pd.read_excel(MASTER_FILE, sheet_name="Actualizacion_430"))
+    update = prepare_update_sheet(pd.read_excel(MASTER_FILE, sheet_name="Actualizacion_430"))
     passed = update[update["eligibility_bucket"].eq("Provisional include")].copy()
     if len(passed) != PROVISIONAL_NEW_N:
         raise ValueError(f"Expected {PROVISIONAL_NEW_N} provisional new candidates, found {len(passed)}.")

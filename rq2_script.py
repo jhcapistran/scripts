@@ -28,16 +28,6 @@ STAGE_ORDER = [
     "Not specified",
 ]
 
-INTEGRATION_LABELS = {
-    "Triage / questionnaires": "Triage /\nquestionnaires",
-    "Mobile screening": "Mobile\nscreening",
-    "Feature extraction": "Feature\nextraction",
-    "Second-reader decision support": "Second-reader\ndecision support",
-    "Risk stratification": "Risk\nstratification",
-    "Longitudinal dashboards": "Longitudinal\ndashboards",
-    "Adaptive intervention": "Adaptive\nintervention",
-    "Assistive tools": "Assistive\ntools",
-}
 STAGE_TRANSLATIONS = {
     "prescreening": "Prescreening",
     "screening": "Screening",
@@ -123,10 +113,6 @@ def write_caption(path: Path, text: str) -> None:
     path.write_text(text.strip() + "\n", encoding="utf-8")
 
 
-def wrap_integration_label(label: str) -> str:
-    return INTEGRATION_LABELS.get(label, label)
-
-
 def ordered_categories(observed: list[str], preferred: list[str]) -> list[str]:
     ordered = [item for item in preferred if item in observed]
     extras = sorted(item for item in observed if item not in preferred)
@@ -155,66 +141,9 @@ def derive_q2_signal_state(row: pd.Series) -> str:
     return "Uncoded"
 
 
-def derive_integration_approach_positive(row: pd.Series) -> str:
-    stage = row["stage_norm"]
-    text = " ".join(
-        [
-            norm_text(row.get("title")),
-            norm_text(row.get("abstract")),
-            norm_text(row.get("AI_task_type")),
-            norm_text(row.get("notes_coding")),
-        ]
-    )
-    if any(token in text for token in ["questionnaire", "checklist", "triage", "refer", "prescreen", "pre-screen"]):
-        return "Triage / questionnaires"
-    if any(token in text for token in ["mobile", "smartphone", "app-based", "tablet-based", "mhealth", "m-health"]):
-        return "Mobile screening"
-    if any(token in text for token in ["feature extraction", "feature selection", "biomarker extraction", "marker extraction"]):
-        return "Feature extraction"
-    if any(token in text for token in ["decision support", "computer-aided", "computer aided", "second reader", "second-reader", "clinician support"]):
-        return "Second-reader decision support"
-    if stage == "Prognosis" or any(token in text for token in ["risk stratification", "predictor", "prediction model", "prenatal", "perinatal", "maternal"]):
-        return "Risk stratification"
-    if any(token in text for token in ["dashboard", "longitudinal", "follow-up", "trajectory", "progress tracking"]):
-        return "Longitudinal dashboards"
-    if any(token in text for token in ["intervention", "therapy", "adaptive", "personalized", "virtual reality", "serious game", "robot-assisted"]):
-        return "Adaptive intervention"
-    if any(token in text for token in ["assistive", "educational", "school", "communication aid", "caregiver support"]):
-        return "Assistive tools"
-    if stage in {"Prescreening", "Screening"}:
-        return "Triage / questionnaires"
-    if stage == "Diagnosis":
-        return "Second-reader decision support"
-    if stage == "Monitoring/intervention":
-        return "Adaptive intervention"
-    return "Unspecified integration"
-
-
-def derive_decision_timing(row: pd.Series) -> str:
-    if row["q2_signal_state"] != "Present":
-        return "Not applicable"
-    approach = row["integration_approach"]
-    text = " ".join(
-        [
-            norm_text(row.get("title")),
-            norm_text(row.get("abstract")),
-            norm_text(row.get("AI_task_type")),
-            norm_text(row.get("notes_coding")),
-        ]
-    )
-    if approach in {"Triage / questionnaires", "Mobile screening", "Feature extraction", "Risk stratification"}:
-        return "Pre-decision"
-    if approach == "Second-reader decision support":
-        return "Pre-decision" if any(token in text for token in ["triage", "pre-read", "feature extraction"]) else "In-decision"
-    if approach in {"Longitudinal dashboards", "Adaptive intervention", "Assistive tools"}:
-        return "Post-decision"
-    return "Unspecified"
-
-
-
 def main() -> None:
     ensure_dir(OUTPUT_DIR)
-    for stale in ["rq2_timing_table_q1_v2.csv", "rq2_stage_x_integration_q1_v2.csv"]:
+    for stale in ["rq2_timing_table_q1_v2.csv", "rq2_stage_x_integration_q1_v2.csv", "rq2_review_rows_q1_v2.csv"]:
         stale_path = OUTPUT_DIR / stale
         if stale_path.exists():
             stale_path.unlink()
@@ -222,35 +151,20 @@ def main() -> None:
     df["q2_abstract_bool"] = df["q2_candidate_abstract"].map(normalize_bool_signal)
     df["q2_terms_bool"] = df["q2_candidate_terms"].map(normalize_bool_signal)
     df["q2_signal_state"] = df.apply(derive_q2_signal_state, axis=1)
-    df["integration_approach"] = pd.NA
     positive_mask = df["q2_signal_state"].eq("Present")
-    df.loc[positive_mask, "integration_approach"] = df.loc[positive_mask].apply(derive_integration_approach_positive, axis=1)
-    df["decision_timing"] = df.apply(derive_decision_timing, axis=1)
     df["q2_signal_pattern"] = df.apply(
         lambda row: f"abstract={status_from_bool(row['q2_abstract_bool'])}; terms={status_from_bool(row['q2_terms_bool'])}",
         axis=1,
     )
     positive_df = df.loc[positive_mask].copy()
-    integration_order = [
-        "Triage / questionnaires",
-        "Mobile screening",
-        "Feature extraction",
-        "Second-reader decision support",
-        "Risk stratification",
-        "Longitudinal dashboards",
-        "Adaptive intervention",
-        "Assistive tools",
-        "Unspecified integration",
-    ]
-    stage_integration = (
-        pd.crosstab(positive_df["stage_norm"], positive_df["integration_approach"])
-        .reindex(index=ordered_categories(df["stage_norm"].unique().tolist(), STAGE_ORDER), columns=integration_order, fill_value=0)
+    stage_signal = (
+        pd.crosstab(df["stage_norm"], df["q2_signal_state"])
+        .reindex(index=ordered_categories(df["stage_norm"].unique().tolist(), STAGE_ORDER), columns=["Present", "Absent"], fill_value=0)
     )
-    stage_integration = stage_integration.loc[(stage_integration.sum(axis=1) > 0), (stage_integration.sum(axis=0) > 0)]
-    stage_integration.to_csv(OUTPUT_DIR / "rq2_stage_x_preliminary_signal_q1_v2.csv")
+    stage_signal = stage_signal.loc[(stage_signal.sum(axis=1) > 0), :]
+    stage_signal.to_csv(OUTPUT_DIR / "rq2_stage_x_preliminary_signal_q1_v2.csv")
     df.to_csv(OUTPUT_DIR / "rq2_tripartite_dataset_q1_v2.csv", index=False)
-    review_rows = positive_df[positive_df["integration_approach"].eq("Unspecified integration") | positive_df["decision_timing"].eq("Unspecified")].copy()
-    review_rows.to_csv(OUTPUT_DIR / "rq2_review_rows_q1_v2.csv", index=False)
+    positive_df.to_csv(OUTPUT_DIR / "rq2_preliminary_signals_for_manual_review_q1_v2.csv", index=False)
     denominator_rows = [
         {"rq": "RQ2", "subset": "all_rows", "group": "Evaluated studies", "denominator_n": int(len(df)), "notes": "Analytical universe: graph-ready studies evaluated for RQ2."},
     ]
@@ -265,8 +179,8 @@ def main() -> None:
             }
         )
     pd.DataFrame(denominator_rows).to_csv(OUTPUT_DIR / "rq2_denominators_q1_v2.csv", index=False)
-    fig, heat_ax = plt.subplots(figsize=(14.2, 7.4), facecolor="white")
-    heat_values = stage_integration.to_numpy(dtype=float)
+    fig, heat_ax = plt.subplots(figsize=(8.6, 6.5), facecolor="white")
+    heat_values = stage_signal.to_numpy(dtype=float)
     img = heat_ax.imshow(heat_values, cmap="Blues", aspect="auto")
     # Determine threshold for switching annotation colour (white on dark, black on light)
     vmin, vmax = heat_values.min(), heat_values.max()
@@ -289,11 +203,11 @@ def main() -> None:
                 color=font_color,
                 linespacing=1.4,
             )
-    heat_ax.set_xticks(range(len(stage_integration.columns)))
-    heat_ax.set_xticklabels([wrap_integration_label(col) for col in stage_integration.columns], rotation=32, ha="right", fontsize=12)
-    heat_ax.set_yticks(range(len(stage_integration.index)))
-    heat_ax.set_yticklabels(stage_integration.index, fontsize=11.5)
-    heat_ax.set_xlabel("Preliminary title/abstract workflow signal", fontsize=14.5, fontweight="bold", labelpad=14)
+    heat_ax.set_xticks(range(len(stage_signal.columns)))
+    heat_ax.set_xticklabels(["Preliminary signal", "Absent"], fontsize=12)
+    heat_ax.set_yticks(range(len(stage_signal.index)))
+    heat_ax.set_yticklabels(stage_signal.index, fontsize=11.5)
+    heat_ax.set_xlabel("Title/abstract signal state", fontsize=14.5, fontweight="bold", labelpad=14)
     heat_ax.set_ylabel("Clinical stage", fontsize=14, fontweight="bold", labelpad=12)
     # Add a colourbar for scale reference
     cbar = fig.colorbar(img, ax=heat_ax, shrink=0.7, pad=0.02)
@@ -304,11 +218,12 @@ def main() -> None:
     write_caption(
         OUTPUT_DIR / "rq2_heatmap_and_timing_q1_v2_caption.txt",
         """
-        RQ2. Preliminary title/abstract evidence heatmap. The heatmap shows study counts by primary clinical stage and
-        preliminary workflow signal among studies with title/abstract evidence. These labels are screening-level evidence
+        RQ2. Preliminary title/abstract evidence heatmap. The heatmap shows 242 studies with preliminary signal and
+        34 without signal, stratified only by primary clinical stage. These labels are screening-level evidence
         only and must not be reported as confirmed clinical integration. Cell annotations report the count and the
-        within-stage percentage. Study-level classifications are stored in rq2_tripartite_dataset_q1_v2.csv and
-        denominators are listed in
+        within-stage percentage. The 242 signal-positive records are exported for manual review in
+        rq2_preliminary_signals_for_manual_review_q1_v2.csv. Study-level classifications are stored in
+        rq2_tripartite_dataset_q1_v2.csv and denominators are listed in
         rq2_denominators_q1_v2.csv.
         """,
     )

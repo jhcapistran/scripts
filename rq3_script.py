@@ -285,7 +285,8 @@ def select_plot_combos(combo: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_omitted_zero_profiles(combo: pd.DataFrame) -> pd.DataFrame:
-    return combo[combo["positive_practice_total"] == 0].copy().reset_index(drop=True)
+    plot_summary = build_plot_summary(combo)
+    return plot_summary[plot_summary["positive_practice_total"] == 0].copy().reset_index(drop=True)
 
 
 def draw_compact_dotplot(
@@ -484,7 +485,7 @@ def main() -> None:
     figure_specs = [
         ("rq3_practice_lollipop_a_q1_v2", "A. Prescreening and screening", ["Prescreening", "Screening"], {"row_height": 0.47, "base_height": 1.0, "min_height": 5.8}),
         ("rq3_practice_lollipop_b_q1_v2", "B. Diagnosis", ["Diagnosis"], {"row_height": 0.48, "base_height": 1.02, "min_height": 6.0}),
-        ("rq3_practice_lollipop_c_q1_v2", "C. Monitoring/intervention", ["Monitoring/intervention"], {"row_height": 0.46, "base_height": 1.0, "min_height": 5.5}),
+        ("rq3_practice_lollipop_c_q1_v2", "C. Monitoring/intervention", ["Monitoring/intervention"], {"row_height": 0.5, "base_height": 1.1, "min_height": 6.0, "bottom_margin": 0.24, "legend_y": 0.02}),
         ("rq3_practice_lollipop_d_q1_v2", "D. Prognosis and unspecified stage", ["Prognosis", "Clinical stage not specified"], {"row_height": 0.34, "base_height": 0.8, "min_height": 4.1, "bottom_margin": 0.27, "xlabel_y": 0.105, "legend_y": 0.01}),
     ]
     for stem, title, stages, layout in figure_specs:
@@ -517,7 +518,8 @@ def main() -> None:
         OUTPUT_DIR / "rq3_practice_lollipop_c_q1_v2_caption.txt",
         f"""
         RQ3C (monitoring/intervention). Companion dot plot for monitoring/intervention profiles using the same
-        aggregation rule as the other RQ3 figures.
+        aggregation rule as the other RQ3 figures. The legend and count labels are separated from the plotting
+        area to avoid overlap.
         """,
     )
     write_caption(

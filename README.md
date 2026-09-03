@@ -2,7 +2,7 @@
 
 Archivo maestro vigente: `cribado_maestro_276_actualizacion_2026-09-02.xlsx`.
 
-Este repositorio genera el dataset analitico y las figuras RQ1-RQ3 sin alterar arbitrariamente el corpus base de 276 estudios. El corpus base sigue siendo `Base_276` / `RQ1_RQ2_base_276` / `RQ3_base_276` del archivo maestro. Las correcciones puntuales se aplican en `analysis_dataset_q1_v2.xlsx` para mantener trazabilidad.
+Este repositorio genera el dataset analitico y las figuras RQ1-RQ3 desde el archivo maestro como unica fuente de verdad. El corpus base sigue siendo `Base_276` / `RQ1_RQ2_base_276` / `RQ3_base_276`; el dataset derivado solo normaliza tipos, agrega trazabilidad vacia cuando falta y exporta tablas reproducibles.
 
 ## Flujo reproducible
 
@@ -17,13 +17,16 @@ Este repositorio genera el dataset analitico y las figuras RQ1-RQ3 sin alterar a
 
 - Corpus analitico final: 276 estudios.
 - Candidatos nuevos que pasaron titulo/resumen: 192, incluyendo `bib_index 188`.
+- Excluidos nuevos: 174.
+- Candidatos pendientes de adjudicacion de texto completo: 191.
+- Textos no recuperados: 0.
 - Pool candidato provisional: 276 + 192 = 468. No es el N final incluido.
-- RQ2 se presenta solo como evidencia preliminar de titulo/resumen, no como integracion clinica confirmada.
-- RQ3 external validation debe partir como 261 ausentes + 15 presentes = 276.
+- RQ2 presenta solo 242 senales preliminares de titulo/resumen y 34 ausentes; no es integracion clinica confirmada. Los 242 registros positivos se exportan para revision manual.
+- RQ3 muestra 37 perfiles / 262 estudios y omite 10 perfiles sin senales / 14 estudios desde la misma tabla agregada. A nivel individual: 110 estudios con alguna senal y 166 sin senales. La validacion externa es un indicador separado: 15 presentes y 261 ausentes.
 
 ## Correcciones auditadas
 
-- `bib_index 188` se incluye solo como candidato provisional. No se infiere decision de texto completo.
-- DeepASDPred se recodifica en el dataset analitico como `Biological/omics`, `risk-RNA identification` y `Not specified`, sin cambiar el tamano del corpus base.
-- Las columnas binarias del dataset analitico se restauran como enteros `0/1`.
-- Las salidas agregan columnas de trazabilidad de revisor/fuente/fecha cuando el maestro las provee; si no existen, quedan como `Not recorded`.
+- `bib_index 188` esta incluido en el maestro solo como candidato provisional. No se infiere decision de texto completo.
+- DeepASDPred / `study_id=282` esta codificado en ambas hojas RQ base como `Biological/omics`, `risk-RNA identification` y `Not specified`, con banderas de etapa en 0.
+- `q2_candidate_abstract`, `q2_candidate_terms` y las banderas `q3_*_signal` se exportan como enteros `0/1`; `q3_candidate_terms` permanece como texto.
+- Las salidas agregan `reviewer_1`, `reviewer_2`, `adjudicator` y `decision_date`; si el maestro no provee datos, quedan vacios.

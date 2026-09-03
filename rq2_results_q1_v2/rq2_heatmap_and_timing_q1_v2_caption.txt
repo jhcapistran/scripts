@@ -1,6 +1,7 @@
-RQ2. Preliminary title/abstract evidence heatmap. The heatmap shows study counts by primary clinical stage and
-        preliminary workflow signal among studies with title/abstract evidence. These labels are screening-level evidence
+RQ2. Preliminary title/abstract evidence heatmap. The heatmap shows 242 studies with preliminary signal and
+        34 without signal, stratified only by primary clinical stage. These labels are screening-level evidence
         only and must not be reported as confirmed clinical integration. Cell annotations report the count and the
-        within-stage percentage. Study-level classifications are stored in rq2_tripartite_dataset_q1_v2.csv and
-        denominators are listed in
+        within-stage percentage. The 242 signal-positive records are exported for manual review in
+        rq2_preliminary_signals_for_manual_review_q1_v2.csv. Study-level classifications are stored in
+        rq2_tripartite_dataset_q1_v2.csv and denominators are listed in
         rq2_denominators_q1_v2.csv.
