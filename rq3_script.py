@@ -14,8 +14,8 @@ matplotlib.use("Agg")
 plt.style.use(["science", "no-latex"])
 
 BASE_DIR = Path(__file__).resolve().parent
-INPUT_FILE = BASE_DIR / "cribado_maestro_276_actualizacion_2026-09-02.xlsx"
-SHEET_NAME = "RQ3_base_276"
+INPUT_FILE = BASE_DIR / "analysis_dataset_q1_v2.xlsx"
+SHEET_NAME = "rq3_graph_ready"
 OUTPUT_DIR = BASE_DIR / "rq3_results_q1_v2"
 SUPPLEMENT_DIR = OUTPUT_DIR / "supplement"
 MASTER_DENOMINATOR_FILE = BASE_DIR / "rq_denominators_q1_v2.csv"
@@ -41,6 +41,7 @@ STAGE_ORDER = [
 METHOD_ORDER = ["Machine Learning", "Deep Learning", "Hybrid", "Not specified"]
 MODALITY_ORDER = [
     "Image",
+    "Biological/omics",
     "Physiological signals",
     "Text / NLP",
     "Audio / Voice",
@@ -54,6 +55,7 @@ MODALITY_TRANSLATIONS = {
     "seã±ales fisiolã³gicas": "Physiological signals",
     "texto · nlp": "Text / NLP",
     "texto / nlp": "Text / NLP",
+    "biological/omics": "Biological/omics",
     "audio · voz": "Audio / Voice",
     "audio / voz": "Audio / Voice",
     "multimodal": "Multimodal",
@@ -386,8 +388,9 @@ def refresh_master_denominator_table() -> None:
         if path.exists():
             frames.append(pd.read_csv(path))
     if frames:
-        screening = pd.read_excel(INPUT_FILE, sheet_name="Actualizacion_430")
-        prior_final_n = int(len(pd.read_excel(INPUT_FILE, sheet_name="Base_276")))
+        dataset = BASE_DIR / "analysis_dataset_q1_v2.xlsx"
+        screening = pd.read_excel(dataset, sheet_name="new_candidates_passed_192")
+        prior_final_n = int(len(pd.read_excel(dataset, sheet_name="included_studies_276")))
         provisional_new_n = int(screening["eligibility_bucket"].eq("Provisional include").sum())
         screening_rows = pd.DataFrame(
             [
@@ -442,6 +445,25 @@ def main() -> None:
             "notes": "Analytical universe: graph-ready studies evaluated for RQ3.",
         },
     ]
+    external_positive = int(global_summary.loc[global_summary["practice_signal"].eq("q3_external_validation_signal"), "positive_n"].iloc[0])
+    denominator_rows.extend(
+        [
+            {
+                "rq": "RQ3",
+                "subset": "external_validation_partition",
+                "group": "Absent",
+                "denominator_n": int(len(df)) - external_positive,
+                "notes": f"External validation absent; partition check {int(len(df)) - external_positive}+{external_positive}={int(len(df))}.",
+            },
+            {
+                "rq": "RQ3",
+                "subset": "external_validation_partition",
+                "group": "Present",
+                "denominator_n": external_positive,
+                "notes": f"External validation present; partition check {int(len(df)) - external_positive}+{external_positive}={int(len(df))}.",
+            },
+        ]
+    )
     for _, row in global_summary.iterrows():
         denominator_rows.append(
             {

@@ -15,8 +15,8 @@ matplotlib.use("Agg")
 plt.style.use(["science", "no-latex"])
 
 BASE_DIR = Path(__file__).resolve().parent
-INPUT_FILE = BASE_DIR / "cribado_maestro_276_actualizacion_2026-09-02.xlsx"
-SHEET_NAME = "RQ1_RQ2_base_276"
+INPUT_FILE = BASE_DIR / "analysis_dataset_q1_v2.xlsx"
+SHEET_NAME = "rq1_rq2_graph_ready"
 OUTPUT_DIR = BASE_DIR / "rq1_results_q1_v2"
 SUPPORTING_DIR = BASE_DIR / "rq1_supporting_q1_v2"
 MASTER_DENOMINATOR_FILE = BASE_DIR / "rq_denominators_q1_v2.csv"
@@ -42,9 +42,10 @@ STAGE_ORDER = [
     "Monitoring/intervention",
     "Not specified",
 ]
-FIGURE_STAGE_ORDER = [stage for stage in STAGE_ORDER if stage != "Not specified"]
+FIGURE_STAGE_ORDER = STAGE_ORDER
 MODALITY_ORDER = [
     "Image",
+    "Biological/omics",
     "Physiological signals",
     "Text / NLP",
     "Audio / Voice",
@@ -62,6 +63,7 @@ MODALITY_TRANSLATIONS = {
     "texto · nlp": "Text / NLP",
     "texto / nlp": "Text / NLP",
     "texto â· nlp": "Text / NLP",
+    "biological/omics": "Biological/omics",
     "audio · voz": "Audio / Voice",
     "audio / voz": "Audio / Voice",
     "audio â· voz": "Audio / Voice",

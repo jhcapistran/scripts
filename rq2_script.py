@@ -15,8 +15,8 @@ matplotlib.use("Agg")
 plt.style.use(["science", "no-latex"])
 
 BASE_DIR = Path(__file__).resolve().parent
-INPUT_FILE = BASE_DIR / "cribado_maestro_276_actualizacion_2026-09-02.xlsx"
-SHEET_NAME = "RQ1_RQ2_base_276"
+INPUT_FILE = BASE_DIR / "analysis_dataset_q1_v2.xlsx"
+SHEET_NAME = "rq1_rq2_graph_ready"
 OUTPUT_DIR = BASE_DIR / "rq2_results_q1_v2"
 
 STAGE_ORDER = [
@@ -214,9 +214,10 @@ def derive_decision_timing(row: pd.Series) -> str:
 
 def main() -> None:
     ensure_dir(OUTPUT_DIR)
-    stale_timing_table = OUTPUT_DIR / "rq2_timing_table_q1_v2.csv"
-    if stale_timing_table.exists():
-        stale_timing_table.unlink()
+    for stale in ["rq2_timing_table_q1_v2.csv", "rq2_stage_x_integration_q1_v2.csv"]:
+        stale_path = OUTPUT_DIR / stale
+        if stale_path.exists():
+            stale_path.unlink()
     df = normalize_common_fields(load_base_df())
     df["q2_abstract_bool"] = df["q2_candidate_abstract"].map(normalize_bool_signal)
     df["q2_terms_bool"] = df["q2_candidate_terms"].map(normalize_bool_signal)
@@ -246,7 +247,7 @@ def main() -> None:
         .reindex(index=ordered_categories(df["stage_norm"].unique().tolist(), STAGE_ORDER), columns=integration_order, fill_value=0)
     )
     stage_integration = stage_integration.loc[(stage_integration.sum(axis=1) > 0), (stage_integration.sum(axis=0) > 0)]
-    stage_integration.to_csv(OUTPUT_DIR / "rq2_stage_x_integration_q1_v2.csv")
+    stage_integration.to_csv(OUTPUT_DIR / "rq2_stage_x_preliminary_signal_q1_v2.csv")
     df.to_csv(OUTPUT_DIR / "rq2_tripartite_dataset_q1_v2.csv", index=False)
     review_rows = positive_df[positive_df["integration_approach"].eq("Unspecified integration") | positive_df["decision_timing"].eq("Unspecified")].copy()
     review_rows.to_csv(OUTPUT_DIR / "rq2_review_rows_q1_v2.csv", index=False)
@@ -257,10 +258,10 @@ def main() -> None:
         denominator_rows.append(
             {
                 "rq": "RQ2",
-                "subset": "integration_signal_state",
+                "subset": "title_abstract_signal_state",
                 "group": state,
                 "denominator_n": int(count),
-                "notes": "Derived from q2_candidate_abstract and q2_candidate_terms.",
+                "notes": "Preliminary title/abstract evidence only; not confirmed clinical integration.",
             }
         )
     pd.DataFrame(denominator_rows).to_csv(OUTPUT_DIR / "rq2_denominators_q1_v2.csv", index=False)
@@ -292,7 +293,7 @@ def main() -> None:
     heat_ax.set_xticklabels([wrap_integration_label(col) for col in stage_integration.columns], rotation=32, ha="right", fontsize=12)
     heat_ax.set_yticks(range(len(stage_integration.index)))
     heat_ax.set_yticklabels(stage_integration.index, fontsize=11.5)
-    heat_ax.set_xlabel("Integration approach", fontsize=14.5, fontweight="bold", labelpad=14)
+    heat_ax.set_xlabel("Preliminary title/abstract workflow signal", fontsize=14.5, fontweight="bold", labelpad=14)
     heat_ax.set_ylabel("Clinical stage", fontsize=14, fontweight="bold", labelpad=12)
     # Add a colourbar for scale reference
     cbar = fig.colorbar(img, ax=heat_ax, shrink=0.7, pad=0.02)
@@ -303,10 +304,11 @@ def main() -> None:
     write_caption(
         OUTPUT_DIR / "rq2_heatmap_and_timing_q1_v2_caption.txt",
         """
-        RQ2. Stage-by-integration heatmap. The heatmap shows study counts by primary clinical stage and derived
-        integration approach among studies with an explicit integration signal. Workflow-oriented categories are assigned
-        using keyword and stage fallback rules. Cell annotations report the count and the within-stage percentage. Study-level
-        classifications are stored in rq2_tripartite_dataset_q1_v2.csv and denominators are listed in
+        RQ2. Preliminary title/abstract evidence heatmap. The heatmap shows study counts by primary clinical stage and
+        preliminary workflow signal among studies with title/abstract evidence. These labels are screening-level evidence
+        only and must not be reported as confirmed clinical integration. Cell annotations report the count and the
+        within-stage percentage. Study-level classifications are stored in rq2_tripartite_dataset_q1_v2.csv and
+        denominators are listed in
         rq2_denominators_q1_v2.csv.
         """,
     )
