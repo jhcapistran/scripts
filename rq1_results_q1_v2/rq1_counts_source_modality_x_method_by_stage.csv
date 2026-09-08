@@ -1,0 +1,91 @@
+stage,source_modality_display,ai_method_display,count
+Diagnosis,Audio/voice,Hybrid,1
+Diagnosis,Audio/voice,Machine Learning,1
+Diagnosis,Audio/voice,Not specified,1
+Diagnosis,Behavioral images/video/gaze/movement,Deep Learning,9
+Diagnosis,Behavioral images/video/gaze/movement,Hybrid,2
+Diagnosis,Behavioral images/video/gaze/movement,Machine Learning,8
+Diagnosis,Behavioral images/video/gaze/movement,Not specified,1
+Diagnosis,Biological/omics,Machine Learning,19
+Diagnosis,Multiple source categories,Deep Learning,10
+Diagnosis,Multiple source categories,Hybrid,2
+Diagnosis,Multiple source categories,Machine Learning,9
+Diagnosis,Multiple source categories,Not specified,1
+Diagnosis,Neuroimaging,Deep Learning,47
+Diagnosis,Neuroimaging,Hybrid,7
+Diagnosis,Neuroimaging,Machine Learning,34
+Diagnosis,Neuroimaging,Not specified,2
+Diagnosis,Not specified,Deep Learning,2
+Diagnosis,Not specified,Machine Learning,1
+Diagnosis,Not specified,Not specified,1
+Diagnosis,Other biomedical/digital data,Machine Learning,1
+Diagnosis,Physiological signals,Deep Learning,17
+Diagnosis,Physiological signals,Hybrid,3
+Diagnosis,Physiological signals,Machine Learning,14
+Diagnosis,Structured clinical/questionnaire data,Deep Learning,1
+Diagnosis,Structured clinical/questionnaire data,Machine Learning,17
+Diagnosis,Text/language,Deep Learning,5
+Monitoring/intervention,Audio/voice,Deep Learning,1
+Monitoring/intervention,Audio/voice,Not specified,1
+Monitoring/intervention,Behavioral images/video/gaze/movement,Deep Learning,7
+Monitoring/intervention,Behavioral images/video/gaze/movement,Hybrid,2
+Monitoring/intervention,Behavioral images/video/gaze/movement,Machine Learning,1
+Monitoring/intervention,Behavioral images/video/gaze/movement,Not specified,3
+Monitoring/intervention,Biological/omics,Machine Learning,1
+Monitoring/intervention,Multiple source categories,Deep Learning,5
+Monitoring/intervention,Multiple source categories,Hybrid,1
+Monitoring/intervention,Multiple source categories,Not specified,1
+Monitoring/intervention,Not specified,Deep Learning,1
+Monitoring/intervention,Not specified,Machine Learning,1
+Monitoring/intervention,Not specified,Not specified,1
+Monitoring/intervention,Other biomedical/digital data,Hybrid,1
+Monitoring/intervention,Other biomedical/digital data,Not specified,2
+Monitoring/intervention,Physiological signals,Hybrid,1
+Monitoring/intervention,Physiological signals,Machine Learning,1
+Monitoring/intervention,Physiological signals,Not specified,1
+Monitoring/intervention,Structured clinical/questionnaire data,Machine Learning,1
+Monitoring/intervention,Text/language,Deep Learning,3
+Monitoring/intervention,Text/language,Not specified,2
+Not specified,Biological/omics,Deep Learning,2
+Not specified,Biological/omics,Machine Learning,7
+Not specified,Multiple source categories,Machine Learning,4
+Not specified,Neuroimaging,Deep Learning,2
+Not specified,Neuroimaging,Machine Learning,6
+Not specified,Other biomedical/digital data,Deep Learning,1
+Not specified,Physiological signals,Deep Learning,1
+Not specified,Structured clinical/questionnaire data,Machine Learning,6
+Not specified,Text/language,Deep Learning,2
+Prescreening,Multiple source categories,Machine Learning,2
+Prescreening,Other biomedical/digital data,Machine Learning,1
+Prescreening,Structured clinical/questionnaire data,Machine Learning,4
+Prescreening,Text/language,Machine Learning,1
+Prognosis,Audio/voice,Machine Learning,1
+Prognosis,Behavioral images/video/gaze/movement,Machine Learning,1
+Prognosis,Biological/omics,Deep Learning,1
+Prognosis,Biological/omics,Machine Learning,2
+Prognosis,Multiple source categories,Machine Learning,4
+Prognosis,Neuroimaging,Machine Learning,2
+Prognosis,Physiological signals,Machine Learning,3
+Prognosis,Structured clinical/questionnaire data,Deep Learning,2
+Prognosis,Structured clinical/questionnaire data,Machine Learning,6
+Screening,Audio/voice,Deep Learning,2
+Screening,Audio/voice,Not specified,1
+Screening,Behavioral images/video/gaze/movement,Deep Learning,18
+Screening,Behavioral images/video/gaze/movement,Hybrid,2
+Screening,Behavioral images/video/gaze/movement,Machine Learning,12
+Screening,Behavioral images/video/gaze/movement,Not specified,2
+Screening,Biological/omics,Machine Learning,2
+Screening,Multiple source categories,Deep Learning,3
+Screening,Multiple source categories,Hybrid,4
+Screening,Multiple source categories,Machine Learning,1
+Screening,Neuroimaging,Deep Learning,1
+Screening,Not specified,Deep Learning,6
+Screening,Not specified,Hybrid,1
+Screening,Not specified,Machine Learning,1
+Screening,Other biomedical/digital data,Machine Learning,1
+Screening,Physiological signals,Deep Learning,3
+Screening,Physiological signals,Machine Learning,3
+Screening,Structured clinical/questionnaire data,Deep Learning,9
+Screening,Structured clinical/questionnaire data,Hybrid,2
+Screening,Structured clinical/questionnaire data,Machine Learning,37
+Screening,Text/language,Machine Learning,2

@@ -1,0 +1,24 @@
+plot_stage,plot_modality,plot_method,specification_group,combo_n,positive_practice_total,external_validation_count,multisource_integration_count,xai_broad_count,cross_site_robustness_count,external_validation_rate,multisource_integration_rate,xai_broad_rate,cross_site_robustness_rate,max_practice_rate,plot_label,stage_sort
+Prescreening,Other biomedical/digital data,Machine Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Prescreening | Other biomedical/digital data | Machine Learning (n=1),Prescreening
+Prescreening,Text/language,Machine Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Prescreening | Text/language | Machine Learning (n=1),Prescreening
+Screening,Audio/voice,Deep Learning,Fully specified profile,2,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Screening | Audio/voice | Deep Learning (n=2),Screening
+Screening,Text/language,Machine Learning,Fully specified profile,2,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Screening | Text/language | Machine Learning (n=2),Screening
+Screening,Other biomedical/digital data,Machine Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Screening | Other biomedical/digital data | Machine Learning (n=1),Screening
+Diagnosis,Physiological signals,Hybrid,Fully specified profile,3,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Diagnosis | Physiological signals | Hybrid (n=3),Diagnosis
+Diagnosis,Audio/voice,Hybrid,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Diagnosis | Audio/voice | Hybrid (n=1),Diagnosis
+Diagnosis,Audio/voice,Machine Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Diagnosis | Audio/voice | Machine Learning (n=1),Diagnosis
+Diagnosis,Other biomedical/digital data,Machine Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Diagnosis | Other biomedical/digital data | Machine Learning (n=1),Diagnosis
+Diagnosis,Structured clinical/questionnaire data,Deep Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Diagnosis | Structured clinical/questionnaire data | Deep Learning (n=1),Diagnosis
+Diagnosis,Data source not specified,Any AI technique,Profiles with unspecified data source,3,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Diagnosis | Data source not specified (n=3),Diagnosis
+Prognosis,Physiological signals,Machine Learning,Fully specified profile,3,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Prognosis | Physiological signals | Machine Learning (n=3),Prognosis
+Prognosis,Audio/voice,Machine Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Prognosis | Audio/voice | Machine Learning (n=1),Prognosis
+Prognosis,Behavioral images/video/gaze/movement,Machine Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Prognosis | Behavioral images/video/gaze/movement | Machine Learning (n=1),Prognosis
+Prognosis,Biological/omics,Deep Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Prognosis | Biological/omics | Deep Learning (n=1),Prognosis
+Monitoring/intervention,Text/language,Deep Learning,Fully specified profile,3,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Monitoring/intervention | Text/language | Deep Learning (n=3),Monitoring/intervention
+Monitoring/intervention,Audio/voice,Deep Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Monitoring/intervention | Audio/voice | Deep Learning (n=1),Monitoring/intervention
+Monitoring/intervention,Behavioral images/video/gaze/movement,Machine Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Monitoring/intervention | Behavioral images/video/gaze/movement | Machine Learning (n=1),Monitoring/intervention
+Monitoring/intervention,Biological/omics,Machine Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Monitoring/intervention | Biological/omics | Machine Learning (n=1),Monitoring/intervention
+Monitoring/intervention,Other biomedical/digital data,Hybrid,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Monitoring/intervention | Other biomedical/digital data | Hybrid (n=1),Monitoring/intervention
+Monitoring/intervention,Physiological signals,Hybrid,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Monitoring/intervention | Physiological signals | Hybrid (n=1),Monitoring/intervention
+Monitoring/intervention,Physiological signals,Machine Learning,Fully specified profile,1,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Monitoring/intervention | Physiological signals | Machine Learning (n=1),Monitoring/intervention
+Monitoring/intervention,Data source not specified,Any AI technique,Profiles with unspecified data source,2,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Monitoring/intervention | Data source not specified (n=2),Monitoring/intervention

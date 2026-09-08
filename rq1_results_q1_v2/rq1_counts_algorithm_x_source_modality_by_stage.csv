@@ -1,0 +1,186 @@
+stage,algorithm_display,source_modality_display,count
+Diagnosis,Autoencoder,Multiple source categories,1
+Diagnosis,Autoencoder,Neuroimaging,2
+Diagnosis,CNN,Behavioral images/video/gaze/movement,3
+Diagnosis,CNN,Neuroimaging,21
+Diagnosis,CNN,Physiological signals,7
+Diagnosis,Clustering,Multiple source categories,1
+Diagnosis,Clustering,Neuroimaging,1
+Diagnosis,Clustering,Structured clinical/questionnaire data,3
+Diagnosis,Composite/ensemble pipeline,Audio/voice,1
+Diagnosis,Composite/ensemble pipeline,Behavioral images/video/gaze/movement,4
+Diagnosis,Composite/ensemble pipeline,Biological/omics,5
+Diagnosis,Composite/ensemble pipeline,Multiple source categories,2
+Diagnosis,Composite/ensemble pipeline,Neuroimaging,13
+Diagnosis,Composite/ensemble pipeline,Physiological signals,4
+Diagnosis,Composite/ensemble pipeline,Structured clinical/questionnaire data,3
+Diagnosis,Decision tree/rules,Multiple source categories,1
+Diagnosis,Decision tree/rules,Neuroimaging,2
+Diagnosis,Decision tree/rules,Structured clinical/questionnaire data,1
+Diagnosis,GNN,Multiple source categories,3
+Diagnosis,GNN,Neuroimaging,8
+Diagnosis,GNN,Physiological signals,3
+Diagnosis,Gradient boosting,Behavioral images/video/gaze/movement,1
+Diagnosis,Gradient boosting,Biological/omics,1
+Diagnosis,Gradient boosting,Multiple source categories,2
+Diagnosis,Gradient boosting,Neuroimaging,1
+Diagnosis,Gradient boosting,Physiological signals,2
+Diagnosis,Gradient boosting,Structured clinical/questionnaire data,1
+Diagnosis,Logistic regression,Biological/omics,3
+Diagnosis,Logistic regression,Neuroimaging,1
+Diagnosis,Logistic regression,Physiological signals,1
+Diagnosis,Logistic regression,Structured clinical/questionnaire data,1
+Diagnosis,MLP/ANN,Behavioral images/video/gaze/movement,1
+Diagnosis,MLP/ANN,Biological/omics,1
+Diagnosis,MLP/ANN,Multiple source categories,1
+Diagnosis,MLP/ANN,Not specified,1
+Diagnosis,MLP/ANN,Physiological signals,2
+Diagnosis,Multiple/not uniquely specified,Audio/voice,2
+Diagnosis,Multiple/not uniquely specified,Behavioral images/video/gaze/movement,1
+Diagnosis,Multiple/not uniquely specified,Biological/omics,4
+Diagnosis,Multiple/not uniquely specified,Multiple source categories,2
+Diagnosis,Multiple/not uniquely specified,Neuroimaging,10
+Diagnosis,Multiple/not uniquely specified,Not specified,1
+Diagnosis,Multiple/not uniquely specified,Physiological signals,4
+Diagnosis,Multiple/not uniquely specified,Structured clinical/questionnaire data,2
+Diagnosis,Other specified method,Behavioral images/video/gaze/movement,6
+Diagnosis,Other specified method,Biological/omics,2
+Diagnosis,Other specified method,Multiple source categories,5
+Diagnosis,Other specified method,Neuroimaging,18
+Diagnosis,Other specified method,Not specified,1
+Diagnosis,Other specified method,Physiological signals,7
+Diagnosis,Other specified method,Structured clinical/questionnaire data,3
+Diagnosis,Other specified method,Text/language,1
+Diagnosis,Random forest,Behavioral images/video/gaze/movement,2
+Diagnosis,Random forest,Biological/omics,2
+Diagnosis,Random forest,Multiple source categories,1
+Diagnosis,Random forest,Neuroimaging,3
+Diagnosis,Random forest,Physiological signals,1
+Diagnosis,Random forest,Structured clinical/questionnaire data,2
+Diagnosis,Recurrent network,Neuroimaging,1
+Diagnosis,Recurrent network,Physiological signals,1
+Diagnosis,SVM,Behavioral images/video/gaze/movement,2
+Diagnosis,SVM,Biological/omics,1
+Diagnosis,SVM,Multiple source categories,3
+Diagnosis,SVM,Neuroimaging,5
+Diagnosis,SVM,Other biomedical/digital data,1
+Diagnosis,SVM,Physiological signals,1
+Diagnosis,SVM,Structured clinical/questionnaire data,2
+Diagnosis,Transformer,Neuroimaging,3
+Diagnosis,Transformer,Not specified,1
+Diagnosis,Transformer,Physiological signals,1
+Diagnosis,Transformer,Text/language,4
+Diagnosis,k-nearest neighbors,Neuroimaging,1
+Monitoring/intervention,CNN,Behavioral images/video/gaze/movement,3
+Monitoring/intervention,CNN,Multiple source categories,1
+Monitoring/intervention,Composite/ensemble pipeline,Behavioral images/video/gaze/movement,2
+Monitoring/intervention,Composite/ensemble pipeline,Multiple source categories,1
+Monitoring/intervention,Composite/ensemble pipeline,Not specified,1
+Monitoring/intervention,Composite/ensemble pipeline,Other biomedical/digital data,1
+Monitoring/intervention,Logistic regression,Behavioral images/video/gaze/movement,1
+Monitoring/intervention,MLP/ANN,Structured clinical/questionnaire data,1
+Monitoring/intervention,Multiple/not uniquely specified,Audio/voice,2
+Monitoring/intervention,Multiple/not uniquely specified,Behavioral images/video/gaze/movement,3
+Monitoring/intervention,Multiple/not uniquely specified,Multiple source categories,1
+Monitoring/intervention,Multiple/not uniquely specified,Not specified,1
+Monitoring/intervention,Multiple/not uniquely specified,Other biomedical/digital data,1
+Monitoring/intervention,Multiple/not uniquely specified,Physiological signals,2
+Monitoring/intervention,Multiple/not uniquely specified,Text/language,1
+Monitoring/intervention,Other specified method,Behavioral images/video/gaze/movement,4
+Monitoring/intervention,Other specified method,Biological/omics,1
+Monitoring/intervention,Other specified method,Multiple source categories,3
+Monitoring/intervention,Other specified method,Not specified,1
+Monitoring/intervention,Other specified method,Other biomedical/digital data,1
+Monitoring/intervention,Transformer,Multiple source categories,1
+Monitoring/intervention,Transformer,Physiological signals,1
+Monitoring/intervention,Transformer,Text/language,4
+Not specified,CNN,Other biomedical/digital data,1
+Not specified,CNN,Physiological signals,1
+Not specified,Clustering,Multiple source categories,1
+Not specified,Clustering,Neuroimaging,2
+Not specified,Clustering,Structured clinical/questionnaire data,1
+Not specified,Composite/ensemble pipeline,Biological/omics,1
+Not specified,Composite/ensemble pipeline,Neuroimaging,1
+Not specified,Logistic regression,Multiple source categories,1
+Not specified,Multiple/not uniquely specified,Biological/omics,2
+Not specified,Multiple/not uniquely specified,Multiple source categories,1
+Not specified,Multiple/not uniquely specified,Neuroimaging,1
+Not specified,Multiple/not uniquely specified,Structured clinical/questionnaire data,1
+Not specified,Other specified method,Biological/omics,4
+Not specified,Other specified method,Neuroimaging,3
+Not specified,Other specified method,Structured clinical/questionnaire data,2
+Not specified,Random forest,Biological/omics,2
+Not specified,Random forest,Multiple source categories,1
+Not specified,Random forest,Structured clinical/questionnaire data,2
+Not specified,Transformer,Neuroimaging,1
+Not specified,Transformer,Text/language,2
+Prescreening,Composite/ensemble pipeline,Multiple source categories,1
+Prescreening,Decision tree/rules,Structured clinical/questionnaire data,1
+Prescreening,Decision tree/rules,Text/language,1
+Prescreening,Logistic regression,Structured clinical/questionnaire data,1
+Prescreening,Multiple/not uniquely specified,Multiple source categories,1
+Prescreening,Multiple/not uniquely specified,Structured clinical/questionnaire data,1
+Prescreening,Random forest,Other biomedical/digital data,1
+Prescreening,SVM,Structured clinical/questionnaire data,1
+Prognosis,Composite/ensemble pipeline,Structured clinical/questionnaire data,1
+Prognosis,Decision tree/rules,Neuroimaging,1
+Prognosis,Decision tree/rules,Physiological signals,1
+Prognosis,Gradient boosting,Structured clinical/questionnaire data,1
+Prognosis,Logistic regression,Multiple source categories,1
+Prognosis,Multiple/not uniquely specified,Biological/omics,2
+Prognosis,Multiple/not uniquely specified,Multiple source categories,1
+Prognosis,Multiple/not uniquely specified,Neuroimaging,1
+Prognosis,Multiple/not uniquely specified,Physiological signals,1
+Prognosis,Multiple/not uniquely specified,Structured clinical/questionnaire data,1
+Prognosis,Other specified method,Behavioral images/video/gaze/movement,1
+Prognosis,Other specified method,Biological/omics,1
+Prognosis,Other specified method,Multiple source categories,2
+Prognosis,Other specified method,Structured clinical/questionnaire data,1
+Prognosis,SVM,Audio/voice,1
+Prognosis,SVM,Physiological signals,1
+Prognosis,SVM,Structured clinical/questionnaire data,2
+Prognosis,Transformer,Structured clinical/questionnaire data,2
+Screening,Autoencoder,Audio/voice,1
+Screening,CNN,Behavioral images/video/gaze/movement,10
+Screening,CNN,Multiple source categories,1
+Screening,CNN,Not specified,2
+Screening,CNN,Physiological signals,1
+Screening,CNN,Structured clinical/questionnaire data,3
+Screening,Clustering,Multiple source categories,1
+Screening,Composite/ensemble pipeline,Behavioral images/video/gaze/movement,3
+Screening,Composite/ensemble pipeline,Biological/omics,1
+Screening,Composite/ensemble pipeline,Multiple source categories,2
+Screening,Composite/ensemble pipeline,Neuroimaging,1
+Screening,Composite/ensemble pipeline,Physiological signals,1
+Screening,Composite/ensemble pipeline,Structured clinical/questionnaire data,8
+Screening,Decision tree/rules,Behavioral images/video/gaze/movement,1
+Screening,Decision tree/rules,Structured clinical/questionnaire data,6
+Screening,Gradient boosting,Behavioral images/video/gaze/movement,2
+Screening,Gradient boosting,Structured clinical/questionnaire data,3
+Screening,Logistic regression,Behavioral images/video/gaze/movement,2
+Screening,Logistic regression,Structured clinical/questionnaire data,1
+Screening,Logistic regression,Text/language,1
+Screening,Multiple/not uniquely specified,Audio/voice,1
+Screening,Multiple/not uniquely specified,Behavioral images/video/gaze/movement,3
+Screening,Multiple/not uniquely specified,Physiological signals,2
+Screening,Multiple/not uniquely specified,Structured clinical/questionnaire data,7
+Screening,Other specified method,Audio/voice,1
+Screening,Other specified method,Behavioral images/video/gaze/movement,8
+Screening,Other specified method,Biological/omics,1
+Screening,Other specified method,Multiple source categories,3
+Screening,Other specified method,Not specified,3
+Screening,Other specified method,Physiological signals,2
+Screening,Other specified method,Structured clinical/questionnaire data,8
+Screening,Other specified method,Text/language,1
+Screening,Random forest,Behavioral images/video/gaze/movement,1
+Screening,Random forest,Other biomedical/digital data,1
+Screening,Random forest,Structured clinical/questionnaire data,6
+Screening,Recurrent network,Behavioral images/video/gaze/movement,1
+Screening,Recurrent network,Not specified,1
+Screening,Recurrent network,Structured clinical/questionnaire data,1
+Screening,SVM,Behavioral images/video/gaze/movement,1
+Screening,SVM,Not specified,1
+Screening,SVM,Structured clinical/questionnaire data,5
+Screening,Transformer,Behavioral images/video/gaze/movement,2
+Screening,Transformer,Multiple source categories,1
+Screening,Transformer,Not specified,1

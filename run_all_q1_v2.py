@@ -15,10 +15,12 @@ def run_script(name: str) -> None:
 
 
 def main() -> None:
-    print("Regenerating RQ1, RQ2, and RQ3 from Maestro_IA_TEA_cierre_2026-09-08.xlsx...\n")
-    for script_name in ("rq1_script.py", "rq2_script.py", "rq3_script.py"):
+    print("================================================================================")
+    print("Regenerating RQ1, RQ2, and RQ3 from Maestro_IA_TEA_cierre_2026-09-08.xlsx...")
+    print("================================================================================\n")
+    for script_name in ("rq1_script.py", "rq2_script.py", "rq3_script.py", "validate_outputs_q1_v2.py"):
         run_script(script_name)
-    print("All RQ scripts executed successfully.")
+    print("=== Pipeline and all validations completed successfully! ===")
 
 
 if __name__ == "__main__":

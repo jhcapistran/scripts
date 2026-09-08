@@ -90,9 +90,9 @@ def ordered_categories(observed: list[str], preferred: list[str]) -> list[str]:
 
 def build_combo_summary(df: pd.DataFrame) -> pd.DataFrame:
     work = df.copy()
-    work["stage_norm"] = work["stage_primary"].fillna("Not specified").astype(str)
-    work["modality_norm"] = work["data_source_primary"].fillna("Not specified").astype(str)
-    work["method_norm"] = work["ai_type"].fillna("Not specified").astype(str)
+    work["stage_norm"] = work["stage_primary"].astype(str)
+    work["modality_norm"] = work["data_source_primary"].astype(str)
+    work["method_norm"] = work["ai_type"].astype(str)
 
     for col in PRACTICE_COLS:
         work[col] = work[col].astype(str).str.strip().eq("Reported").astype(int)

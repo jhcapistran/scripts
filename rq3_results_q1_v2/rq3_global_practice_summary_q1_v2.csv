@@ -1,0 +1,5 @@
+practice_field,practice,reported_n,not_reported_n,not_ascertainable_n,total_n,reported_rate
+external_validation,External validation,24,397,7,428,0.056074766355140186
+multisource_integration,Multisource integration,77,335,16,428,0.17990654205607476
+xai_broad,Explicit explainability (broad),126,293,9,428,0.29439252336448596
+cross_site_robustness,Cross-site evaluation,12,414,2,428,0.028037383177570093

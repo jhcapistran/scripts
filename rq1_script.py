@@ -252,11 +252,11 @@ def main() -> None:
     ensure_dir(SUPPORTING_DIR)
     df = load_base_df()
 
-    df["stage"] = df["stage_primary"].fillna("Not specified").astype(str)
-    df["source_modality_display"] = df["data_source_primary"].fillna("Not specified").astype(str)
-    df["ai_method_display"] = df["ai_type"].fillna("Not specified").astype(str)
-    df["algorithm_display"] = df["algorithm_family"].fillna("Other specified method").astype(str)
-    df["algorithm_main_clean"] = df["algorithm_main"].fillna("Not specified").astype(str)
+    df["stage"] = df["stage_primary"].astype(str)
+    df["source_modality_display"] = df["data_source_primary"].astype(str)
+    df["ai_method_display"] = df["ai_type"].astype(str)
+    df["algorithm_display"] = df["algorithm_family"].astype(str)
+    df["algorithm_main_clean"] = df["algorithm_main"].astype(str)
 
     algorithm_counts = (
         df.groupby(["stage", "algorithm_display", "source_modality_display"])["study_id"]

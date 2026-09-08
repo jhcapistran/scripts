@@ -1,0 +1,26 @@
+rq,subset,group,denominator_n,notes
+Screening,candidate_pool,Historical register,276,Historical reports retained in Maestro_IA_TEA_cierre_2026-09-08.xlsx.
+Screening,candidate_pool,Update reports assessed,178,New candidate reports initially included from the update.
+Screening,candidate_pool,Combined incoming register,454,276 historical plus 178 update reports.
+Screening,exclusions,Closure audit exclusions,26,23 historical and 3 update reports excluded upon audit (EXCLUSIONES_CIERRE).
+Screening,final_corpus,Included main synthesis,428,Frozen analytical synthesis corpus: 253 historical and 175 update reports (BASE_CIERRE include_main=1).
+RQ1,all_rows,Evaluated studies,428,Analytical universe: included reports evaluated for RQ1 from Maestro_IA_TEA_cierre_2026-09-08.xlsx.
+RQ1,stage_resolution,Stage resolved,397,stage_primary resolved to one of the five clinical functional stages.
+RQ1,stage_resolution,Not specified,31,stage_primary not uniquely specified in assessed material.
+RQ2,all_rows,Evaluated studies,428,Analytical universe: included reports evaluated for RQ2 from Maestro_IA_TEA_cierre_2026-09-08.xlsx.
+RQ2,integration_evaluation,Evaluated AI use,19,"Reports documenting evaluation of AI at point of use, in care-delivery, or in an AI-supported intervention."
+RQ2,integration_evaluation,Proposed only,98,Reports with translational or clinical use proposed but without user/workflow evaluation.
+RQ2,integration_evaluation,Research only,311,Reports with research-only modeling or biomarker discovery.
+RQ2,adjudicated_status,Evaluated at point of use,8,Adjudicated rq2_status in final master closure.
+RQ2,adjudicated_status,Evaluated AI-supported intervention,10,Adjudicated rq2_status in final master closure.
+RQ2,adjudicated_status,Evaluated care-delivery platform,1,Adjudicated rq2_status in final master closure.
+RQ2,adjudicated_status,Proposed only,98,Adjudicated rq2_status in final master closure.
+RQ2,adjudicated_status,Research only,311,Adjudicated rq2_status in final master closure.
+RQ3,all_rows,Evaluated studies,428,Analytical universe: included reports evaluated for RQ3 from Maestro_IA_TEA_cierre_2026-09-08.xlsx.
+RQ3,practice_signal,External validation,428,Reported=24; Not reported=397; Not ascertainable=7; Rate=5.6%.
+RQ3,practice_signal,Multisource integration,428,Reported=77; Not reported=335; Not ascertainable=16; Rate=18.0%.
+RQ3,practice_signal,Explicit explainability (broad),428,Reported=126; Not reported=293; Not ascertainable=9; Rate=29.4%.
+RQ3,practice_signal,Cross-site evaluation,428,Reported=12; Not reported=414; Not ascertainable=2; Rate=2.8%.
+RQ3,additional_practice_signal,Formal attribution/explanation (strict),428,Reported=38; Rate=8.9%; field xai_strict from BASE_CIERRE.
+RQ3,additional_practice_signal,Multisite data availability,428,Reported=88; Rate=20.6%; field multisite_dataset from BASE_CIERRE.
+RQ3,additional_practice_signal,Prospective AI evaluation,428,Reported=18; Rate=4.2%; field prospective_evaluation from BASE_CIERRE.

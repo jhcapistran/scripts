@@ -1,0 +1,9 @@
+rq,subset,group,denominator_n,notes
+RQ3,all_rows,Evaluated studies,428,Analytical universe: included reports evaluated for RQ3 from Maestro_IA_TEA_cierre_2026-09-08.xlsx.
+RQ3,practice_signal,External validation,428,Reported=24; Not reported=397; Not ascertainable=7; Rate=5.6%.
+RQ3,practice_signal,Multisource integration,428,Reported=77; Not reported=335; Not ascertainable=16; Rate=18.0%.
+RQ3,practice_signal,Explicit explainability (broad),428,Reported=126; Not reported=293; Not ascertainable=9; Rate=29.4%.
+RQ3,practice_signal,Cross-site evaluation,428,Reported=12; Not reported=414; Not ascertainable=2; Rate=2.8%.
+RQ3,additional_practice_signal,Formal attribution/explanation (strict),428,Reported=38; Rate=8.9%; field xai_strict from BASE_CIERRE.
+RQ3,additional_practice_signal,Multisite data availability,428,Reported=88; Rate=20.6%; field multisite_dataset from BASE_CIERRE.
+RQ3,additional_practice_signal,Prospective AI evaluation,428,Reported=18; Rate=4.2%; field prospective_evaluation from BASE_CIERRE.

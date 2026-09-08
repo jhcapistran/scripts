@@ -1,0 +1,4 @@
+rq,subset,group,denominator_n,notes
+RQ1,all_rows,Evaluated studies,428,Analytical universe: included reports evaluated for RQ1 from Maestro_IA_TEA_cierre_2026-09-08.xlsx.
+RQ1,stage_resolution,Stage resolved,397,stage_primary resolved to one of the five clinical functional stages.
+RQ1,stage_resolution,Not specified,31,stage_primary not uniquely specified in assessed material.

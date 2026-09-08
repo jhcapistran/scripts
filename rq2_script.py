@@ -76,8 +76,8 @@ def main() -> None:
             stale_path.unlink()
 
     df = load_base_df()
-    df["stage_norm"] = df["stage_primary"].fillna("Not specified").astype(str)
-    df["rq2_status_norm"] = df["rq2_status"].fillna("Research only").astype(str)
+    df["stage_norm"] = df["stage_primary"].astype(str)
+    df["rq2_status_norm"] = df["rq2_status"].astype(str)
 
     stage_signal = (
         pd.crosstab(df["stage_norm"], df["rq2_status_norm"])

@@ -1,0 +1,331 @@
+algorithm_raw,algorithm_plot
+Autoencoder,Autoencoder
+Autoencoder feature representation,Autoencoder
+Convolutional autoencoder + conventional classifiers in early-fusion pipeline,Autoencoder
+Semi-supervised autoencoder,Autoencoder
+1D CNN,CNN
+3T-DINet (3T dilated inception + ResNet + Crossover-based Black Widow Optimization),CNN
+ASD-Net CNN,CNN
+Attention-based CNN feature extractor + conventional ML classifier,CNN
+CNN,CNN
+CNN / NLP components,CNN
+CNN emotion decoder,CNN
+CNN facial-expression recognition,CNN
+CNN facial-expression system,CNN
+CNN scanpath classifier,CNN
+CNN with CAM and Grad-CAM,CNN
+CNN with prototype learning,CNN
+Capsule DenseNet++ + CosmoNest optimization + PPO recommendation,CNN
+DWT-GFK + VGG16 + ELBN-HLNCL optimized with Walrus Optimization Algorithm,CNN
+DenseNet169 with gorilla-troops optimization,CNN
+DenseNet201,CNN
+DenseResNet transfer learning (DenseNet + ResNet),CNN
+Dual-stream CNN with attention,CNN
+ET-ASDNet (ResNet18 backbone + trajectory processing/fusion modules),CNN
+FHOA + DenWide-Net (DenseNet/WideResNet optimization pipeline),CNN
+FRHIS + CRBM feature selection + DSTCNN,CNN
+FaithfulNet 3D CNN + Faith_CAM (Grad-CAM + SHAP),CNN
+GazeScan lightweight CNN on grayscale scanpath images,CNN
+HOG + ResNet50V2 transfer learning,CNN
+HYMA: hierarchical YOLO + BAM attention + Mixture-of-Experts + ensemble decision fusion,CNN
+Hybrid keyframe selection + 1D CNN + contrastive learning on CARAT edge robot,CNN
+JSTO-optimized DenseNet,CNN
+Lightweight 1D-CNN variants (including InceptionNet/ResNet-style models),CNN
+MUXAI-ASDBD (CNN + machine unlearning + partitioning XAI),CNN
+MobileNetV2-based CNN,CNN
+Multimodal concatenation CNN,CNN
+PoseConv3D / SlowOnly 3D CNN-ResNet,CNN
+RA-EBO optimized SSM-AM classifier + MDA-AUnet localization,CNN
+ResNet34 with spatial and intensity data augmentation,CNN
+ResNet50V2 + InceptionV3 for ASD detection; Enhanced MobileNet for emotion recognition,CNN
+SMOTE-enhanced 1D-CNN,CNN
+Stacking classifier ensemble with modified VGG-19 features,CNN
+Two-stream VGG16 framework,CNN
+VGG16 CNN,CNN
+Bagged multiview spectral clustering,Clustering
+Classification and clustering; principal family unresolved,Clustering
+Clustering,Clustering
+Clustering and statistical analyses,Clustering
+Clustering; principal family unresolved,Clustering
+Ensemble subspace clustering,Clustering
+HYDRA / clustering,Clustering
+Normative modeling / clustering,Clustering
+Unsupervised molecular clustering + integrative multiomics/clinical ML; refined 17-transcript panel,Clustering
+2sGCN-AxLSTM (two-stream GCN + attention-enhanced xLSTM),Composite/ensemble pipeline
+3D autoencoder + Siamese CNN,Composite/ensemble pipeline
+Autoencoder + LSTM,Composite/ensemble pipeline
+Autoencoder + MLP,Composite/ensemble pipeline
+Autoencoder / LSTM / DBN ensemble,Composite/ensemble pipeline
+Automated social-gaze detector (CNN/computer vision) + SVM-RBF diagnostic classifier,Composite/ensemble pipeline
+CNN + LSTM,Composite/ensemble pipeline
+CNN radiomic features with random forest,Composite/ensemble pipeline
+CNN transfer features with SVM,Composite/ensemble pipeline
+CNN-BiGRU with feature-level fusion,Composite/ensemble pipeline
+CNN-BiLSTM with attention,Composite/ensemble pipeline
+CNN-GRU-ANN,Composite/ensemble pipeline
+CNN-LSTM,Composite/ensemble pipeline
+CNN-LSTM with STFT/ICA preprocessing and grid-search optimization,Composite/ensemble pipeline
+CNN/RNN and SVM,Composite/ensemble pipeline
+CoNA-Net: Contrastive Variational Graph Transformer + GraphDDPMAugmentor + BrainNode-Attention GNN,Composite/ensemble pipeline
+EDCNN (VGG16/ResNet/Inception) + IRUN-HSOA weighted fusion + ARLSTM,Composite/ensemble pipeline
+EEFM (LSTM autoencoder + XGBoost regressor + linear regression),Composite/ensemble pipeline
+Federated CNA(KNN)-ViT(NN),Composite/ensemble pipeline
+Federated CNN-LSTM with decision aggregation,Composite/ensemble pipeline
+GCN-LSTM,Composite/ensemble pipeline
+Gradient boosting / random forest,Composite/ensemble pipeline
+Hybrid CNN-GAT (Convolutional Neural Network + Graph Attention Network),Composite/ensemble pipeline
+K-nearest neighbors (KNN) + WGCNA-derived six-gene panel,Composite/ensemble pipeline
+LASSO + Random Forest + SVM-RFE feature selection; ANN/linear predictive model,Composite/ensemble pipeline
+Logistic regression / SVM (task-specific winners),Composite/ensemble pipeline
+Logistic regression and alternating decision tree,Composite/ensemble pipeline
+Logistic regression and gradient-boosted trees,Composite/ensemble pipeline
+MCBERT (multi-head CNN + BERT with spatial/channel attention),Composite/ensemble pipeline
+MGSOA-optimized adaptive dilated 1DCNN-LSTM with attention,Composite/ensemble pipeline
+MResNet + ACAL-BL adaptive-attention LSTM with Bayesian learning + RFMPA optimization,Composite/ensemble pipeline
+Mixed CNN-GNN (MCG-Net),Composite/ensemble pipeline
+Multiple sparse models (logistic regression / linear SVM),Composite/ensemble pipeline
+RF / XGBoost / CatBoost stacking,Composite/ensemble pipeline
+Random Forest + XGBoost with SHAP,Composite/ensemble pipeline
+Random Forest / XGBoost after SVM-RFECV feature selection,Composite/ensemble pipeline
+Random forest / clustering,Composite/ensemble pipeline
+ResNet-152-CBAM + ViT-Large bidirectional cross-attention + weighted ensemble/TTA,Composite/ensemble pipeline
+STEM / MAC autoencoder + depthwise-separable CNN + BiGRU with PLASC self-training,Composite/ensemble pipeline
+SVM / random forest,Composite/ensemble pipeline
+SVM and random forest,Composite/ensemble pipeline
+SVM predictor with variant-based clustering,Composite/ensemble pipeline
+SVM; MLP for the Pakistani subset,Composite/ensemble pipeline
+Shared-weight autoencoder-CNN,Composite/ensemble pipeline
+Stacked autoencoder with probabilistic SVM,Composite/ensemble pipeline
+Stacking ensemble (DT/RF/KNN/AdaBoost/gradient boosting),Composite/ensemble pipeline
+Support Vector Classifier (best-performing; compared with LR/KNN/DT/RF),Composite/ensemble pipeline
+TF-TBN: Transformer-enhanced 1D-CNN + Vision Transformer time-frequency fusion,Composite/ensemble pipeline
+Thermal feature encoder plus RF / SVM,Composite/ensemble pipeline
+Transformer + graph neural network,Composite/ensemble pipeline
+Transformer / CNN / recurrent multi-branch network,Composite/ensemble pipeline
+VGG16 CNN + Random Forest (late fusion),Composite/ensemble pipeline
+ViT-ARDNet-LSTM,Composite/ensemble pipeline
+XGBoost + random forest,Composite/ensemble pipeline
+k-means sensory-phenotype clustering + linear SVC on graph-theoretical fMRI features,Composite/ensemble pipeline
+wav2vec 2.0 transformer embeddings with ANN,Composite/ensemble pipeline
+Alternating Decision Tree,Decision tree/rules
+Alternating decision tree,Decision tree/rules
+Binary decision tree classifier on cranial morphometric parameters,Decision tree/rules
+Decision tree,Decision tree/rules
+Decision tree joint model with whole-brain radiomics signature and VIQ,Decision tree/rules
+Decision tree with F-classify feature selection (best of 8 classifiers),Decision tree/rules
+J48 decision tree,Decision tree/rules
+Relief feature selection with decision tree,Decision tree/rules
+Rule induction (Rules-Machine Learning),Decision tree/rules
+Ada-MST adaptive multi-scale dynamic graph neural network with overlapping-community-aware readout,GNN
+Bilinear perceptual fusion GCN,GNN
+Edge-Weight Enhanced Graph Attention Network (EWE-GAT),GNN
+Fuzzy multi-scale enhanced graph convolutional network (MSE-GCN),GNN
+Graph neural network,GNN
+Heterogeneous graph convolutional attention network,GNN
+Regional-asymmetric adaptive GCN,GNN
+Relational-attention GCN,GNN
+Triple-pooling graph neural network,GNN
+CatBoost + PyCaret AutoML + SHAP,Gradient boosting
+ConvNeXtBase with LightGBM,Gradient boosting
+Digital-phenotype feature pipeline with gradient-boosted classifier,Gradient boosting
+Gradient boosting,Gradient boosting
+OpenFace + MediaPipe features with AdaBoost/decision-tree classification,Gradient boosting
+XGBoost,Gradient boosting
+XGBoost (best-performing) with LIME and SHAP,Gradient boosting
+XGBoost + SHAP,Gradient boosting
+XGBoost and interpretable two-stage decision model,Gradient boosting
+Eight-protein ML classifier with bidirectional feature screening (abstract reports logic-regression/leave-one-out validation),Logistic regression
+Land-use regression / logistic regression,Logistic regression
+Logistic Regression on DWT spectral/statistical EEG features (comparative ML/DL/meta-learning benchmark),Logistic regression
+Logistic regression,Logistic regression
+Logistic regression ancillary classifier; wearable labeling system,Logistic regression
+Logistic regression on an 8-protein biomarker panel,Logistic regression
+Multivariable logistic regression + machine-learning risk-profile modeling,Logistic regression
+Regularized logistic regression,Logistic regression
+Regularized logistic regression (LASSO / elastic net),Logistic regression
+Artificial neural network,MLP/ANN
+Artificial neural network; depth unresolved,MLP/ANN
+Bayesian-optimized ANN (BO-ANN) on fractal-dimension EEG features,MLP/ANN
+DeepFace with MLP classifier,MLP/ANN
+MLP,MLP/ANN
+AI monitoring and adaptive learning system; implementation unspecified,Multiple/not uniquely specified
+Best-performing classifier among six ML models after multi-method feature selection (family not uniquely stated in accessible abstract),Multiple/not uniquely specified
+Clustering + classifier comparison,Multiple/not uniquely specified
+Clustering / classifier unspecified,Multiple/not uniquely specified
+Computer vision classifier (family not specified),Multiple/not uniquely specified
+Constraint-based modeling / ML unspecified,Multiple/not uniquely specified
+Conversational AI virtual peer (underlying model not specified in accessible text),Multiple/not uniquely specified
+Deep classifier; family unspecified,Multiple/not uniquely specified
+Ensemble; component families not specified,Multiple/not uniquely specified
+Ensemble; components unspecified,Multiple/not uniquely specified
+"Feature selection, multiple ML models and fuzzy multicriteria ranking",Multiple/not uniquely specified
+Frequency-domain classifiers; family unspecified,Multiple/not uniquely specified
+"Logistic regression (best), with SVM/KNN/RF/NN and ensemble comparison",Multiple/not uniquely specified
+"Logistic regression (best), with ridge/gradient boosting/XGBoost comparison",Multiple/not uniquely specified
+Logistic regression / ML unspecified,Multiple/not uniquely specified
+Machine-learning hub-gene selection (specific model family not stated in accessible source),Multiple/not uniquely specified
+Machine-learning prediction models on proteomic and metabolomic signatures (specific family not stated in accessible text),Multiple/not uniquely specified
+Meta-learning; neural backbone unspecified,Multiple/not uniquely specified
+Multiple ML classifiers + propensity-score matching; best learner not specified in accessible text,Multiple/not uniquely specified
+Multiple ML/DL models (primary not specified),Multiple/not uniquely specified
+Multiple algorithms compared (8; primary not specified),Multiple/not uniquely specified
+Multiple classifiers (primary not specified),Multiple/not uniquely specified
+Multiple classifiers with forward feature selection,Multiple/not uniquely specified
+Multiple classifiers with graph-derived features,Multiple/not uniquely specified
+Multiple classifiers; no single primary family,Multiple/not uniquely specified
+Multiple classifiers; primary unspecified,Multiple/not uniquely specified
+Multiple classifiers; principal family unresolved,Multiple/not uniquely specified
+Multiple conventional classifiers; no primary winner,Multiple/not uniquely specified
+Multiple deep video models,Multiple/not uniquely specified
+Multiple machine-learning classifiers; principal family unresolved,Multiple/not uniquely specified
+Neural network (depth not specified),Multiple/not uniquely specified
+Neural network / SVM comparison,Multiple/not uniquely specified
+Not specified,Multiple/not uniquely specified
+Predictive modelling with normalized feature importance + SHAP (base learner not specified in recovered text),Multiple/not uniquely specified
+Proprietary AI; family unspecified,Multiple/not uniquely specified
+Proprietary ML; family unspecified,Multiple/not uniquely specified
+Proprietary robot AI; unspecified,Multiple/not uniquely specified
+Random forest / SVM comparison,Multiple/not uniquely specified
+Random forest / classifier comparison,Multiple/not uniquely specified
+SVM (best) with random forest / decision tree comparison + SHAP,Multiple/not uniquely specified
+Segmentation; family unspecified,Multiple/not uniquely specified
+Speech-segmentation AI; underlying family unspecified,Multiple/not uniquely specified
+Speech-segmentation network; unspecified,Multiple/not uniquely specified
+XGBoost / random forest / SVM comparison,Multiple/not uniquely specified
+3D neural networks and Lasso GLM,Other specified method
+ADBrainNet lightweight deep neural network + LIME,Other specified method
+ANFIS-EffNet + AWSO pivotal-region extraction,Other specified method
+ASA: Improved Genetic Algorithm feature selection + Optimized Deep Neural Network (ODNN),Other specified method
+ASD-HybridNet (ROI time-series + functional-connectivity map fusion),Other specified method
+Adaptive kernel attention network with EIA feature selection,Other specified method
+Adaptive structure-learning ensemble,Other specified method
+AlexNet,Other specified method
+AutoML / feature-ranking framework,Other specified method
+AutoML/ensemble framework (27 ML models; voting/bagging),Other specified method
+CARES AI-driven information-filtering and interactive itinerary-planning system,Other specified method
+CART and multivariable regression,Other specified method
+Cascaded RVFL+ with self-paced learning,Other specified method
+CbRNN-EM + NCIAPPF temporal encoding/fusion,Other specified method
+Cell-specific deep-learning variant-effect prediction model,Other specified method
+Clinical-response classifier; family unresolved,Other specified method
+Cluster analysis,Other specified method
+Common spatial patterns with supervised classifier,Other specified method
+Computer-vision gaze quantification; architecture unresolved,Other specified method
+DHCA-Net dual-stream hierarchical channel-attention network + multi-head feature fusion,Other specified method
+DNN,Other specified method
+DNN for lexicogrammatical and text features,Other specified method
+DNN with diffusion mapping,Other specified method
+Deep ensemble,Other specified method
+Deep maxout network with cascade neuro-fuzzy model,Other specified method
+Deep neural network (best) vs NB/LR/DT/LDA,Other specified method
+Deep neural network; architecture unresolved,Other specified method
+Deep normative generative model,Other specified method
+Deep unrolling with convolutional prototype classifier,Other specified method
+DeepFace facial emotion recognition with individualized calibration,Other specified method
+Device threshold-optimization framework; model family unresolved,Other specified method
+Diagnostic-boundary classifier; family unresolved,Other specified method
+Discriminant analysis,Other specified method
+Dual-attention learning neural network,Other specified method
+Dynamic-connectivity classification; family unresolved,Other specified method
+EMLF-Net (HDFR + DFB + OFB multi-level feature fusion),Other specified method
+Elastic-net regression/classification,Other specified method
+Empowered Brain smartglasses; underlying algorithm unresolved,Other specified method
+Enhanced pyannote-audio speaker diarization with physiologic alignment/cloud pipeline,Other specified method
+Ensemble classifier,Other specified method
+Explainable AI subgrouping; architecture unresolved,Other specified method
+Factor-analysis features with supervised classifier,Other specified method
+Federated stacking and deep network,Other specified method
+Feedforward neural network,Other specified method
+GMOA-DRNet with imaging/phenotypic feature integration,Other specified method
+Gaze and emotion-response classifier; family unresolved,Other specified method
+HBFND-AMLD adaptive label-distribution learning,Other specified method
+Histogram-based morphometry with classifier,Other specified method
+Hybrid attention ensemble,Other specified method
+Hybrid involution-convolution neural network,Other specified method
+HyperCrossNet + Parrot Optimization + Pied Kingfisher Optimization,Other specified method
+Kinematic machine-learning classifier; family unresolved,Other specified method
+LRSF-DLNN + DFGAO feature selection with EEG/fMRI fusion pipeline,Other specified method
+Late-fusion ensemble,Other specified method
+Linguistic-feature classifiers; principal family unresolved,Other specified method
+MEResNeXt (MoNet + ResNeXt) with DeSEHO feature selection,Other specified method
+ML gene-signature predictive model (7-gene panel; final classifier not clearly specified in indexed text),Other specified method
+Machine-learning biomarker selection pipeline,Other specified method
+Metabolomic-response machine learning; family unresolved,Other specified method
+Metric learning with dynamic time warping (CAMI),Other specified method
+Mixed-model ensemble,Other specified method
+Multi-agent neural meta-learning,Other specified method
+Multichannel deep attention neural network,Other specified method
+Multivariate classifier; family unresolved,Other specified method
+NBS-Predict with linear discriminant analysis,Other specified method
+NLP + regression,Other specified method
+Naive Bayes,Other specified method
+NeD-TraF + EVA-Search,Other specified method
+Network-based gene and miRNA prioritization,Other specified method
+Neural network (personal characteristics),Other specified method
+NeuroNet57 + ant colony optimization + FineKNN,Other specified method
+"OQA-CMVT + DMM-AND + GAN, optimized with RS-COA",Other specified method
+Persistent spectral/topological feature classifier,Other specified method
+Personalized deep network,Other specified method
+Pretrained language-model semantic features + regression-based EEG semantic-processing model,Other specified method
+Primate-informed functional-connectivity classifiers,Other specified method
+Probabilistic neural network,Other specified method
+Recursive convolutional neural network,Other specified method
+Regression and classification tree,Other specified method
+Regularized generalized linear model,Other specified method
+Ridge regression,Other specified method
+SGD classifier,Other specified method
+Scanpath Trend Analysis (STA),Other specified method
+Sensor-feature machine learning; family unresolved,Other specified method
+Stacking ensemble,Other specified method
+Super Learner,Other specified method
+Supervised canonical graph matching feature selection,Other specified method
+Supervised classifier; family unresolved,Other specified method
+Supervised functional-connectivity network learning,Other specified method
+Tablet-kinematics classifier; family unresolved,Other specified method
+Tabular ML and graph representation,Other specified method
+Temporal-frequency hyperdimensional computing (TF-HDC),Other specified method
+Time-frequency feature classifiers; family unresolved,Other specified method
+Weakly supervised segmentation network,Other specified method
+Bayesian-optimized Random Forest,Random forest
+Boruta feature selection + Random Forest,Random forest
+Conditional Random Forest,Random forest
+Conditional random forest,Random forest
+Exposure estimation: neural network/RF/boosting,Random forest
+Random Forest,Random forest
+Random Forest (best-performing among seven ML models),Random forest
+Random forest,Random forest
+Random forest regressor,Random forest
+Random forest with modified grasshopper optimization,Random forest
+Stacked Random Forest ensemble using spatial EEG and temporal microstate/HMM features,Random forest
+BiLSTM-CGBO,Recurrent network
+GRU optimized with jellyfish search and bacterial foraging,Recurrent network
+Graph network + LSTM,Recurrent network
+LSTM with attention and residual/channel-attention components,Recurrent network
+RNN / LSTM / GRU,Recurrent network
+Ensemble and multiple neural/SVM benchmarks,SVM
+LASSO feature selection + sigmoid-kernel SVM,SVM
+LR-SVM soft-voting ensemble with Chi-square feature selection,SVM
+Linear SVC with recursive feature elimination,SVM
+MKDCA fusion with SVM,SVM
+Neural network (combined dataset); SVM/LR comparators,SVM
+Quantum SVM,SVM
+SVM,SVM
+SVM / PLS-DA,SVM
+SVM / SVR,SVM
+SVM with backward feature selection,SVM
+SVM with recursive cluster elimination,SVM
+Support vector regression,SVM
+Audio-visual transformer,Transformer
+BERT,Transformer
+Federated Transformer encoder with secure aggregation / federated weighted averaging,Transformer
+GPT-4 and ERNIE Bot language models,Transformer
+HerBERT transformer + Integrated Gradients + explainable linguistic models,Transformer
+Hybrid ViT-Mamba / Mamba state-space multimodal architecture,Transformer
+MACFUT (Multi-Aspect Cross-Fusion Transformer),Transformer
+Multi-Tier Transformer (feature attention + dual self/cross-attention),Transformer
+Transformer,Transformer
+Transformer and quantum neural network,Transformer
+Transformer ensemble,Transformer
+Transformer or ChatGPT proposed; implemented architecture unresolved,Transformer
+Vision Transformer,Transformer
+k-nearest neighbors,k-nearest neighbors

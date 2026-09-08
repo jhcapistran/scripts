@@ -1,7 +1,4 @@
-.venv
+.venv/
 __pycache__/
 .vscode/
-*.pdf
-*.svg
-*.jpg
-*.csv
+*.pyc

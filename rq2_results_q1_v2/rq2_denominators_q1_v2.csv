@@ -1,0 +1,10 @@
+rq,subset,group,denominator_n,notes
+RQ2,all_rows,Evaluated studies,428,Analytical universe: included reports evaluated for RQ2 from Maestro_IA_TEA_cierre_2026-09-08.xlsx.
+RQ2,integration_evaluation,Evaluated AI use,19,"Reports documenting evaluation of AI at point of use, in care-delivery, or in an AI-supported intervention."
+RQ2,integration_evaluation,Proposed only,98,Reports with translational or clinical use proposed but without user/workflow evaluation.
+RQ2,integration_evaluation,Research only,311,Reports with research-only modeling or biomarker discovery.
+RQ2,adjudicated_status,Evaluated at point of use,8,Adjudicated rq2_status in final master closure.
+RQ2,adjudicated_status,Evaluated AI-supported intervention,10,Adjudicated rq2_status in final master closure.
+RQ2,adjudicated_status,Evaluated care-delivery platform,1,Adjudicated rq2_status in final master closure.
+RQ2,adjudicated_status,Proposed only,98,Adjudicated rq2_status in final master closure.
+RQ2,adjudicated_status,Research only,311,Adjudicated rq2_status in final master closure.

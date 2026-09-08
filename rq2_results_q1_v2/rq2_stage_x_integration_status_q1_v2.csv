@@ -1,0 +1,7 @@
+stage_norm,Evaluated at point of use,Evaluated AI-supported intervention,Evaluated care-delivery platform,Proposed only,Research only
+Prescreening,0,0,0,1,7
+Screening,4,0,0,52,57
+Diagnosis,1,0,0,30,185
+Prognosis,0,0,0,3,19
+Monitoring/intervention,3,10,1,12,12
+Not specified,0,0,0,0,31
