@@ -1,7 +1,6 @@
-RQ2. Preliminary title/abstract evidence heatmap. The heatmap shows 242 studies with preliminary signal and
-        34 without signal, stratified only by primary clinical stage. These labels are screening-level evidence
-        only and must not be reported as confirmed clinical integration. Cell annotations report the count and the
-        within-stage percentage. The 242 signal-positive records are exported for manual review in
-        rq2_preliminary_signals_for_manual_review_q1_v2.csv. Study-level classifications are stored in
-        rq2_tripartite_dataset_q1_v2.csv and denominators are listed in
-        rq2_denominators_q1_v2.csv.
+RQ2. Adjudicated clinical-integration heatmap. The heatmap uses rq2_integration_status and rq2_role from the
+        corrected master workbook; legacy q2_candidate_abstract and q2_candidate_terms are not treated as final
+        integration evidence. Cell annotations report the count and the within-stage percentage. The corpus contains
+        454 unique studies, with 10 confirmed integration statuses and 276 historical
+        studies not adjudicated for final RQ2 integration in the master. Study-level classifications are stored in
+        rq2_tripartite_dataset_q1_v2.csv and denominators are listed in rq2_denominators_q1_v2.csv.

@@ -1,4 +1,4 @@
 RQ1 notes support summary
 Notes column: notes_coding
-Rows with non-empty notes: 189
+Rows with non-empty notes: 364
 Full note trail file: C:\Users\jonhe\OneDrive - Tecnológico Nacional de México Campus Orizaba\Posdoc Orizaba\ai for autism review\scripts\rq1_supporting_q1_v2\rq1_notes_full_context.csv

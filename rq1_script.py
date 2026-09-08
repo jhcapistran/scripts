@@ -6,6 +6,7 @@ import re
 
 import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib.ticker import NullLocator
 import numpy as np
 import pandas as pd
 import scienceplots
@@ -225,6 +226,8 @@ def build_reference_algorithm_bubble(counts_df: pd.DataFrame, out_stem: Path) ->
     ax.set_xlabel("Clinical stage", fontsize=16)
     ax.set_ylabel("Algorithm family", fontsize=16)
     ax.tick_params(axis="both", labelsize=13, length=0)
+    ax.xaxis.set_minor_locator(NullLocator())
+    ax.yaxis.set_minor_locator(NullLocator())
     ax.grid(True, color="#e5e7eb", linewidth=1.0)
     ax.set_axisbelow(True)
     for spine in ax.spines.values():

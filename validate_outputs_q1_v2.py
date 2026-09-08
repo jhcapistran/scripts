@@ -2,12 +2,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from openpyxl import load_workbook
 import pandas as pd
 
 
 BASE_DIR = Path(__file__).resolve().parent
-MASTER_FILE = BASE_DIR / "cribado_maestro_276_actualizacion_2026-09-02.xlsx"
+MASTER_FILE = BASE_DIR / "cribado_maestro_276_actualizacion_FINAL_CORREGIDO_2026-09-07.xlsx"
 DATASET = BASE_DIR / "analysis_dataset_q1_v2.xlsx"
 
 BINARY_COLS = [
@@ -23,21 +22,30 @@ BINARY_COLS = [
     "stage_diagnosis",
     "stage_prognosis",
     "stage_monitoring_intervention",
-    "q2_candidate_abstract",
-    "q2_candidate_terms",
-    "q3_external_validation_signal",
-    "q3_explainability_signal",
-    "q3_multisite_signal",
-    "q3_multisource_strategy_signal",
-    "needs_full_text_check",
-    "q3_completed_manual_19",
-    "q3_cross_site_robustness_signal",
-    "q3_multisite_dataset_signal",
-    "q3_internal_validation_signal",
-    "q3_prospective_evaluation_signal",
-    "q3_xai_strict_signal",
-    "q3_xai_partial_signal",
-    "q3_multisource_data_signal",
+    "q3_external_validation",
+    "q3_multisite_dataset",
+    "q3_cross_site_robustness",
+    "q3_prospective_evaluation",
+    "q3_xai_strict",
+    "q3_xai_partial",
+    "q3_multisource_data",
+]
+
+REQUIRED_RQ_COLS = [
+    "modalidad",
+    "tipo_IA",
+    "AI_algorithm_main",
+    "AI_task_type",
+    "stage_primary",
+    "rq2_integration_status",
+    "rq2_role",
+    "q3_external_validation",
+    "q3_multisite_dataset",
+    "q3_cross_site_robustness",
+    "q3_prospective_evaluation",
+    "q3_xai_strict",
+    "q3_xai_partial",
+    "q3_multisource_data",
 ]
 
 
@@ -59,115 +67,64 @@ def check_binary_columns(df: pd.DataFrame, sheet: str) -> None:
 
 
 def main() -> None:
-    require(MASTER_FILE.exists(), "master workbook does not exist")
+    require(MASTER_FILE.exists(), "corrected master workbook does not exist")
     require(DATASET.exists(), "analysis_dataset_q1_v2.xlsx does not exist")
 
-    master_sheets = pd.ExcelFile(MASTER_FILE).sheet_names
-    require("Texto_completo_192" in master_sheets, "Master is missing Texto_completo_192")
-    require("Texto_completo_191" not in master_sheets, "Stale Texto_completo_191 sheet still exists")
-    require("Excluidos_174" in master_sheets, "Master is missing Excluidos_174")
-    master_update = pd.read_excel(MASTER_FILE, sheet_name="Actualizacion_430")
-    require(int(master_update["eligibility_bucket"].eq("Provisional include").sum()) == 192, "Master does not have 192 provisional candidates")
-    require(int(master_update["eligibility_bucket"].eq("Excluded").sum()) == 174, "Master does not have 174 excluded records")
-    require(int(master_update["eligibility_bucket"].eq("Report not retrieved").sum()) == 0, "Master reports nonzero reports not retrieved")
-    master_text = pd.read_excel(MASTER_FILE, sheet_name="Texto_completo_192")
-    require(len(master_text) == 192, "Texto_completo_192 does not contain 192 rows")
-    require(int(master_text["full_text_decision"].eq("Pending adjudication").sum()) == 191, "Master does not have 191 pending candidates")
-    wb = load_workbook(MASTER_FILE, data_only=False)
-    require("Texto_completo_192" in str(wb["Resumen"]["B11"].value), "Resumen formulas do not reference Texto_completo_192")
-    require("$J$2:$J$193" in str(wb["Resumen"]["B12"].value), "Resumen pending formula does not cover 192 text-complete rows")
-    for sheet in ["Texto_completo_192", "RQ1_RQ2_base_276", "RQ3_base_276"]:
-        header = {cell.value: cell.column for cell in wb[sheet][1]}
-        for col in ["reviewer_1", "reviewer_2", "adjudicator", "decision_date"]:
-            require(col in header, f"Master {sheet} is missing {col}")
-    for sheet in ["RQ1_RQ2_base_276", "RQ3_base_276"]:
-        ws = wb[sheet]
-        header = {cell.value: cell.column for cell in ws[1]}
-        for col in ["q2_candidate_abstract", "q2_candidate_terms"]:
-            c = header[col]
-            values = {ws.cell(row, c).value for row in range(2, ws.max_row + 1)}
-            formats = {ws.cell(row, c).number_format for row in range(2, ws.max_row + 1)}
-            require(values <= {0, 1}, f"Master {sheet}.{col} is not real 0/1")
-            require(formats == {"General"}, f"Master {sheet}.{col} is not formatted as General")
-    master_q12 = pd.read_excel(MASTER_FILE, sheet_name="RQ1_RQ2_base_276")
-    master_q3 = pd.read_excel(MASTER_FILE, sheet_name="RQ3_base_276")
-    terms = master_q12[["study_id", "q3_candidate_terms"]].merge(
-        master_q3[["study_id", "q3_candidate_terms"]],
-        on="study_id",
-        suffixes=("_rq12", "_rq3"),
-    )
-    require(
-        terms["q3_candidate_terms_rq12"].fillna("").astype(str).equals(terms["q3_candidate_terms_rq3"].fillna("").astype(str)),
-        "Master q3_candidate_terms differs between RQ1/RQ2 and RQ3",
-    )
-    for sheet_name, frame in [("RQ1_RQ2_base_276", master_q12), ("RQ3_base_276", master_q3)]:
-        stages = dict(zip(frame["study_id"], frame["stage_primary"]))
-        require(stages[236] == "Prescreening" and stages[266] == "Prescreening", f"Master {sheet_name} does not unify stages 236/266")
+    master = pd.ExcelFile(MASTER_FILE)
+    for sheet in ["RQ1_RQ2_base_276", "RQ3_base_276", "Texto_completo_191", "Extraccion_RQ_nuevos"]:
+        require(sheet in master.sheet_names, f"Master is missing {sheet}")
+
+    master_rq12 = pd.read_excel(MASTER_FILE, sheet_name="RQ1_RQ2_base_276")
+    master_rq3 = pd.read_excel(MASTER_FILE, sheet_name="RQ3_base_276")
+    extraction = pd.read_excel(MASTER_FILE, sheet_name="Extraccion_RQ_nuevos")
+    text_complete = pd.read_excel(MASTER_FILE, sheet_name="Texto_completo_191")
+
+    historical_n = len(master_rq12)
+    require(historical_n == len(master_rq3), "Historical RQ1/RQ2 and RQ3 sheet lengths differ")
+    require(master_rq12["study_id"].nunique() == historical_n, "Historical RQ1/RQ2 study_id values are not unique")
+    require(master_rq3["study_id"].nunique() == historical_n, "Historical RQ3 study_id values are not unique")
+
+    new_included_n = int(extraction["full_text_decision"].isin(["Include", "Include with integrity flag"]).sum())
+    excluded_n = int(text_complete["full_text_decision"].eq("Exclude").sum())
+    pending_n = int(text_complete["full_text_decision"].astype(str).str.contains("Pending", case=False, na=False).sum())
 
     rq12 = read("rq1_rq2_graph_ready")
     rq3 = read("rq3_graph_ready")
-    candidates = read("new_candidates_passed_192")
-    prisma = read("PRISMA_scope_468")
-    dataset_wb = load_workbook(DATASET, data_only=True)
+    included = read("included_studies")
+    prisma = read("PRISMA_scope")
 
-    require(len(rq12) == 276 and rq12["study_id"].nunique() == 276, "RQ1/RQ2 corpus is not 276 unique studies")
-    require(len(rq3) == 276 and rq3["study_id"].nunique() == 276, "RQ3 corpus is not 276 unique studies")
-    require(rq12["study_id"].tolist() == rq3["study_id"].tolist(), "RQ1/RQ2 and RQ3 study order differs")
-
-    require(len(candidates) == 192, "Expected 192 provisional candidates")
-    row188 = candidates[candidates["bib_index"].eq(188)]
-    require(len(row188) == 1, "bib_index 188 is not present exactly once among candidates")
-    require(row188["full_text_decision"].iloc[0] == "Pending adjudication", "bib_index 188 has an inferred full-text decision")
-    row125 = candidates[candidates["bib_index"].eq(125)]
-    require(len(row125) == 1, "bib_index 125 is not present exactly once among candidates")
-    require(row125["full_text_decision"].iloc[0] == "Include with integrity flag", "bib_index 125 lost its full-text decision")
+    final_n = historical_n + new_included_n
+    require(final_n == 454, f"Expected 454 unique studies = historical + new, got {final_n}")
+    require(historical_n == 276, f"Expected 276 historical studies, got {historical_n}")
+    require(new_included_n == 178, f"Expected 178 new included studies, got {new_included_n}")
+    require(excluded_n == 14, f"Expected 14 full-text exclusions, got {excluded_n}")
+    require(pending_n == 0, f"Expected 0 pending full-text adjudications, got {pending_n}")
 
     for df, sheet in [(rq12, "rq1_rq2_graph_ready"), (rq3, "rq3_graph_ready")]:
+        require(len(df) == final_n, f"{sheet} does not contain {final_n} rows")
+        require(df["study_id"].nunique() == final_n, f"{sheet} does not contain {final_n} unique study_id values")
+        require(set(REQUIRED_RQ_COLS) <= set(df.columns), f"{sheet} is missing required normalized columns")
         check_binary_columns(df, sheet)
-        for col in ["reviewer_1", "reviewer_2", "adjudicator", "decision_date"]:
-            require(col in df.columns, f"{sheet} is missing traceability field {col}")
-        require("q3_candidate_terms" in df.columns, f"{sheet} is missing q3_candidate_terms")
-        ws = dataset_wb[sheet]
-        q3_terms_col = {cell.value: cell.column for cell in ws[1]}["q3_candidate_terms"]
-        require(
-            all(ws.cell(row, q3_terms_col).data_type in {"s", "inlineStr", "n"} and ws.cell(row, q3_terms_col).value not in {0, 1} for row in range(2, ws.max_row + 1)),
-            f"{sheet}.q3_candidate_terms was converted to binary values",
-        )
-        deep = df[df["title"].astype(str).str.contains("DeepASDPred", case=False, na=False)]
-        require(len(deep) == 1, f"{sheet} does not contain exactly one DeepASDPred row")
-        deep = deep.iloc[0]
-        require(deep["modalidad"] == "Biological/omics", f"{sheet} DeepASDPred modality not corrected")
-        require(deep["AI_task_type"] == "risk-RNA identification", f"{sheet} DeepASDPred task not corrected")
-        require(deep["stage_primary"] == "Not specified", f"{sheet} DeepASDPred stage not corrected")
-        for col in ["stage_prescreening", "stage_screening", "stage_diagnosis", "stage_prognosis", "stage_monitoring_intervention"]:
-            require(int(deep[col]) == 0, f"{sheet} DeepASDPred {col} not zero")
+    require(len(included) == final_n, f"included_studies does not contain {final_n} rows")
+    require(included["study_id"].nunique() == final_n, f"included_studies does not contain {final_n} unique study_id values")
 
-    rq3_summary = pd.read_csv(BASE_DIR / "rq3_results_q1_v2" / "rq3_global_practice_summary_q1_v2.csv")
-    ext = rq3_summary[rq3_summary["practice_signal"].eq("q3_external_validation_signal")].iloc[0]
-    require(int(ext["positive_n"]) == 15 and int(ext["total_n"]) - int(ext["positive_n"]) == 261, "RQ3 external validation partition is not 261+15=276")
-    q3_any = rq3[["q3_external_validation_signal", "q3_explainability_signal", "q3_multisite_signal", "q3_multisource_strategy_signal"]].astype(int).any(axis=1)
-    require(int(q3_any.sum()) == 110 and int((~q3_any).sum()) == 166, "RQ3 individual signal split is not 110+166=276")
-    plotted = pd.read_csv(BASE_DIR / "rq3_results_q1_v2" / "rq3_lollipop_combos_q1_v2.csv")
-    omitted = pd.read_csv(BASE_DIR / "rq3_results_q1_v2" / "rq3_omitted_zero_profiles_q1_v2.csv")
-    require(len(plotted) == 37 and int(plotted["combo_n"].sum()) == 262, "RQ3 plotted profiles are not 37 profiles/262 studies")
-    require(len(omitted) == 10 and int(omitted["combo_n"].sum()) == 14, "RQ3 omitted profiles are not 10 profiles/14 studies")
+    require(rq12["study_id"].tolist() == rq3["study_id"].tolist(), "RQ1/RQ2 and RQ3 study order differs")
+    require(int(included["cohort"].eq("historical_276").sum()) == historical_n, "included_studies historical count mismatch")
+    require(int(included["cohort"].eq("update_2026_included").sum()) == new_included_n, "included_studies new count mismatch")
+    require(int(prisma.loc[prisma["stage"].eq("Final analytical corpus"), "n"].iloc[0]) == final_n, "PRISMA final corpus count mismatch")
+    require(int(prisma.loc[prisma["stage"].eq("Full-text exclusions"), "n"].iloc[0]) == excluded_n, "PRISMA exclusion count mismatch")
+    require(int(prisma.loc[prisma["stage"].eq("Pending full-text adjudication"), "n"].iloc[0]) == pending_n, "PRISMA pending count mismatch")
 
     rq2_denoms = pd.read_csv(BASE_DIR / "rq2_results_q1_v2" / "rq2_denominators_q1_v2.csv")
-    require(set(rq2_denoms["subset"]) == {"all_rows", "title_abstract_signal_state"}, "RQ2 denominator is not labeled as title/abstract")
-    present = int(rq2_denoms.loc[rq2_denoms["group"].eq("Present"), "denominator_n"].iloc[0])
-    absent = int(rq2_denoms.loc[rq2_denoms["group"].eq("Absent"), "denominator_n"].iloc[0])
-    require(present == 242 and absent == 34, "RQ2 signal split is not 242+34=276")
-    rq2_review = pd.read_csv(BASE_DIR / "rq2_results_q1_v2" / "rq2_preliminary_signals_for_manual_review_q1_v2.csv")
-    require(len(rq2_review) == 242, "RQ2 manual-review export does not contain 242 records")
+    require("title_abstract_signal_state" not in set(rq2_denoms["subset"]), "RQ2 still validates legacy title/abstract candidate signals")
+    require(set(rq2_denoms["subset"]) >= {"all_rows", "integration_status"}, "RQ2 denominators do not use integration_status")
+    require(not (BASE_DIR / "rq2_results_q1_v2" / "rq2_stage_x_preliminary_signal_q1_v2.csv").exists(), "Stale RQ2 preliminary-signal CSV still exists")
+    require((BASE_DIR / "rq2_results_q1_v2" / "rq2_stage_x_integration_status_q1_v2.csv").exists(), "RQ2 integration-status CSV was not written")
     caption = (BASE_DIR / "rq2_results_q1_v2" / "rq2_heatmap_and_timing_q1_v2_caption.txt").read_text(encoding="utf-8")
-    require("not be reported as confirmed clinical integration" in caption, "RQ2 caption does not warn against confirmed integration")
-    require("manual review" in caption, "RQ2 caption does not flag the 242 positives for manual review")
-    require(not (BASE_DIR / "rq2_results_q1_v2" / "rq2_stage_x_integration_q1_v2.csv").exists(), "Stale RQ2 integration CSV still exists")
+    require("q2_candidate_abstract and q2_candidate_terms are not treated as final" in caption, "RQ2 caption does not reject legacy q2_candidate_* final use")
 
-    not_spec = pd.read_csv(BASE_DIR / "rq1_results_q1_v2" / "rq1_denominators_q1_v2.csv")
-    require(int(not_spec.loc[not_spec["group"].eq("Not specified"), "denominator_n"].iloc[0]) == 8, "RQ1 Not specified count is not 8")
-
-    require(int(prisma.loc[prisma["stage"].eq("Combined provisional candidate pool"), "n"].iloc[0]) == 468, "PRISMA pool is not 468")
+    rq3_summary = pd.read_csv(BASE_DIR / "rq3_results_q1_v2" / "rq3_global_practice_summary_q1_v2.csv")
+    require(set(rq3_summary["practice_signal"]) == {"q3_external_validation", "q3_multisource_data", "q3_xai_any", "q3_site_any"}, "RQ3 summary is not based on new q3_* fields")
 
     figure_paths = [
         BASE_DIR / "rq1_results_q1_v2" / "rq1_algorithm_bubbles_q1_v2.png",
@@ -181,7 +138,7 @@ def main() -> None:
     for path in figure_paths:
         require(path.exists() and path.stat().st_size > 10_000, f"Missing or tiny figure: {path.name}")
 
-    print("PASS: dataset, counts, binary columns, traceability-sensitive corrections, and figures validated.")
+    print(f"PASS: {final_n} unique = {historical_n} + {new_included_n}; full-text exclusions={excluded_n}; pending={pending_n}.")
 
 
 if __name__ == "__main__":

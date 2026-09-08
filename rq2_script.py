@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import datetime as dt
 from pathlib import Path
 import re
 
@@ -67,34 +66,6 @@ def normalize_stage(value: object) -> str:
     return stage if stage in STAGE_ORDER else "Not specified"
 
 
-def normalize_bool_signal(value: object) -> bool | None:
-    if pd.isna(value):
-        return None
-    if isinstance(value, dt.datetime):
-        return value.date() == dt.date(1900, 1, 1)
-    if isinstance(value, dt.time):
-        return False
-    if isinstance(value, (int, float, np.integer, np.floating)) and not isinstance(value, bool):
-        if float(value) > 0:
-            return True
-        if float(value) == 0:
-            return False
-    text = norm_text(value)
-    if text in {"verdadero", "true", "1", "1.0", "yes", "y"}:
-        return True
-    if text in {"falso", "false", "0", "0.0", "no", "n"}:
-        return False
-    return None
-
-
-def status_from_bool(value: bool | None) -> str:
-    if value is True:
-        return "Present"
-    if value is False:
-        return "Absent"
-    return "Uncoded"
-
-
 def ensure_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
 
@@ -131,51 +102,57 @@ def normalize_common_fields(df: pd.DataFrame) -> pd.DataFrame:
     return work
 
 
-def derive_q2_signal_state(row: pd.Series) -> str:
-    abs_signal = normalize_bool_signal(row.get("q2_candidate_abstract"))
-    terms_signal = normalize_bool_signal(row.get("q2_candidate_terms"))
-    if abs_signal is True or terms_signal is True:
-        return "Present"
-    if abs_signal is False or terms_signal is False:
-        return "Absent"
-    return "Uncoded"
+def normalize_integration_status(value: object) -> str:
+    text = clean_text(value)
+    if pd.isna(text):
+        return "Not adjudicated in master"
+    status = str(text)
+    if status.startswith("Confirmed"):
+        return status
+    if status in {"Research only", "Proposed only"}:
+        return status
+    return "Other adjudicated status"
 
 
 def main() -> None:
     ensure_dir(OUTPUT_DIR)
-    for stale in ["rq2_timing_table_q1_v2.csv", "rq2_stage_x_integration_q1_v2.csv", "rq2_review_rows_q1_v2.csv"]:
+    for stale in ["rq2_timing_table_q1_v2.csv", "rq2_stage_x_preliminary_signal_q1_v2.csv", "rq2_preliminary_signals_for_manual_review_q1_v2.csv", "rq2_review_rows_q1_v2.csv"]:
         stale_path = OUTPUT_DIR / stale
         if stale_path.exists():
             stale_path.unlink()
     df = normalize_common_fields(load_base_df())
-    df["q2_abstract_bool"] = df["q2_candidate_abstract"].map(normalize_bool_signal)
-    df["q2_terms_bool"] = df["q2_candidate_terms"].map(normalize_bool_signal)
-    df["q2_signal_state"] = df.apply(derive_q2_signal_state, axis=1)
-    positive_mask = df["q2_signal_state"].eq("Present")
-    df["q2_signal_pattern"] = df.apply(
-        lambda row: f"abstract={status_from_bool(row['q2_abstract_bool'])}; terms={status_from_bool(row['q2_terms_bool'])}",
-        axis=1,
-    )
-    positive_df = df.loc[positive_mask].copy()
+    df["rq2_integration_status_norm"] = df["rq2_integration_status"].map(normalize_integration_status)
     stage_signal = (
-        pd.crosstab(df["stage_norm"], df["q2_signal_state"])
-        .reindex(index=ordered_categories(df["stage_norm"].unique().tolist(), STAGE_ORDER), columns=["Present", "Absent"], fill_value=0)
+        pd.crosstab(df["stage_norm"], df["rq2_integration_status_norm"])
+        .reindex(
+            index=ordered_categories(df["stage_norm"].unique().tolist(), STAGE_ORDER),
+            columns=[
+                "Confirmed in workflow",
+                "Confirmed in care delivery",
+                "Confirmed in intervention",
+                "Proposed only",
+                "Research only",
+                "Not adjudicated in master",
+                "Other adjudicated status",
+            ],
+            fill_value=0,
+        )
     )
+    stage_signal = stage_signal.loc[:, stage_signal.sum(axis=0) > 0]
     stage_signal = stage_signal.loc[(stage_signal.sum(axis=1) > 0), :]
-    stage_signal.to_csv(OUTPUT_DIR / "rq2_stage_x_preliminary_signal_q1_v2.csv")
+    stage_signal.to_csv(OUTPUT_DIR / "rq2_stage_x_integration_status_q1_v2.csv")
     df.to_csv(OUTPUT_DIR / "rq2_tripartite_dataset_q1_v2.csv", index=False)
-    positive_df.to_csv(OUTPUT_DIR / "rq2_preliminary_signals_for_manual_review_q1_v2.csv", index=False)
     denominator_rows = [
         {"rq": "RQ2", "subset": "all_rows", "group": "Evaluated studies", "denominator_n": int(len(df)), "notes": "Analytical universe: graph-ready studies evaluated for RQ2."},
     ]
-    for state, count in df["q2_signal_state"].value_counts(dropna=False).reindex(["Present", "Absent", "Uncoded"], fill_value=0).items():
+    for state, count in df["rq2_integration_status_norm"].value_counts(dropna=False).items():
         denominator_rows.append(
             {
                 "rq": "RQ2",
-                "subset": "title_abstract_signal_state",
+                "subset": "integration_status",
                 "group": state,
                 "denominator_n": int(count),
-                "notes": "Preliminary title/abstract evidence only; not confirmed clinical integration.",
+                "notes": "Final integration status from rq2_integration_status; q2_candidate_* audit fields are not used.",
             }
         )
     pd.DataFrame(denominator_rows).to_csv(OUTPUT_DIR / "rq2_denominators_q1_v2.csv", index=False)
@@ -204,10 +181,10 @@ def main() -> None:
                 linespacing=1.4,
             )
     heat_ax.set_xticks(range(len(stage_signal.columns)))
-    heat_ax.set_xticklabels(["Preliminary signal", "Absent"], fontsize=12)
+    heat_ax.set_xticklabels(stage_signal.columns, fontsize=11, rotation=35, ha="right")
     heat_ax.set_yticks(range(len(stage_signal.index)))
     heat_ax.set_yticklabels(stage_signal.index, fontsize=11.5)
-    heat_ax.set_xlabel("Title/abstract signal state", fontsize=14.5, fontweight="bold", labelpad=14)
+    heat_ax.set_xlabel("Adjudicated integration status", fontsize=14.5, fontweight="bold", labelpad=14)
     heat_ax.set_ylabel("Clinical stage", fontsize=14, fontweight="bold", labelpad=12)
     # Add a colourbar for scale reference
     cbar = fig.colorbar(img, ax=heat_ax, shrink=0.7, pad=0.02)
@@ -215,22 +192,25 @@ def main() -> None:
     cbar.ax.tick_params(labelsize=10.5)
     fig.tight_layout()
     save_figure_variants(fig, OUTPUT_DIR / "rq2_heatmap_and_timing_q1_v2")
+    counts = df["rq2_integration_status_norm"].value_counts().to_dict()
+    confirmed_n = int(df["rq2_integration_status_norm"].astype(str).str.startswith("Confirmed").sum())
+    not_adjudicated_n = int(counts.get("Not adjudicated in master", 0))
     write_caption(
         OUTPUT_DIR / "rq2_heatmap_and_timing_q1_v2_caption.txt",
-        """
-        RQ2. Preliminary title/abstract evidence heatmap. The heatmap shows 242 studies with preliminary signal and
-        34 without signal, stratified only by primary clinical stage. These labels are screening-level evidence
-        only and must not be reported as confirmed clinical integration. Cell annotations report the count and the
-        within-stage percentage. The 242 signal-positive records are exported for manual review in
-        rq2_preliminary_signals_for_manual_review_q1_v2.csv. Study-level classifications are stored in
-        rq2_tripartite_dataset_q1_v2.csv and denominators are listed in
-        rq2_denominators_q1_v2.csv.
+        f"""
+        RQ2. Adjudicated clinical-integration heatmap. The heatmap uses rq2_integration_status and rq2_role from the
+        corrected master workbook; legacy q2_candidate_abstract and q2_candidate_terms are not treated as final
+        integration evidence. Cell annotations report the count and the within-stage percentage. The corpus contains
+        {len(df)} unique studies, with {confirmed_n} confirmed integration statuses and {not_adjudicated_n} historical
+        studies not adjudicated for final RQ2 integration in the master. Study-level classifications are stored in
+        rq2_tripartite_dataset_q1_v2.csv and denominators are listed in rq2_denominators_q1_v2.csv.
         """,
     )
 
 
 def _self_check() -> None:
-    assert derive_q2_signal_state(pd.Series({"q2_candidate_abstract": "true", "q2_candidate_terms": pd.NA})) == "Present"
+    assert normalize_integration_status("Confirmed in workflow") == "Confirmed in workflow"
+    assert normalize_integration_status(pd.NA) == "Not adjudicated in master"
 
 
 if __name__ == "__main__":
