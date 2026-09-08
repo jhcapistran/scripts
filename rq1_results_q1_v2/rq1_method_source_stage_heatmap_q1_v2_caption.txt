@@ -1,3 +1,4 @@
 RQ1 companion figure. Faceted heatmaps showing the distribution of AI methods across data sources within
         each functional stage of the clinical process in ASD. Each panel corresponds to one clinical stage; rows
-        represent data sources, columns represent AI methods, and cell labels report counts directly.
+        represent data sources, columns represent AI methods, and cell labels report counts directly from the final
+        adjudicated master workbook (N=428 included reports).

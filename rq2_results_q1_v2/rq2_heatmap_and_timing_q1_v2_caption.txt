@@ -1,6 +1,7 @@
-RQ2. Adjudicated clinical-integration heatmap. The heatmap uses rq2_integration_status and rq2_role from the
-        corrected master workbook; legacy q2_candidate_abstract and q2_candidate_terms are not treated as final
-        integration evidence. Cell annotations report the count and the within-stage percentage. The corpus contains
-        454 unique studies, with 10 confirmed integration statuses and 276 historical
-        studies not adjudicated for final RQ2 integration in the master. Study-level classifications are stored in
-        rq2_tripartite_dataset_q1_v2.csv and denominators are listed in rq2_denominators_q1_v2.csv.
+RQ2. Adjudicated clinical-integration heatmap. Distribution of clinical integration maturity across functional
+        clinical stages from the final frozen master workbook (Maestro_IA_TEA_cierre_2026-09-08.xlsx). The analytical universe
+        contains 428 reports: 19 reports (4.4%) with evaluated AI use (8 point-of-use evaluations,
+        10 AI-supported interventions, and 1 care-delivery platform),
+        98 reports (22.9%) proposing translational tools or workflows without direct implementation testing,
+        and 311 reports (72.7%) restricted to research modeling.
+        Cell annotations report the absolute report count and the within-stage percentage.

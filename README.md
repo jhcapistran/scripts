@@ -1,8 +1,8 @@
 # AI for autism review scripts
 
-Archivo maestro vigente: `cribado_maestro_276_actualizacion_FINAL_CORREGIDO_2026-09-07.xlsx`.
+Archivo maestro único y congelado: `Maestro_IA_TEA_cierre_2026-09-08.xlsx`.
 
-Este repositorio genera `analysis_dataset_q1_v2.xlsx` y las figuras RQ1-RQ3 usando exclusivamente ese maestro como fuente de verdad. Los demas XLSX del directorio son legacy y no deben usarse como input.
+Este repositorio genera las figuras y tablas CSV de RQ1–RQ3 usando exclusivamente este archivo maestro final como única fuente de verdad (leyendo directamente la hoja `BASE_CIERRE` con `include_main == 1`). Los demás archivos XLSX del directorio son legacy y no deben usarse como input.
 
 ## Flujo reproducible
 
@@ -11,32 +11,19 @@ Este repositorio genera `analysis_dataset_q1_v2.xlsx` y las figuras RQ1-RQ3 usan
 .\.venv\Scripts\python.exe validate_outputs_q1_v2.py
 ```
 
-`run_all_q1_v2.py` reconstruye primero el dataset analitico y despues regenera RQ1, RQ2 y RQ3.
+`run_all_q1_v2.py` ejecuta secuencialmente `rq1_script.py`, `rq2_script.py` y `rq3_script.py`.
 
-## Politica de conteos
+## Política de conteos y denominadores
 
-Los conteos se derivan del maestro corregido:
+Los conteos provienen exclusivamente de `Maestro_IA_TEA_cierre_2026-09-08.xlsx`:
 
-- Corpus final: 454 estudios unicos.
-- Base historica: 276 estudios desde `RQ1_RQ2_base_276` / `RQ3_base_276`.
-- Nuevos incluidos: 178 estudios desde `Extraccion_RQ_nuevos` con `full_text_decision` Include o Include with integrity flag.
-- Exclusiones en texto completo: 14 desde `Texto_completo_191`.
-- Pendientes de adjudicacion de texto completo: 0.
+- **Registros conservados para auditoría**: 454 (276 históricos + 178 de actualización).
+- **Exclusiones de auditoría**: 26 (23 históricos + 3 de actualización), detalladas en `EXCLUSIONES_CIERRE` e identificadas con `include_main == 0`.
+- **Corpus incluido en la síntesis analítica principal**: 428 estudios únicos (253 históricos + 175 de actualización), identificados con `include_main == 1`.
+- **RQ1**: 397 resueltos en las 5 etapas clínicas funcionales (Diagnosis: 216, Screening: 113, Monitoring/intervention: 38, Prognosis: 22, Prescreening: 8) y 31 no especificados (*Not specified*). Total = 428.
+- **RQ2**: Clasificación adjudicada de madurez de integración (`rq2_status`): Research only: 311, Proposed only: 98, Evaluated AI use: 19 (8 en punto de uso, 10 en intervención, 1 en plataforma).
+- **RQ3**: Cuatro prácticas primarias analizadas por perfil (90 perfiles en `RQ3_PERFILES`): External validation: 24 (5.6%), Multisource integration: 77 (18.0%), Explicit explainability broad: 126 (29.4%), Cross-site evaluation: 12 (2.8%).
 
-## Mapeos
+## Sin inferencia de valores faltantes
 
-Los estudios nuevos se normalizan al esquema existente:
-
-- `data_source_primary` -> `modalidad`
-- `ai_type` -> `tipo_IA`
-- `ai_algorithm_main` -> `AI_algorithm_main`
-- `ai_task_type` -> `AI_task_type`
-- `stage_primary` se conserva y alimenta las banderas de etapa.
-
-RQ2 usa solo `rq2_integration_status` y `rq2_role` como campos finales adjudicados. Los campos legacy `q2_candidate_abstract` y `q2_candidate_terms` quedan solo como auditoria historica y no se interpretan como integracion clinica final.
-
-RQ3 usa los campos adjudicados `q3_*`. Para mantener el diseno actual de cuatro practicas, el script resume XAI estricto/parcial como explicabilidad y multisite/cross-site como evidencia entre sitios.
-
-## Limitacion sin inferencia
-
-El maestro no contiene `rq2_integration_status` ni `rq2_role` para los 276 estudios historicos. Esas filas se marcan como `Not adjudicated in master` en RQ2 en vez de inferir integracion desde `q2_candidate_*`.
+No se imputa ni infiere ningún valor. Los estados "Not specified", "Not reported in assessed sources" y "Not ascertainable" se respetan explícitamente conforme a la codificación adjudicada del maestro de cierre.

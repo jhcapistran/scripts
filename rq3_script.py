@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import datetime as dt
 from pathlib import Path
 
 import matplotlib
@@ -14,22 +13,19 @@ matplotlib.use("Agg")
 plt.style.use(["science", "no-latex"])
 
 BASE_DIR = Path(__file__).resolve().parent
-INPUT_FILE = BASE_DIR / "analysis_dataset_q1_v2.xlsx"
-SHEET_NAME = "rq3_graph_ready"
+MASTER_FILE = BASE_DIR / "Maestro_IA_TEA_cierre_2026-09-08.xlsx"
+SHEET_NAME = "BASE_CIERRE"
 OUTPUT_DIR = BASE_DIR / "rq3_results_q1_v2"
 SUPPLEMENT_DIR = OUTPUT_DIR / "supplement"
 MASTER_DENOMINATOR_FILE = BASE_DIR / "rq_denominators_q1_v2.csv"
 
-METHOD_COL = "tipo_IA"
-MODALITY_COL = "modalidad"
-STAGE_COL = "stage_primary"
-
 PRACTICE_COLS = {
-    "q3_external_validation_signal": ("External validation", "#d95f02", "X"),
-    "q3_multisource_strategy_signal": ("Multisource integration", "#1f78b4", "s"),
-    "q3_explainability_signal": ("Model explainability", "#1b9e77", "D"),
-    "q3_multisite_signal": ("Cross-site robustness", "#7570b3", "^"),
+    "external_validation": ("External validation", "#d95f02", "X"),
+    "multisource_integration": ("Multisource integration", "#1f78b4", "s"),
+    "xai_broad": ("Explicit explainability (broad)", "#1b9e77", "D"),
+    "cross_site_robustness": ("Cross-site evaluation", "#7570b3", "^"),
 }
+
 STAGE_ORDER = [
     "Prescreening",
     "Screening",
@@ -38,88 +34,24 @@ STAGE_ORDER = [
     "Monitoring/intervention",
     "Not specified",
 ]
-METHOD_ORDER = ["Machine Learning", "Deep Learning", "Hybrid", "Not specified"]
+
 MODALITY_ORDER = [
-    "Image",
-    "Biological/omics",
+    "Neuroimaging",
+    "Structured clinical/questionnaire data",
+    "Behavioral images/video/gaze/movement",
+    "Multiple source categories",
     "Physiological signals",
-    "Text / NLP",
-    "Audio / Voice",
-    "Multimodal",
+    "Biological/omics",
+    "Text/language",
+    "Audio/voice",
+    "Other biomedical/digital data",
     "Not specified",
 ]
-MODALITY_TRANSLATIONS = {
-    "imagen": "Image",
-    "señales fisiológicas": "Physiological signals",
-    "senales fisiologicas": "Physiological signals",
-    "seã±ales fisiolã³gicas": "Physiological signals",
-    "texto · nlp": "Text / NLP",
-    "texto / nlp": "Text / NLP",
-    "biological/omics": "Biological/omics",
-    "audio · voz": "Audio / Voice",
-    "audio / voz": "Audio / Voice",
-    "multimodal": "Multimodal",
-    "no especificado": "Not specified",
-    "no especificada": "Not specified",
-    "not specified": "Not specified",
-}
-METHOD_TRANSLATIONS = {
-    "machine learning": "Machine Learning",
-    "deep learning": "Deep Learning",
-    "híbrido": "Hybrid",
-    "hibrido": "Hybrid",
-    "hybrid": "Hybrid",
-    "no especificado": "Not specified",
-    "not specified": "Not specified",
-}
-STAGE_TRANSLATIONS = {
-    "prescreening": "Prescreening",
-    "screening": "Screening",
-    "diagnosis": "Diagnosis",
-    "prognosis": "Prognosis",
-    "monitoring/intervention": "Monitoring/intervention",
-    "monitoring_intervention": "Monitoring/intervention",
-    "not clear": "Not specified",
-    "not specified": "Not specified",
-    "no especificado": "Not specified",
-}
 
-# ponytail: no supplement, so the main figure carries every positive combination.
+METHOD_ORDER = ["Machine Learning", "Deep Learning", "Hybrid", "Not specified"]
+
 MIN_COMBO_N_FOR_FIGURE = 1
 TOP_COMBOS_FOR_FIGURE = 999
-
-
-def clean_text(value: object) -> object:
-    if pd.isna(value):
-        return pd.NA
-    text = str(value).strip()
-    return text if text else pd.NA
-
-
-def normalize_category(value: object, mapping: dict[str, str], fallback: str = "Not specified") -> str:
-    cleaned = clean_text(value)
-    if pd.isna(cleaned):
-        return fallback
-    return mapping.get(str(cleaned).casefold(), str(cleaned))
-
-
-def normalize_signal(value: object) -> int:
-    if pd.isna(value):
-        return 0
-    if isinstance(value, dt.datetime):
-        return 1 if value.date() == dt.date(1900, 1, 1) else 0
-    if isinstance(value, dt.time):
-        return 0
-    try:
-        return 1 if float(value) > 0 else 0
-    except (TypeError, ValueError):
-        return 1 if str(value).strip().casefold() in {"true", "yes", "y"} else 0
-
-
-def ordered_categories(observed: list[str], preferred: list[str]) -> list[str]:
-    ordered = [item for item in preferred if item in observed]
-    extras = sorted(item for item in observed if item not in preferred)
-    return ordered + extras
 
 
 def ensure_dir(path: Path) -> None:
@@ -141,17 +73,29 @@ def write_caption(path: Path, text: str) -> None:
 
 
 def load_base_df() -> pd.DataFrame:
-    return pd.read_excel(INPUT_FILE, sheet_name=SHEET_NAME).copy()
+    if not MASTER_FILE.exists():
+        raise FileNotFoundError(f"Master file not found: {MASTER_FILE}")
+    df = pd.read_excel(MASTER_FILE, sheet_name=SHEET_NAME, skiprows=3)
+    df = df[df["include_main"] == 1].copy()
+    if len(df) != 428:
+        raise ValueError(f"Expected 428 included studies in BASE_CIERRE, found {len(df)}")
+    return df
+
+
+def ordered_categories(observed: list[str], preferred: list[str]) -> list[str]:
+    ordered = [item for item in preferred if item in observed]
+    extras = sorted(item for item in observed if item not in preferred)
+    return ordered + extras
 
 
 def build_combo_summary(df: pd.DataFrame) -> pd.DataFrame:
     work = df.copy()
-    work["method_norm"] = work[METHOD_COL].apply(normalize_category, mapping=METHOD_TRANSLATIONS)
-    work["modality_norm"] = work[MODALITY_COL].apply(normalize_category, mapping=MODALITY_TRANSLATIONS)
-    work["stage_norm"] = work[STAGE_COL].apply(normalize_category, mapping=STAGE_TRANSLATIONS)
+    work["stage_norm"] = work["stage_primary"].fillna("Not specified").astype(str)
+    work["modality_norm"] = work["data_source_primary"].fillna("Not specified").astype(str)
+    work["method_norm"] = work["ai_type"].fillna("Not specified").astype(str)
 
     for col in PRACTICE_COLS:
-        work[col] = work[col].apply(normalize_signal)
+        work[col] = work[col].astype(str).str.strip().eq("Reported").astype(int)
 
     combo = (
         work.groupby(["stage_norm", "modality_norm", "method_norm"], dropna=False)
@@ -260,14 +204,18 @@ def build_global_summary(df: pd.DataFrame) -> pd.DataFrame:
     rows = []
     total_n = int(len(df))
     for col, (label, _, _) in PRACTICE_COLS.items():
-        positive_n = int(df[col].apply(normalize_signal).sum())
+        reported_n = int(df[col].astype(str).str.strip().eq("Reported").sum())
+        not_rep_n = int(df[col].astype(str).str.strip().eq("Not reported in assessed sources").sum())
+        not_asc_n = int(df[col].astype(str).str.strip().eq("Not ascertainable").sum())
         rows.append(
             {
-                "practice_signal": col,
+                "practice_field": col,
                 "practice": label,
-                "positive_n": positive_n,
+                "reported_n": reported_n,
+                "not_reported_n": not_rep_n,
+                "not_ascertainable_n": not_asc_n,
                 "total_n": total_n,
-                "positive_rate": positive_n / total_n if total_n else 0.0,
+                "reported_rate": reported_n / total_n if total_n else 0.0,
             }
         )
     return pd.DataFrame(rows)
@@ -303,17 +251,19 @@ def draw_compact_dotplot(
     panel_data = [(title, plot_df[plot_df["plot_stage"].isin(stages)].reset_index(drop=True)) for title, stages in panel_specs]
     panel_data = [(title, df_stage) for title, df_stage in panel_data if not df_stage.empty]
 
-    max_rows = max(len(df_stage) for _, df_stage in panel_data)
+    if not panel_data:
+        return
+
     total_rows = sum(len(df_stage) for _, df_stage in panel_data)
     n_panels = len(panel_data)
     ncols = 1
     nrows = (n_panels + ncols - 1) // ncols
-    row_height = layout.get("row_height", 0.5)
+    row_height = layout.get("row_height", 0.48)
     base_height = layout.get("base_height", 1.05)
-    min_height = layout.get("min_height", 5.9)
+    min_height = layout.get("min_height", 5.8)
     fig_height = max(min_height, row_height * total_rows + base_height * nrows)
     max_label_len = max(len(str(label)) for _, df_stage in panel_data for label in df_stage["plot_label"])
-    fig_width = min(12.5, max(9.6, 7.2 + 0.055 * max_label_len))
+    fig_width = min(13.2, max(9.8, 7.2 + 0.055 * max_label_len))
     fig, axes = plt.subplots(nrows, ncols, figsize=(fig_width, fig_height), facecolor="white")
     axes = axes.flatten() if hasattr(axes, "flatten") else [axes]
 
@@ -343,18 +293,18 @@ def draw_compact_dotplot(
                 row_labels.append(f"{points[0][3]}/{int(row['combo_n'])}")
 
             if row_labels:
-                ax.text(1.045, row_idx, ", ".join(row_labels), va="center", ha="left", fontsize=12)
+                ax.text(1.045, row_idx, ", ".join(row_labels), va="center", ha="left", fontsize=11.5)
 
-        ax.set_title(title, fontsize=16, loc="left")
-        ax.set_xlim(0, 1.16)
+        ax.set_title(title, fontsize=15.5, loc="left", fontweight="bold")
+        ax.set_xlim(0, 1.18)
         ax.set_ylim(-0.5, len(stage_df) - 0.5)
         ax.set_yticks(y_positions)
-        ax.set_yticklabels(stage_df["plot_label"], fontsize=12)
-        ax.set_ylabel("Stage | data source | AI technique", fontsize=15, labelpad=34)
+        ax.set_yticklabels(stage_df["plot_label"], fontsize=11.5)
+        ax.set_ylabel("Stage | data source | AI technique", fontsize=14, labelpad=28)
         ax.invert_yaxis()
         ax.set_xticks([0, 0.25, 0.5, 0.75, 1.0], ["0%", "25%", "50%", "75%", "100%"])
-        ax.tick_params(axis="x", labelsize=13)
-        ax.set_xlabel("Implementation frequency within each profile", fontsize=15, labelpad=12)
+        ax.tick_params(axis="x", labelsize=12)
+        ax.set_xlabel("Implementation frequency within each profile", fontsize=14, labelpad=10)
         ax.grid(axis="x", color="#e5e7eb", linewidth=0.9)
         ax.grid(axis="y", color="#f1f5f9", linewidth=0.8)
         ax.set_axisbelow(True)
@@ -370,15 +320,14 @@ def draw_compact_dotplot(
         if any(int(row[f"{col}_count"]) > 0 for _, df_stage in panel_data for _, row in df_stage.iterrows())
     ]
     legend_handles = [
-        Line2D([0], [0], color=color, marker=marker, linewidth=0, markersize=10, label=label)
+        Line2D([0], [0], color=color, marker=marker, linewidth=0, markersize=9.5, label=label)
         for _, label, color, marker in visible_practices
     ]
     legend_y = layout.get("legend_y", 0.01 if n_panels == 1 else 0.02)
-    xlabel_y = layout.get("xlabel_y", 0.12 if n_panels == 1 else 0.08)
-    bottom_margin = layout.get("bottom_margin", 0.2 if n_panels == 1 else 0.14)
+    bottom_margin = layout.get("bottom_margin", 0.20 if n_panels == 1 else 0.14)
     legend_cols = 2 if len(legend_handles) > 2 else max(1, len(legend_handles))
-    fig.legend(handles=legend_handles, frameon=False, ncol=legend_cols, loc="lower center", bbox_to_anchor=(0.5, legend_y), fontsize=13)
-    fig.subplots_adjust(left=0.42, right=0.98, top=0.95, bottom=bottom_margin, hspace=layout.get("hspace", 0.12))
+    fig.legend(handles=legend_handles, frameon=False, ncol=legend_cols, loc="lower center", bbox_to_anchor=(0.5, legend_y), fontsize=12)
+    fig.subplots_adjust(left=0.42, right=0.98, top=0.94, bottom=bottom_margin, hspace=layout.get("hspace", 0.12))
     save_figure_variants(fig, outpath)
 
 
@@ -388,37 +337,47 @@ def refresh_master_denominator_table() -> None:
         path = BASE_DIR / ("rq1_results_q1_v2" if filename.startswith("rq1") else "rq2_results_q1_v2" if filename.startswith("rq2") else "rq3_results_q1_v2") / filename
         if path.exists():
             frames.append(pd.read_csv(path))
-    if frames:
-        dataset = BASE_DIR / "analysis_dataset_q1_v2.xlsx"
-        screening = pd.read_excel(dataset, sheet_name="new_candidates_passed_192")
-        prior_final_n = int(len(pd.read_excel(dataset, sheet_name="included_studies_276")))
-        provisional_new_n = int(screening["eligibility_bucket"].eq("Provisional include").sum())
-        screening_rows = pd.DataFrame(
-            [
-                {
-                    "rq": "Screening",
-                    "subset": "candidate_pool",
-                    "group": "Prior final corpus",
-                    "denominator_n": prior_final_n,
-                    "notes": "Definitive studies included before the 2026-09-02 update.",
-                },
-                {
-                    "rq": "Screening",
-                    "subset": "candidate_pool",
-                    "group": "New candidates passed title/abstract screening",
-                    "denominator_n": provisional_new_n,
-                    "notes": "All update records in the Provisional include bucket; counted for PRISMA/screening summaries.",
-                },
-                {
-                    "rq": "Screening",
-                    "subset": "candidate_pool",
-                    "group": "Combined provisional candidate pool",
-                    "denominator_n": prior_final_n + provisional_new_n,
-                    "notes": f"{prior_final_n} prior final studies plus new candidates that passed screening; not a final included-study denominator.",
-                },
-            ]
-        )
-        pd.concat([screening_rows, *frames], ignore_index=True).to_csv(MASTER_DENOMINATOR_FILE, index=False)
+
+    screening_rows = pd.DataFrame([
+        {
+            "rq": "Screening",
+            "subset": "candidate_pool",
+            "group": "Historical register",
+            "denominator_n": 276,
+            "notes": "Historical reports retained in Maestro_IA_TEA_cierre_2026-09-08.xlsx.",
+        },
+        {
+            "rq": "Screening",
+            "subset": "candidate_pool",
+            "group": "Update reports assessed",
+            "denominator_n": 178,
+            "notes": "New candidate reports initially included from the update.",
+        },
+        {
+            "rq": "Screening",
+            "subset": "candidate_pool",
+            "group": "Combined incoming register",
+            "denominator_n": 454,
+            "notes": "276 historical plus 178 update reports.",
+        },
+        {
+            "rq": "Screening",
+            "subset": "exclusions",
+            "group": "Closure audit exclusions",
+            "denominator_n": 26,
+            "notes": "23 historical and 3 update reports excluded upon audit (EXCLUSIONES_CIERRE).",
+        },
+        {
+            "rq": "Screening",
+            "subset": "final_corpus",
+            "group": "Included main synthesis",
+            "denominator_n": 428,
+            "notes": "Frozen analytical synthesis corpus: 253 historical and 175 update reports (BASE_CIERRE include_main=1).",
+        },
+    ])
+
+    all_frames = [screening_rows] + frames
+    pd.concat(all_frames, ignore_index=True).to_csv(MASTER_DENOMINATOR_FILE, index=False)
 
 
 def main() -> None:
@@ -443,38 +402,36 @@ def main() -> None:
             "subset": "all_rows",
             "group": "Evaluated studies",
             "denominator_n": int(len(df)),
-            "notes": "Analytical universe: graph-ready studies evaluated for RQ3.",
+            "notes": "Analytical universe: included reports evaluated for RQ3 from Maestro_IA_TEA_cierre_2026-09-08.xlsx.",
         },
     ]
-    external_positive = int(global_summary.loc[global_summary["practice_signal"].eq("q3_external_validation_signal"), "positive_n"].iloc[0])
-    denominator_rows.extend(
-        [
-            {
-                "rq": "RQ3",
-                "subset": "external_validation_partition",
-                "group": "Absent",
-                "denominator_n": int(len(df)) - external_positive,
-                "notes": f"External validation absent; partition check {int(len(df)) - external_positive}+{external_positive}={int(len(df))}.",
-            },
-            {
-                "rq": "RQ3",
-                "subset": "external_validation_partition",
-                "group": "Present",
-                "denominator_n": external_positive,
-                "notes": f"External validation present; partition check {int(len(df)) - external_positive}+{external_positive}={int(len(df))}.",
-            },
-        ]
-    )
+
     for _, row in global_summary.iterrows():
         denominator_rows.append(
             {
                 "rq": "RQ3",
-                "subset": "practice",
+                "subset": "practice_signal",
                 "group": row["practice"],
                 "denominator_n": int(row["total_n"]),
-                "notes": f"Positive={int(row['positive_n'])}; rate={row['positive_rate']:.1%}.",
+                "notes": f"Reported={int(row['reported_n'])}; Not reported={int(row['not_reported_n'])}; Not ascertainable={int(row['not_ascertainable_n'])}; Rate={row['reported_rate']:.1%}.",
             }
         )
+
+    for field, label in [
+        ("xai_strict", "Formal attribution/explanation (strict)"),
+        ("multisite_dataset", "Multisite data availability"),
+        ("prospective_evaluation", "Prospective AI evaluation"),
+    ]:
+        if field in df.columns:
+            rep_n = int(df[field].astype(str).str.strip().eq("Reported").sum())
+            denominator_rows.append({
+                "rq": "RQ3",
+                "subset": "additional_practice_signal",
+                "group": label,
+                "denominator_n": int(len(df)),
+                "notes": f"Reported={rep_n}; Rate={rep_n/len(df):.1%}; field {field} from BASE_CIERRE.",
+            })
+
     pd.DataFrame(denominator_rows).to_csv(OUTPUT_DIR / "rq3_denominators_q1_v2.csv", index=False)
 
     plotted_profiles_n = int(len(plot_combos))
@@ -483,32 +440,31 @@ def main() -> None:
     omitted_studies_n = int(omitted_zero["combo_n"].sum()) if not omitted_zero.empty else 0
 
     figure_specs = [
-        ("rq3_practice_lollipop_a_q1_v2", "A. Prescreening and screening", ["Prescreening", "Screening"], {"row_height": 0.47, "base_height": 1.0, "min_height": 5.8}),
-        ("rq3_practice_lollipop_b_q1_v2", "B. Diagnosis", ["Diagnosis"], {"row_height": 0.48, "base_height": 1.02, "min_height": 6.0}),
-        ("rq3_practice_lollipop_c_q1_v2", "C. Monitoring/intervention", ["Monitoring/intervention"], {"row_height": 0.5, "base_height": 1.1, "min_height": 6.0, "bottom_margin": 0.24, "legend_y": 0.02}),
-        ("rq3_practice_lollipop_d_q1_v2", "D. Prognosis and unspecified stage", ["Prognosis", "Clinical stage not specified"], {"row_height": 0.34, "base_height": 0.8, "min_height": 4.1, "bottom_margin": 0.27, "xlabel_y": 0.105, "legend_y": 0.01}),
+        ("rq3_practice_lollipop_a_q1_v2", "A. Prescreening and screening", ["Prescreening", "Screening"], {"row_height": 0.46, "base_height": 1.0, "min_height": 5.8}),
+        ("rq3_practice_lollipop_b_q1_v2", "B. Diagnosis", ["Diagnosis"], {"row_height": 0.47, "base_height": 1.02, "min_height": 6.0}),
+        ("rq3_practice_lollipop_c_q1_v2", "C. Monitoring/intervention", ["Monitoring/intervention"], {"row_height": 0.50, "base_height": 1.1, "min_height": 6.0, "bottom_margin": 0.24, "legend_y": 0.02}),
+        ("rq3_practice_lollipop_d_q1_v2", "D. Prognosis and unspecified stage", ["Prognosis", "Clinical stage not specified"], {"row_height": 0.40, "base_height": 0.9, "min_height": 4.6, "bottom_margin": 0.25, "xlabel_y": 0.105, "legend_y": 0.01}),
     ]
     for stem, title, stages, layout in figure_specs:
         draw_compact_dotplot(combo, OUTPUT_DIR / stem, [(title, stages)], layout)
+
     write_caption(
         OUTPUT_DIR / "rq3_practice_lollipop_a_q1_v2_caption.txt",
         f"""
         RQ3A (prescreening and screening). Compact dot plot showing how frequently four methodological practices are implemented within combinations of
-        clinical stage, data source, and AI technique in ASD studies. Each row represents one fully specified profile
-        or one aggregated partially specified profile with at least one positive methodological-practice signal in the
-        consolidated dataset. Profiles with unspecified data source, AI technique, or clinical stage were collapsed into
-        compact classes for readability, while preserving their counts in the plotted n/N labels. Marker position
+        clinical stage, data source, and AI technique in ASD studies from Maestro_IA_TEA_cierre_2026-09-08.xlsx. Each row represents one fully specified profile
+        or one aggregated partially specified profile with at least one positive methodological-practice signal. Profiles with unspecified data source, AI technique,
+        or clinical stage were collapsed into compact classes for readability, while preserving their counts in the plotted n/N labels. Marker position
         encodes within-profile frequency, and adjacent labels report raw counts as n/N. Together, the four RQ3 figures display
-        {plotted_profiles_n} positive profiles covering {plotted_studies_n} studies. An additional
-        {omitted_profiles_n} zero-positive profiles covering {omitted_studies_n} studies remain in the analytical
-        universe but were omitted from the visual because they do not contribute positive methodological-practice
-        evidence for RQ3.
+        {plotted_profiles_n} positive profiles covering {plotted_studies_n} reports. An additional
+        {omitted_profiles_n} zero-positive profiles covering {omitted_studies_n} reports remain in the analytical
+        universe but were omitted from the visual because they do not contribute positive methodological-practice evidence for RQ3.
         """,
     )
     write_caption(
         OUTPUT_DIR / "rq3_practice_lollipop_b_q1_v2_caption.txt",
         f"""
-        RQ3B (diagnosis). Companion dot plot for diagnosis profiles. The same aggregation rule was used as in the
+        RQ3B (diagnosis). Companion dot plot for diagnosis profiles from Maestro_IA_TEA_cierre_2026-09-08.xlsx. The same aggregation rule was used as in the
         prescreening and screening figure: fully specified profiles are shown individually, while partially specified
         profiles were collapsed into compact classes to preserve the counts without overextending the figure height.
         Marker position encodes within-profile frequency, and adjacent labels report raw counts as n/N.
@@ -517,7 +473,7 @@ def main() -> None:
     write_caption(
         OUTPUT_DIR / "rq3_practice_lollipop_c_q1_v2_caption.txt",
         f"""
-        RQ3C (monitoring/intervention). Companion dot plot for monitoring/intervention profiles using the same
+        RQ3C (monitoring/intervention). Companion dot plot for monitoring/intervention profiles from Maestro_IA_TEA_cierre_2026-09-08.xlsx using the same
         aggregation rule as the other RQ3 figures. The legend and count labels are separated from the plotting
         area to avoid overlap.
         """,
@@ -526,18 +482,18 @@ def main() -> None:
         OUTPUT_DIR / "rq3_practice_lollipop_d_q1_v2_caption.txt",
         f"""
         RQ3D (prognosis and unspecified stage). Companion dot plot for prognosis and unspecified clinical stage
-        profiles. The same aggregation rule was used as in the other RQ3 figures:
+        profiles from Maestro_IA_TEA_cierre_2026-09-08.xlsx. The same aggregation rule was used as in the other RQ3 figures:
         fully specified profiles are shown individually, while partially specified profiles were collapsed into compact
         classes to preserve the counts without overextending the figure height. Marker position encodes within-profile
         frequency, and adjacent labels report raw counts as n/N.
         """,
     )
+
     refresh_master_denominator_table()
 
 
 def _self_check() -> None:
-    assert normalize_signal(1) == 1
-    assert normalize_signal(0) == 0
+    assert len(PRACTICE_COLS) == 4
 
 
 if __name__ == "__main__":

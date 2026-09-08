@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-import re
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -14,8 +13,8 @@ matplotlib.use("Agg")
 plt.style.use(["science", "no-latex"])
 
 BASE_DIR = Path(__file__).resolve().parent
-INPUT_FILE = BASE_DIR / "analysis_dataset_q1_v2.xlsx"
-SHEET_NAME = "rq1_rq2_graph_ready"
+MASTER_FILE = BASE_DIR / "Maestro_IA_TEA_cierre_2026-09-08.xlsx"
+SHEET_NAME = "BASE_CIERRE"
 OUTPUT_DIR = BASE_DIR / "rq2_results_q1_v2"
 
 STAGE_ORDER = [
@@ -27,43 +26,13 @@ STAGE_ORDER = [
     "Not specified",
 ]
 
-STAGE_TRANSLATIONS = {
-    "prescreening": "Prescreening",
-    "screening": "Screening",
-    "diagnosis": "Diagnosis",
-    "prognosis": "Prognosis",
-    "monitoring/intervention": "Monitoring/intervention",
-    "monitoring_intervention": "Monitoring/intervention",
-    "not clear": "Not specified",
-    "not specified": "Not specified",
-    "no especificado": "Not specified",
-}
-
-
-def clean_text(value: object) -> object:
-    if pd.isna(value):
-        return pd.NA
-    text = str(value).strip()
-    return text if text else pd.NA
-
-
-def norm_text(value: object) -> str:
-    cleaned = clean_text(value)
-    if pd.isna(cleaned):
-        return ""
-    return re.sub(r"\s+", " ", str(cleaned).casefold().replace("\n", " "))
-
-
-def normalize_category(value: object, mapping: dict[str, str], fallback: str = "Not specified") -> str:
-    cleaned = clean_text(value)
-    if pd.isna(cleaned):
-        return fallback
-    return mapping.get(str(cleaned).casefold(), str(cleaned))
-
-
-def normalize_stage(value: object) -> str:
-    stage = normalize_category(value, STAGE_TRANSLATIONS)
-    return stage if stage in STAGE_ORDER else "Not specified"
+STATUS_ORDER = [
+    "Evaluated at point of use",
+    "Evaluated AI-supported intervention",
+    "Evaluated care-delivery platform",
+    "Proposed only",
+    "Research only",
+]
 
 
 def ensure_dir(path: Path) -> None:
@@ -84,85 +53,87 @@ def write_caption(path: Path, text: str) -> None:
     path.write_text(text.strip() + "\n", encoding="utf-8")
 
 
-def ordered_categories(observed: list[str], preferred: list[str]) -> list[str]:
-    ordered = [item for item in preferred if item in observed]
-    extras = sorted(item for item in observed if item not in preferred)
-    return ordered + extras
-
-
 def load_base_df() -> pd.DataFrame:
-    df = pd.read_excel(INPUT_FILE, sheet_name=SHEET_NAME).copy()
-    df["row_id"] = range(1, len(df) + 1)
+    if not MASTER_FILE.exists():
+        raise FileNotFoundError(f"Master file not found: {MASTER_FILE}")
+    df = pd.read_excel(MASTER_FILE, sheet_name=SHEET_NAME, skiprows=3)
+    df = df[df["include_main"] == 1].copy()
+    if len(df) != 428:
+        raise ValueError(f"Expected 428 included studies in BASE_CIERRE, found {len(df)}")
     return df
-
-
-def normalize_common_fields(df: pd.DataFrame) -> pd.DataFrame:
-    work = df.copy()
-    work["stage_norm"] = work["stage_primary"].apply(normalize_stage)
-    return work
-
-
-def normalize_integration_status(value: object) -> str:
-    text = clean_text(value)
-    if pd.isna(text):
-        return "Not adjudicated in master"
-    status = str(text)
-    if status.startswith("Confirmed"):
-        return status
-    if status in {"Research only", "Proposed only"}:
-        return status
-    return "Other adjudicated status"
 
 
 def main() -> None:
     ensure_dir(OUTPUT_DIR)
-    for stale in ["rq2_timing_table_q1_v2.csv", "rq2_stage_x_preliminary_signal_q1_v2.csv", "rq2_preliminary_signals_for_manual_review_q1_v2.csv", "rq2_review_rows_q1_v2.csv"]:
+    for stale in [
+        "rq2_timing_table_q1_v2.csv",
+        "rq2_stage_x_preliminary_signal_q1_v2.csv",
+        "rq2_preliminary_signals_for_manual_review_q1_v2.csv",
+        "rq2_review_rows_q1_v2.csv",
+    ]:
         stale_path = OUTPUT_DIR / stale
         if stale_path.exists():
             stale_path.unlink()
-    df = normalize_common_fields(load_base_df())
-    df["rq2_integration_status_norm"] = df["rq2_integration_status"].map(normalize_integration_status)
+
+    df = load_base_df()
+    df["stage_norm"] = df["stage_primary"].fillna("Not specified").astype(str)
+    df["rq2_status_norm"] = df["rq2_status"].fillna("Research only").astype(str)
+
     stage_signal = (
-        pd.crosstab(df["stage_norm"], df["rq2_integration_status_norm"])
+        pd.crosstab(df["stage_norm"], df["rq2_status_norm"])
         .reindex(
-            index=ordered_categories(df["stage_norm"].unique().tolist(), STAGE_ORDER),
-            columns=[
-                "Confirmed in workflow",
-                "Confirmed in care delivery",
-                "Confirmed in intervention",
-                "Proposed only",
-                "Research only",
-                "Not adjudicated in master",
-                "Other adjudicated status",
-            ],
+            index=STAGE_ORDER,
+            columns=STATUS_ORDER,
             fill_value=0,
         )
     )
-    stage_signal = stage_signal.loc[:, stage_signal.sum(axis=0) > 0]
-    stage_signal = stage_signal.loc[(stage_signal.sum(axis=1) > 0), :]
+
     stage_signal.to_csv(OUTPUT_DIR / "rq2_stage_x_integration_status_q1_v2.csv")
-    df.to_csv(OUTPUT_DIR / "rq2_tripartite_dataset_q1_v2.csv", index=False)
-    denominator_rows = [
-        {"rq": "RQ2", "subset": "all_rows", "group": "Evaluated studies", "denominator_n": int(len(df)), "notes": "Analytical universe: graph-ready studies evaluated for RQ2."},
+
+    export_cols = [
+        "study_id",
+        "cohort",
+        "title",
+        "doi",
+        "year",
+        "stage_primary",
+        "rq2_status",
+        "rq2_role",
+        "decision_timing_coded",
+        "observed_decision_timing",
+        "source_level",
+        "rationale",
     ]
-    for state, count in df["rq2_integration_status_norm"].value_counts(dropna=False).items():
-        denominator_rows.append(
-            {
-                "rq": "RQ2",
-                "subset": "integration_status",
-                "group": state,
-                "denominator_n": int(count),
-                "notes": "Final integration status from rq2_integration_status; q2_candidate_* audit fields are not used.",
-            }
-        )
+    available_cols = [c for c in export_cols if c in df.columns]
+    df[available_cols].to_csv(OUTPUT_DIR / "rq2_tripartite_dataset_q1_v2.csv", index=False)
+
+    counts = df["rq2_status_norm"].value_counts().to_dict()
+    evaluated_n = int(df["rq2_status_norm"].str.startswith("Evaluated").sum())
+
+    denominator_rows = [
+        {"rq": "RQ2", "subset": "all_rows", "group": "Evaluated studies", "denominator_n": int(len(df)), "notes": "Analytical universe: included reports evaluated for RQ2 from Maestro_IA_TEA_cierre_2026-09-08.xlsx."},
+        {"rq": "RQ2", "subset": "integration_evaluation", "group": "Evaluated AI use", "denominator_n": evaluated_n, "notes": "Reports documenting evaluation of AI at point of use, in care-delivery, or in an AI-supported intervention."},
+        {"rq": "RQ2", "subset": "integration_evaluation", "group": "Proposed only", "denominator_n": int(counts.get("Proposed only", 0)), "notes": "Reports with translational or clinical use proposed but without user/workflow evaluation."},
+        {"rq": "RQ2", "subset": "integration_evaluation", "group": "Research only", "denominator_n": int(counts.get("Research only", 0)), "notes": "Reports with research-only modeling or biomarker discovery."},
+    ]
+    for status in STATUS_ORDER:
+        denominator_rows.append({
+            "rq": "RQ2",
+            "subset": "adjudicated_status",
+            "group": status,
+            "denominator_n": int(counts.get(status, 0)),
+            "notes": f"Adjudicated rq2_status in final master closure.",
+        })
     pd.DataFrame(denominator_rows).to_csv(OUTPUT_DIR / "rq2_denominators_q1_v2.csv", index=False)
-    fig, heat_ax = plt.subplots(figsize=(8.6, 6.5), facecolor="white")
+
+    fig, heat_ax = plt.subplots(figsize=(10.8, 6.8), facecolor="white")
     heat_values = stage_signal.to_numpy(dtype=float)
     img = heat_ax.imshow(heat_values, cmap="Blues", aspect="auto")
-    # Determine threshold for switching annotation colour (white on dark, black on light)
+
     vmin, vmax = heat_values.min(), heat_values.max()
-    threshold = vmin + (vmax - vmin) * 0.55
+    threshold = vmin + (vmax - vmin) * 0.52
     row_totals = heat_values.sum(axis=1)
+
     for row_idx in range(heat_values.shape[0]):
         for col_idx in range(heat_values.shape[1]):
             value = int(heat_values[row_idx, col_idx])
@@ -171,46 +142,49 @@ def main() -> None:
                 label = "0"
                 font_color = "#888888"
             else:
-                label = f"{value}\n{share:.0%}"
+                label = f"{value}\n{share:.1%}" if share < 0.999 else f"{value}\n100%"
                 font_color = "white" if heat_values[row_idx, col_idx] >= threshold else "#1a1a2e"
             heat_ax.text(
                 col_idx, row_idx, label,
                 ha="center", va="center",
-                fontsize=10.4, fontweight="bold",
+                fontsize=11, fontweight="bold",
                 color=font_color,
-                linespacing=1.4,
+                linespacing=1.35,
             )
+
     heat_ax.set_xticks(range(len(stage_signal.columns)))
-    heat_ax.set_xticklabels(stage_signal.columns, fontsize=11, rotation=35, ha="right")
+    heat_ax.set_xticklabels(
+        [col.replace("Evaluated ", "Evaluated\n").replace("Proposed only", "Proposed\nonly").replace("Research only", "Research\nonly") for col in stage_signal.columns],
+        fontsize=11.5,
+    )
     heat_ax.set_yticks(range(len(stage_signal.index)))
-    heat_ax.set_yticklabels(stage_signal.index, fontsize=11.5)
-    heat_ax.set_xlabel("Adjudicated integration status", fontsize=14.5, fontweight="bold", labelpad=14)
+    heat_ax.set_yticklabels(stage_signal.index, fontsize=12)
+    heat_ax.set_xlabel("Adjudicated clinical integration status", fontsize=14.5, fontweight="bold", labelpad=14)
     heat_ax.set_ylabel("Clinical stage", fontsize=14, fontweight="bold", labelpad=12)
-    # Add a colourbar for scale reference
-    cbar = fig.colorbar(img, ax=heat_ax, shrink=0.7, pad=0.02)
-    cbar.set_label("Study count", fontsize=11.5)
-    cbar.ax.tick_params(labelsize=10.5)
+
+    cbar = fig.colorbar(img, ax=heat_ax, shrink=0.75, pad=0.03)
+    cbar.set_label("Report count", fontsize=12)
+    cbar.ax.tick_params(labelsize=11)
     fig.tight_layout()
     save_figure_variants(fig, OUTPUT_DIR / "rq2_heatmap_and_timing_q1_v2")
-    counts = df["rq2_integration_status_norm"].value_counts().to_dict()
-    confirmed_n = int(df["rq2_integration_status_norm"].astype(str).str.startswith("Confirmed").sum())
-    not_adjudicated_n = int(counts.get("Not adjudicated in master", 0))
+
     write_caption(
         OUTPUT_DIR / "rq2_heatmap_and_timing_q1_v2_caption.txt",
         f"""
-        RQ2. Adjudicated clinical-integration heatmap. The heatmap uses rq2_integration_status and rq2_role from the
-        corrected master workbook; legacy q2_candidate_abstract and q2_candidate_terms are not treated as final
-        integration evidence. Cell annotations report the count and the within-stage percentage. The corpus contains
-        {len(df)} unique studies, with {confirmed_n} confirmed integration statuses and {not_adjudicated_n} historical
-        studies not adjudicated for final RQ2 integration in the master. Study-level classifications are stored in
-        rq2_tripartite_dataset_q1_v2.csv and denominators are listed in rq2_denominators_q1_v2.csv.
+        RQ2. Adjudicated clinical-integration heatmap. Distribution of clinical integration maturity across functional
+        clinical stages from the final frozen master workbook (Maestro_IA_TEA_cierre_2026-09-08.xlsx). The analytical universe
+        contains {len(df)} reports: {evaluated_n} reports ({evaluated_n/len(df):.1%}) with evaluated AI use ({counts.get('Evaluated at point of use', 0)} point-of-use evaluations,
+        {counts.get('Evaluated AI-supported intervention', 0)} AI-supported interventions, and {counts.get('Evaluated care-delivery platform', 0)} care-delivery platform),
+        {counts.get('Proposed only', 0)} reports ({counts.get('Proposed only', 0)/len(df):.1%}) proposing translational tools or workflows without direct implementation testing,
+        and {counts.get('Research only', 0)} reports ({counts.get('Research only', 0)/len(df):.1%}) restricted to research modeling.
+        Cell annotations report the absolute report count and the within-stage percentage.
         """,
     )
 
 
 def _self_check() -> None:
-    assert normalize_integration_status("Confirmed in workflow") == "Confirmed in workflow"
-    assert normalize_integration_status(pd.NA) == "Not adjudicated in master"
+    assert len(STAGE_ORDER) == 6
+    assert len(STATUS_ORDER) == 5
 
 
 if __name__ == "__main__":
