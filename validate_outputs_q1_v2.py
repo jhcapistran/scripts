@@ -16,10 +16,41 @@ LEGACY_PATTERNS = [
     "consolidado_RA",
 ]
 
+RQ2_ADJUDICATED_COLS = [
+    "rq2_status",
+    "rq2_role",
+    "decision_timing_coded",
+    "observed_decision_timing",
+    "source_level",
+    "rationale",
+]
+RQ2_MATURITY_ORDER = ["Research only", "Proposed only", "Evaluated AI use"]
+RQ2_TIMING_ORDER = ["Pre-decision", "In-decision", "Post-decision"]
+
 
 def require(condition: bool, message: str) -> None:
     if not condition:
         raise AssertionError(message)
+
+
+def rq2_maturity(status: object) -> str:
+    status_text = str(status)
+    if status_text.startswith("Evaluated"):
+        return "Evaluated AI use"
+    return status_text
+
+
+def require_frame_equal(actual: pd.DataFrame, expected: pd.DataFrame, message: str) -> None:
+    try:
+        pd.testing.assert_frame_equal(
+            actual.reset_index(drop=True),
+            expected.reset_index(drop=True),
+            check_dtype=False,
+            check_like=False,
+            check_names=False,
+        )
+    except AssertionError as exc:
+        raise AssertionError(f"{message}: {exc}") from exc
 
 
 def check_no_legacy_references() -> None:
@@ -80,8 +111,84 @@ def main() -> None:
     require(rq1_alg["count"].sum() == 428, f"RQ1 algorithm counts sum != 428 (was {rq1_alg['count'].sum()})")
 
     # 4. RQ2 Generated Outputs
-    rq2_table = pd.read_csv(BASE_DIR / "rq2_results_q1_v2" / "rq2_stage_x_integration_status_q1_v2.csv", index_col=0)
-    require(rq2_table.to_numpy().sum() == 428, f"RQ2 table sum != 428 (was {rq2_table.to_numpy().sum()})")
+    inc["integration_maturity"] = inc["rq2_status"].map(rq2_maturity)
+    rq2_dir = BASE_DIR / "rq2_results_q1_v2"
+    rq2_maturity_expected = inc["integration_maturity"].value_counts().reindex(RQ2_MATURITY_ORDER, fill_value=0)
+    require(
+        rq2_maturity_expected.to_dict() == {"Research only": 311, "Proposed only": 98, "Evaluated AI use": 19},
+        f"RQ2 maturity counts changed in master: {rq2_maturity_expected.to_dict()}",
+    )
+
+    rq2_stage_maturity = pd.read_csv(rq2_dir / "rq2_stage_x_integration_maturity_q1_v2.csv", index_col=0)
+    expected_stage_maturity = (
+        pd.crosstab(inc["stage_primary"].astype(str), inc["integration_maturity"])
+        .reindex(index=rq2_stage_maturity.index, columns=RQ2_MATURITY_ORDER, fill_value=0)
+    )
+    require_frame_equal(rq2_stage_maturity, expected_stage_maturity, "RQ2 maturity x stage CSV does not match BASE_CIERRE")
+    require(rq2_stage_maturity.to_numpy().sum() == 428, f"RQ2 maturity table sum != 428 (was {rq2_stage_maturity.to_numpy().sum()})")
+    require(int(rq2_stage_maturity["Research only"].sum()) == 311, "RQ2 Research only total != 311")
+    require(int(rq2_stage_maturity["Proposed only"].sum()) == 98, "RQ2 Proposed only total != 98")
+    require(int(rq2_stage_maturity["Evaluated AI use"].sum()) == 19, "RQ2 Evaluated AI use total != 19")
+
+    rq2_status_table = pd.read_csv(rq2_dir / "rq2_stage_x_integration_status_q1_v2.csv", index_col=0)
+    require(rq2_status_table.to_numpy().sum() == 428, f"RQ2 status table sum != 428 (was {rq2_status_table.to_numpy().sum()})")
+
+    proposed_evaluated = inc[inc["integration_maturity"].isin(["Proposed only", "Evaluated AI use"])].copy()
+    evaluated = inc[inc["integration_maturity"] == "Evaluated AI use"].copy()
+    require(len(proposed_evaluated) == 117, f"RQ2 Proposed/Evaluated subset != 117 (was {len(proposed_evaluated)})")
+    require(len(evaluated) == 19, f"RQ2 Evaluated subset != 19 (was {len(evaluated)})")
+
+    roles_csv = pd.read_csv(rq2_dir / "rq2_role_proposed_evaluated_q1_v2.csv")
+    expected_roles = (
+        proposed_evaluated["rq2_role"]
+        .value_counts()
+        .reindex(sorted(proposed_evaluated["rq2_role"].dropna().unique()), fill_value=0)
+        .rename_axis("rq2_role")
+        .reset_index(name="n")
+    )
+    require_frame_equal(roles_csv, expected_roles, "RQ2 role CSV does not match BASE_CIERRE")
+    require(int(roles_csv["n"].sum()) == 117, f"RQ2 role total != 117 (was {roles_csv['n'].sum()})")
+
+    coded_csv = pd.read_csv(rq2_dir / "rq2_decision_timing_coded_proposed_evaluated_q1_v2.csv")
+    expected_coded = (
+        proposed_evaluated["decision_timing_coded"]
+        .value_counts()
+        .reindex(RQ2_TIMING_ORDER, fill_value=0)
+        .rename_axis("decision_timing_coded")
+        .reset_index(name="n")
+    )
+    require_frame_equal(coded_csv, expected_coded, "RQ2 coded timing CSV does not match BASE_CIERRE")
+    require(int(coded_csv["n"].sum()) == 117, f"RQ2 coded timing total != 117 (was {coded_csv['n'].sum()})")
+
+    observed_csv = pd.read_csv(rq2_dir / "rq2_observed_decision_timing_evaluated_q1_v2.csv")
+    expected_observed = (
+        evaluated["observed_decision_timing"]
+        .value_counts()
+        .reindex(RQ2_TIMING_ORDER, fill_value=0)
+        .rename_axis("observed_decision_timing")
+        .reset_index(name="n")
+    )
+    require_frame_equal(observed_csv, expected_observed, "RQ2 observed timing CSV does not match BASE_CIERRE")
+    require(int(observed_csv["n"].sum()) == 19, f"RQ2 observed timing total != 19 (was {observed_csv['n'].sum()})")
+
+    non_evaluated = inc[inc["integration_maturity"] != "Evaluated AI use"]
+    bad_observed = non_evaluated[non_evaluated["observed_decision_timing"] != "Not observed in assessed sources"]
+    require(
+        bad_observed.empty,
+        "Research only or Proposed only rows appear as observed clinical timing: "
+        + bad_observed[["study_id", "rq2_status", "observed_decision_timing"]].to_string(index=False),
+    )
+    observed_rows = inc[inc["observed_decision_timing"].isin(RQ2_TIMING_ORDER)]
+    require(
+        observed_rows["integration_maturity"].eq("Evaluated AI use").all(),
+        "Rows with observed_decision_timing are not all Evaluated AI use: "
+        + observed_rows[["study_id", "rq2_status", "observed_decision_timing"]].to_string(index=False),
+    )
+
+    adjudicated_csv = pd.read_csv(rq2_dir / "rq2_adjudicated_columns_q1_v2.csv")
+    expected_adjudicated = inc[RQ2_ADJUDICATED_COLS].copy()
+    require(list(adjudicated_csv.columns) == RQ2_ADJUDICATED_COLS, "RQ2 adjudicated CSV columns changed")
+    require_frame_equal(adjudicated_csv, expected_adjudicated, "RQ2 adjudicated CSV does not exactly reproduce master columns")
 
     # 5. RQ3 Generated Outputs
     rq3_summary = pd.read_csv(BASE_DIR / "rq3_results_q1_v2" / "rq3_global_practice_summary_q1_v2.csv")
@@ -100,9 +207,9 @@ def main() -> None:
         BASE_DIR / "rq1_results_q1_v2" / "rq1_method_source_stage_heatmap_q1_v2.png",
         BASE_DIR / "rq1_results_q1_v2" / "rq1_method_source_stage_heatmap_q1_v2.pdf",
         BASE_DIR / "rq1_results_q1_v2" / "rq1_method_source_stage_heatmap_q1_v2.svg",
-        BASE_DIR / "rq2_results_q1_v2" / "rq2_heatmap_and_timing_q1_v2.png",
-        BASE_DIR / "rq2_results_q1_v2" / "rq2_heatmap_and_timing_q1_v2.pdf",
-        BASE_DIR / "rq2_results_q1_v2" / "rq2_heatmap_and_timing_q1_v2.svg",
+        BASE_DIR / "rq2_results_q1_v2" / "rq2_integration_levels_and_timing_q1_v2.png",
+        BASE_DIR / "rq2_results_q1_v2" / "rq2_integration_levels_and_timing_q1_v2.pdf",
+        BASE_DIR / "rq2_results_q1_v2" / "rq2_integration_levels_and_timing_q1_v2.svg",
         BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_a_q1_v2.png",
         BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_a_q1_v2.pdf",
         BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_a_q1_v2.svg",
@@ -145,12 +252,12 @@ def main() -> None:
         },
         {
             "RQ": "RQ2",
-            "Gráfica / Análisis": "rq2_heatmap_and_timing_q1_v2 (Heatmap: Madurez integración x Etapa)",
+            "Gráfica / Análisis": "rq2_integration_levels_and_timing_q1_v2 (Madurez, rol y timing RQ2)",
             "Denominador esperado": 428,
-            "Suma graficada": int(rq2_table.to_numpy().sum()),
+            "Suma graficada": int(rq2_stage_maturity.to_numpy().sum()),
             "Papers omitidos": 0,
-            "Motivo": "Universo analítico completo (311 research, 98 proposed, 19 evaluated use)",
-            "PASS/FAIL": "PASS" if int(rq2_table.to_numpy().sum()) == 428 else "FAIL",
+            "Motivo": "Panel A usa 428; paneles B-C usan 117 Proposed/Evaluated; panel D usa 19 Evaluated only",
+            "PASS/FAIL": "PASS" if int(rq2_stage_maturity.to_numpy().sum()) == 428 and int(roles_csv["n"].sum()) == 117 and int(observed_csv["n"].sum()) == 19 else "FAIL",
         },
         {
             "RQ": "RQ3",

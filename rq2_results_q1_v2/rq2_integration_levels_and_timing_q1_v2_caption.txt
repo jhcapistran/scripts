@@ -1,0 +1,7 @@
+Figure 4. RQ2 clinical integration levels and timing. Panel A shows integration maturity by clinical stage for all
+        428 included studies from BASE_CIERRE: Research only = 311,
+        Proposed only = 98, and Evaluated AI use = 19. Panel B summarizes
+        the adjudicated functional role of AI among Proposed/Evaluated studies (n=117). Panel C
+        reports adjudicated decision_timing_coded in the same Proposed/Evaluated subset. Panel D is deliberately restricted
+        to observed_decision_timing among the 19 Evaluated AI use studies, distinguishing observed timing from
+        proposed or coded timing. No values are inferred from stage_primary or automated rules.

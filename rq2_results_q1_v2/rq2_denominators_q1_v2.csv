@@ -1,8 +1,10 @@
 rq,subset,group,denominator_n,notes
-RQ2,all_rows,Evaluated studies,428,Analytical universe: included reports evaluated for RQ2 from Maestro_IA_TEA_cierre_2026-09-08.xlsx.
-RQ2,integration_evaluation,Evaluated AI use,19,"Reports documenting evaluation of AI at point of use, in care-delivery, or in an AI-supported intervention."
-RQ2,integration_evaluation,Proposed only,98,Reports with translational or clinical use proposed but without user/workflow evaluation.
-RQ2,integration_evaluation,Research only,311,Reports with research-only modeling or biomarker discovery.
+RQ2,all_rows,All included,428,Included reports from BASE_CIERRE where include_main == 1.
+RQ2,integration_maturity,Research only,311,Adjudicated research-only modeling or discovery; not observed clinical AI use.
+RQ2,integration_maturity,Proposed only,98,Adjudicated proposed clinical or translational use without observed workflow evaluation.
+RQ2,integration_maturity,Evaluated AI use,19,"Adjudicated evaluated point-of-use, intervention, or care-delivery AI use."
+RQ2,role_and_coded_timing,Proposed/Evaluated,117,Reports with proposed or evaluated clinical/translational use; timing is coded from adjudicated decision_timing_coded.
+RQ2,observed_timing,Evaluated AI use,19,Only reports with evaluated AI use; timing is observed_decision_timing.
 RQ2,adjudicated_status,Evaluated at point of use,8,Adjudicated rq2_status in final master closure.
 RQ2,adjudicated_status,Evaluated AI-supported intervention,10,Adjudicated rq2_status in final master closure.
 RQ2,adjudicated_status,Evaluated care-delivery platform,1,Adjudicated rq2_status in final master closure.
