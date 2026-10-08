@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 import re
-import numpy as np
+import sys
 import pandas as pd
+from PIL import Image
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -65,264 +66,273 @@ def check_no_legacy_references() -> None:
             )
 
 
-def main() -> None:
-    require(MASTER_FILE.exists(), f"Master file not found: {MASTER_FILE.name}")
-    check_no_legacy_references()
+def _sorted_frame(df: pd.DataFrame, keys: list[str]) -> pd.DataFrame:
+    df = df.copy()
+    for column in df.select_dtypes(include="category"):
+        df[column] = df[column].astype(str)
+    return df.sort_values(keys).reset_index(drop=True)
 
-    # 1. Base dataset validation
-    base_df = pd.read_excel(MASTER_FILE, sheet_name="BASE_CIERRE", skiprows=3)
-    require(len(base_df) == 454, f"Expected 454 total records in BASE_CIERRE, found {len(base_df)}")
-    inc = base_df[base_df["include_main"] == 1].copy()
-    exc = base_df[base_df["include_main"] == 0].copy()
+
+def require_table(actual: pd.DataFrame, expected: pd.DataFrame, name: str, keys: list[str]) -> None:
+    actual = _sorted_frame(actual, keys)
+    expected = _sorted_frame(expected, keys)
+    try:
+        pd.testing.assert_frame_equal(actual, expected, check_dtype=False, check_names=False, rtol=1e-12, atol=1e-12)
+    except AssertionError as exc:
+        if actual.shape == expected.shape and list(actual.columns) == list(expected.columns):
+            affected = actual.compare(expected, keep_shape=False, keep_equal=False).head(25)
+        else:
+            affected = pd.concat({"actual": actual.head(12), "expected": expected.head(12)}, names=["source"])
+        raise AssertionError(f"{name} does not match BASE_CIERRE.\nAffected records:\n{affected.to_string()}\n{exc}") from exc
+
+
+def read_summary_sheet(name: str) -> pd.DataFrame:
+    return pd.read_excel(MASTER_FILE, sheet_name=name, header=3).dropna(how="all")
+
+
+def grouped_counts(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
+    return df.groupby(columns, dropna=False, sort=True).size().reset_index(name="n")
+
+
+def with_stage_denominators(counts: pd.DataFrame, inc: pd.DataFrame) -> pd.DataFrame:
+    counts = counts.copy()
+    counts["denominator_stage"] = counts["stage_primary"].map(inc["stage_primary"].value_counts()).astype(int)
+    counts["within_stage_fraction"] = counts["n"] / counts["denominator_stage"]
+    return counts
+
+
+def expected_practices(inc: pd.DataFrame, fields: dict[str, str], profiles: bool) -> pd.DataFrame:
+    rows = []
+    groups = inc.groupby(["stage_primary", "data_source_primary", "ai_type"], dropna=False, sort=True) if profiles else [("All included", inc), *inc.groupby("stage_primary", dropna=False, sort=False)]
+    for key, group in groups:
+        for field, label in fields.items():
+            values = group[field].astype(str).str.strip()
+            denominator = len(group)
+            reported = int(values.eq("Reported").sum())
+            unknown = int(values.eq("Not ascertainable").sum())
+            row = {
+                "practice": label,
+                "field": field,
+                "reported": reported,
+                "not_reported": int(values.eq("Not reported in assessed sources").sum()),
+                "not_ascertainable": unknown,
+                "denominator": denominator,
+                "reported_fraction": reported / denominator,
+                "fraction_excluding_unknown": reported / (denominator - unknown) if denominator != unknown else 0.0,
+            }
+            if profiles:
+                row = {
+                    "stage_primary": key[0],
+                    "data_source_primary": key[1],
+                    "ai_type": key[2],
+                    **row,
+                    "study_ids": "; ".join(group["study_id"].astype(str)),
+                }
+            else:
+                row = {"stratum": str(key), **row}
+            rows.append(row)
+    return pd.DataFrame(rows)
+
+
+def validate_base_dynamic(base_df: pd.DataFrame, inc: pd.DataFrame) -> None:
+    invalid_flags = base_df[~base_df["include_main"].isin([0, 1])]
+    require(invalid_flags.empty, "include_main has values other than 0 or 1:\n" + invalid_flags[["study_id", "include_main"]].to_string(index=False))
     require(len(inc) == 428, f"Expected 428 included studies, found {len(inc)}")
-    require(len(exc) == 26, f"Expected 26 excluded studies, found {len(exc)}")
+    duplicates = inc[inc["study_id"].duplicated(keep=False)][["study_id", "title"]]
+    require(inc["study_id"].nunique() == 428, f"Expected 428 unique study_id values, found {inc['study_id'].nunique()}:\n{duplicates.to_string(index=False)}")
+    practice_fields = ["external_validation", "multisource_integration", "xai_broad", "cross_site_robustness", "xai_strict", "multisite_dataset", "prospective_evaluation"]
+    allowed = {"Reported", "Not reported in assessed sources", "Not ascertainable"}
+    for field in practice_fields:
+        bad = inc[~inc[field].astype(str).str.strip().isin(allowed)][["study_id", field]]
+        require(bad.empty, f"Unexpected category in {field}:\n{bad.to_string(index=False)}")
 
-    # 2. Check Excel summary sheets against BASE_CIERRE
-    # RQ1_PERFILES
-    rq1_perf = pd.read_excel(MASTER_FILE, sheet_name="RQ1_PERFILES", skiprows=2)
-    rq1_perf.columns = rq1_perf.iloc[0]
-    rq1_perf = rq1_perf[1:].dropna(how="all")
-    require(int(rq1_perf["n"].astype(int).sum()) == 428, "RQ1_PERFILES sum != 428")
 
-    # RQ1_ALGORITMOS
-    rq1_alg_sheet = pd.read_excel(MASTER_FILE, sheet_name="RQ1_ALGORITMOS", skiprows=2)
-    rq1_alg_sheet.columns = rq1_alg_sheet.iloc[0]
-    rq1_alg_sheet = rq1_alg_sheet[1:].dropna(how="all")
-    require(int(rq1_alg_sheet["n"].astype(int).sum()) == 428, "RQ1_ALGORITMOS sum != 428")
+def validate_excel_dynamic(inc: pd.DataFrame) -> None:
+    expected = with_stage_denominators(grouped_counts(inc, ["stage_primary", "data_source_primary", "ai_type"]), inc)
+    require_table(read_summary_sheet("RQ1_PERFILES"), expected, "RQ1_PERFILES", ["stage_primary", "data_source_primary", "ai_type"])
+    expected = with_stage_denominators(grouped_counts(inc, ["stage_primary", "algorithm_family"]), inc)
+    require_table(read_summary_sheet("RQ1_ALGORITMOS"), expected, "RQ1_ALGORITMOS", ["stage_primary", "algorithm_family"])
+    expected = with_stage_denominators(grouped_counts(inc, ["stage_primary", "data_source_primary", "algorithm_family", "ai_type"]), inc)
+    require_table(read_summary_sheet("RQ1_ALG_FUENTE"), expected, "RQ1_ALG_FUENTE", ["stage_primary", "data_source_primary", "algorithm_family", "ai_type"])
+    expected = with_stage_denominators(grouped_counts(inc, ["stage_primary", "rq2_role", "rq2_status", "decision_timing_coded"]), inc)
+    require_table(read_summary_sheet("RQ2_INTEGRACION"), expected, "RQ2_INTEGRACION", ["stage_primary", "rq2_role", "rq2_status", "decision_timing_coded"])
+    evaluated_sheet = read_summary_sheet("RQ2_USO_EVALUADO")
+    evaluated = inc[inc["rq2_status"].astype(str).str.startswith("Evaluated")][evaluated_sheet.columns]
+    require_table(evaluated_sheet, evaluated, "RQ2_USO_EVALUADO", ["study_id"])
+    all_practices = {
+        "external_validation": "External validation",
+        "multisource_integration": "Multisource integration",
+        "xai_broad": "Explicit explainability (broad)",
+        "cross_site_robustness": "Cross-site evaluation",
+        "xai_strict": "Formal attribution/explanation (strict)",
+        "multisite_dataset": "Multisite data availability",
+        "prospective_evaluation": "Prospective AI evaluation",
+    }
+    require_table(read_summary_sheet("RQ3_PRACTICAS"), expected_practices(inc, all_practices, False), "RQ3_PRACTICAS", ["field", "stratum"])
+    primary = {key: all_practices[key] for key in list(all_practices)[:4]}
+    require_table(read_summary_sheet("RQ3_PERFILES"), expected_practices(inc, primary, True), "RQ3_PERFILES", ["stage_primary", "data_source_primary", "ai_type", "field"])
 
-    # RQ2_INTEGRACION
-    rq2_sheet = pd.read_excel(MASTER_FILE, sheet_name="RQ2_INTEGRACION", skiprows=2)
-    rq2_sheet.columns = rq2_sheet.iloc[0]
-    rq2_sheet = rq2_sheet[1:].dropna(how="all")
-    require(int(rq2_sheet["n"].astype(int).sum()) == 428, "RQ2_INTEGRACION sum != 428")
 
-    # RQ3_PRACTICAS
-    rq3_sheet = pd.read_excel(MASTER_FILE, sheet_name="RQ3_PRACTICAS", skiprows=2)
-    rq3_sheet.columns = rq3_sheet.iloc[0]
-    rq3_sheet = rq3_sheet[1:].dropna(how="all")
-    all_inc_practices = rq3_sheet[rq3_sheet["stratum"] == "All included"]
-    for _, prow in all_inc_practices.iterrows():
-        require(int(prow["denominator"]) == 428, f"RQ3_PRACTICAS practice {prow['practice']} denominator != 428")
+def validate_rq1_dynamic(inc: pd.DataFrame) -> None:
+    out = BASE_DIR / "rq1_results_q1_v2"
+    method = grouped_counts(inc, ["stage_primary", "data_source_primary", "ai_type"]).rename(columns={"stage_primary": "stage", "data_source_primary": "source_modality_display", "ai_type": "ai_method_display", "n": "count"})
+    require_table(pd.read_csv(out / "rq1_counts_source_modality_x_method_by_stage.csv"), method, "RQ1 method CSV", ["stage", "source_modality_display", "ai_method_display"])
+    algorithm = grouped_counts(inc, ["stage_primary", "algorithm_family", "data_source_primary"]).rename(columns={"stage_primary": "stage", "algorithm_family": "algorithm_display", "data_source_primary": "source_modality_display", "n": "count"})
+    require_table(pd.read_csv(out / "rq1_counts_algorithm_x_source_modality_by_stage.csv"), algorithm, "RQ1 algorithm CSV", ["stage", "algorithm_display", "source_modality_display"])
+    audit_cols = ["study_id", "cohort", "title", "year", "doi", "data_source_primary", "ai_type", "algorithm_main", "algorithm_family", "stage_primary"]
+    expected_audit = inc[audit_cols].copy()
+    for column in ["data_source_primary", "ai_type", "algorithm_main", "algorithm_family", "stage_primary"]:
+        expected_audit[column] = expected_audit[column].astype(str)
+    require_table(pd.read_csv(out / "rq1_stage_assignment_audit.csv"), expected_audit, "RQ1 row audit CSV", ["study_id"])
+    summary = inc["stage_primary"].astype(str).value_counts().rename_axis("stage_primary").reset_index(name="studies_n")
+    require_table(pd.read_csv(out / "rq1_stage_assignment_summary.csv"), summary, "RQ1 stage summary CSV", ["stage_primary"])
+    mapping = pd.DataFrame({"algorithm_raw": inc["algorithm_main"].astype(str), "algorithm_plot": inc["algorithm_family"].astype(str)}).drop_duplicates().sort_values(["algorithm_plot", "algorithm_raw"])
+    require_table(pd.read_csv(out / "rq1_algorithm_plot_mapping.csv"), mapping, "RQ1 algorithm mapping CSV", ["algorithm_plot", "algorithm_raw"])
+    notes_rows = []
+    for _, row in inc.iterrows():
+        notes = []
+        if pd.notna(row.get("rationale")):
+            notes.append(f"Rationale: {row['rationale']}")
+        if pd.notna(row.get("source_scope_caution_detail")):
+            notes.append(f"Scope caution: {row['source_scope_caution_detail']}")
+        if pd.notna(row.get("integrity_caution")):
+            notes.append(f"Integrity caution: {row['integrity_caution']}")
+        if notes:
+            notes_rows.append({"study_id": row["study_id"], "cohort": row.get("cohort", ""), "title": row["title"], "notes_combined": " | ".join(notes)})
+    require_table(pd.read_csv(BASE_DIR / "rq1_supporting_q1_v2" / "rq1_notes_full_context.csv"), pd.DataFrame(notes_rows), "RQ1 notes CSV", ["study_id"])
+    denom = pd.read_csv(out / "rq1_denominators_q1_v2.csv").set_index("group")["denominator_n"].to_dict()
+    expected_denom = {"Evaluated studies": len(inc), "Stage resolved": int(inc["stage_primary"].ne("Not specified").sum()), "Not specified": int(inc["stage_primary"].eq("Not specified").sum())}
+    require(denom == expected_denom, f"RQ1 denominator mismatch: actual={denom}; expected={expected_denom}")
 
-    # 3. RQ1 Generated Outputs
-    rq1_counts = pd.read_csv(BASE_DIR / "rq1_results_q1_v2" / "rq1_counts_source_modality_x_method_by_stage.csv")
-    rq1_alg = pd.read_csv(BASE_DIR / "rq1_results_q1_v2" / "rq1_counts_algorithm_x_source_modality_by_stage.csv")
-    require(rq1_counts["count"].sum() == 428, f"RQ1 method counts sum != 428 (was {rq1_counts['count'].sum()})")
-    require(rq1_alg["count"].sum() == 428, f"RQ1 algorithm counts sum != 428 (was {rq1_alg['count'].sum()})")
 
-    # 4. RQ2 Generated Outputs
-    inc["integration_maturity"] = inc["rq2_status"].map(rq2_maturity)
-    rq2_dir = BASE_DIR / "rq2_results_q1_v2"
-    rq2_maturity_expected = inc["integration_maturity"].value_counts().reindex(RQ2_MATURITY_ORDER, fill_value=0)
-    require(
-        rq2_maturity_expected.to_dict() == {"Research only": 311, "Proposed only": 98, "Evaluated AI use": 19},
-        f"RQ2 maturity counts changed in master: {rq2_maturity_expected.to_dict()}",
-    )
-
-    rq2_stage_maturity = pd.read_csv(rq2_dir / "rq2_stage_x_integration_maturity_q1_v2.csv", index_col=0)
-    expected_stage_maturity = (
-        pd.crosstab(inc["stage_primary"].astype(str), inc["integration_maturity"])
-        .reindex(index=rq2_stage_maturity.index, columns=RQ2_MATURITY_ORDER, fill_value=0)
-    )
-    require_frame_equal(rq2_stage_maturity, expected_stage_maturity, "RQ2 maturity x stage CSV does not match BASE_CIERRE")
-    require(rq2_stage_maturity.to_numpy().sum() == 428, f"RQ2 maturity table sum != 428 (was {rq2_stage_maturity.to_numpy().sum()})")
-    require(int(rq2_stage_maturity["Research only"].sum()) == 311, "RQ2 Research only total != 311")
-    require(int(rq2_stage_maturity["Proposed only"].sum()) == 98, "RQ2 Proposed only total != 98")
-    require(int(rq2_stage_maturity["Evaluated AI use"].sum()) == 19, "RQ2 Evaluated AI use total != 19")
-
-    rq2_status_table = pd.read_csv(rq2_dir / "rq2_stage_x_integration_status_q1_v2.csv", index_col=0)
-    require(rq2_status_table.to_numpy().sum() == 428, f"RQ2 status table sum != 428 (was {rq2_status_table.to_numpy().sum()})")
-
-    proposed_evaluated = inc[inc["integration_maturity"].isin(["Proposed only", "Evaluated AI use"])].copy()
-    evaluated = inc[inc["integration_maturity"] == "Evaluated AI use"].copy()
-    require(len(proposed_evaluated) == 117, f"RQ2 Proposed/Evaluated subset != 117 (was {len(proposed_evaluated)})")
-    require(len(evaluated) == 19, f"RQ2 Evaluated subset != 19 (was {len(evaluated)})")
-
-    roles_csv = pd.read_csv(rq2_dir / "rq2_role_proposed_evaluated_q1_v2.csv")
-    expected_roles = (
-        proposed_evaluated["rq2_role"]
-        .value_counts()
-        .reindex(sorted(proposed_evaluated["rq2_role"].dropna().unique()), fill_value=0)
-        .rename_axis("rq2_role")
-        .reset_index(name="n")
-    )
-    require_frame_equal(roles_csv, expected_roles, "RQ2 role CSV does not match BASE_CIERRE")
-    require(int(roles_csv["n"].sum()) == 117, f"RQ2 role total != 117 (was {roles_csv['n'].sum()})")
-
-    coded_csv = pd.read_csv(rq2_dir / "rq2_decision_timing_coded_proposed_evaluated_q1_v2.csv")
-    expected_coded = (
-        proposed_evaluated["decision_timing_coded"]
-        .value_counts()
-        .reindex(RQ2_TIMING_ORDER, fill_value=0)
-        .rename_axis("decision_timing_coded")
-        .reset_index(name="n")
-    )
-    require_frame_equal(coded_csv, expected_coded, "RQ2 coded timing CSV does not match BASE_CIERRE")
-    require(int(coded_csv["n"].sum()) == 117, f"RQ2 coded timing total != 117 (was {coded_csv['n'].sum()})")
-
-    observed_csv = pd.read_csv(rq2_dir / "rq2_observed_decision_timing_evaluated_q1_v2.csv")
-    expected_observed = (
-        evaluated["observed_decision_timing"]
-        .value_counts()
-        .reindex(RQ2_TIMING_ORDER, fill_value=0)
-        .rename_axis("observed_decision_timing")
-        .reset_index(name="n")
-    )
-    require_frame_equal(observed_csv, expected_observed, "RQ2 observed timing CSV does not match BASE_CIERRE")
-    require(int(observed_csv["n"].sum()) == 19, f"RQ2 observed timing total != 19 (was {observed_csv['n'].sum()})")
-
-    non_evaluated = inc[inc["integration_maturity"] != "Evaluated AI use"]
-    bad_observed = non_evaluated[non_evaluated["observed_decision_timing"] != "Not observed in assessed sources"]
-    require(
-        bad_observed.empty,
-        "Research only or Proposed only rows appear as observed clinical timing: "
-        + bad_observed[["study_id", "rq2_status", "observed_decision_timing"]].to_string(index=False),
-    )
-    observed_rows = inc[inc["observed_decision_timing"].isin(RQ2_TIMING_ORDER)]
-    require(
-        observed_rows["integration_maturity"].eq("Evaluated AI use").all(),
-        "Rows with observed_decision_timing are not all Evaluated AI use: "
-        + observed_rows[["study_id", "rq2_status", "observed_decision_timing"]].to_string(index=False),
-    )
-
-    adjudicated_csv = pd.read_csv(rq2_dir / "rq2_adjudicated_columns_q1_v2.csv")
-    expected_adjudicated = inc[RQ2_ADJUDICATED_COLS].copy()
-    require(list(adjudicated_csv.columns) == RQ2_ADJUDICATED_COLS, "RQ2 adjudicated CSV columns changed")
-    require_frame_equal(adjudicated_csv, expected_adjudicated, "RQ2 adjudicated CSV does not exactly reproduce master columns")
-
-    # 5. RQ3 Generated Outputs
-    rq3_summary = pd.read_csv(BASE_DIR / "rq3_results_q1_v2" / "rq3_global_practice_summary_q1_v2.csv")
-    rq3_combo = pd.read_csv(BASE_DIR / "rq3_results_q1_v2" / "supplement" / "rq3_combo_summary_q1_v2.csv")
-    rq3_plot = pd.read_csv(BASE_DIR / "rq3_results_q1_v2" / "rq3_lollipop_combos_q1_v2.csv")
-    rq3_omitted = pd.read_csv(BASE_DIR / "rq3_results_q1_v2" / "rq3_omitted_zero_profiles_q1_v2.csv")
-
-    require(rq3_combo["combo_n"].sum() == 428, f"RQ3 combo sum != 428 (was {rq3_combo['combo_n'].sum()})")
-    require(rq3_plot["combo_n"].sum() + rq3_omitted["combo_n"].sum() == 428, "RQ3 plotted + omitted != 428")
-
-    # 6. Figures existence and integrity
-    figures = [
-        BASE_DIR / "rq1_results_q1_v2" / "rq1_algorithm_bubbles_q1_v2.png",
-        BASE_DIR / "rq1_results_q1_v2" / "rq1_algorithm_bubbles_q1_v2.pdf",
-        BASE_DIR / "rq1_results_q1_v2" / "rq1_algorithm_bubbles_q1_v2.svg",
-        BASE_DIR / "rq1_results_q1_v2" / "rq1_method_source_stage_heatmap_q1_v2.png",
-        BASE_DIR / "rq1_results_q1_v2" / "rq1_method_source_stage_heatmap_q1_v2.pdf",
-        BASE_DIR / "rq1_results_q1_v2" / "rq1_method_source_stage_heatmap_q1_v2.svg",
-        BASE_DIR / "rq2_results_q1_v2" / "rq2_integration_levels_and_timing_q1_v2.png",
-        BASE_DIR / "rq2_results_q1_v2" / "rq2_integration_levels_and_timing_q1_v2.pdf",
-        BASE_DIR / "rq2_results_q1_v2" / "rq2_integration_levels_and_timing_q1_v2.svg",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_a_q1_v2.png",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_a_q1_v2.pdf",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_a_q1_v2.svg",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_b_q1_v2.png",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_b_q1_v2.pdf",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_b_q1_v2.svg",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_c_q1_v2.png",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_c_q1_v2.pdf",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_c_q1_v2.svg",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_d_q1_v2.png",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_d_q1_v2.pdf",
-        BASE_DIR / "rq3_results_q1_v2" / "rq3_practice_lollipop_d_q1_v2.svg",
+def validate_rq2_dynamic(inc: pd.DataFrame) -> None:
+    out = BASE_DIR / "rq2_results_q1_v2"
+    work = inc.copy()
+    work["integration_maturity"] = work["rq2_status"].map(rq2_maturity)
+    maturity_counts = work["integration_maturity"].value_counts().reindex(RQ2_MATURITY_ORDER, fill_value=0)
+    require(maturity_counts.to_dict() == {"Research only": 311, "Proposed only": 98, "Evaluated AI use": 19}, f"RQ2 maturity changed in BASE_CIERRE: {maturity_counts.to_dict()}")
+    stage_order = ["Prescreening", "Screening", "Diagnosis", "Prognosis", "Monitoring/intervention", "Not specified"]
+    maturity_table = pd.crosstab(work["stage_primary"], work["integration_maturity"]).reindex(index=stage_order, columns=RQ2_MATURITY_ORDER, fill_value=0).rename_axis("stage_norm").reset_index()
+    require_table(pd.read_csv(out / "rq2_stage_x_integration_maturity_q1_v2.csv"), maturity_table, "RQ2 maturity CSV", ["stage_norm"])
+    status_order = ["Evaluated at point of use", "Evaluated AI-supported intervention", "Evaluated care-delivery platform", "Proposed only", "Research only"]
+    status_table = pd.crosstab(work["stage_primary"], work["rq2_status"]).reindex(index=stage_order, columns=status_order, fill_value=0).rename_axis("stage_norm").reset_index()
+    require_table(pd.read_csv(out / "rq2_stage_x_integration_status_q1_v2.csv"), status_table, "RQ2 status CSV", ["stage_norm"])
+    proposed = work[work["integration_maturity"].isin(["Proposed only", "Evaluated AI use"])]
+    evaluated = work[work["integration_maturity"].eq("Evaluated AI use")]
+    specs = [
+        ("rq2_role_proposed_evaluated_q1_v2.csv", "rq2_role", proposed, sorted(proposed["rq2_role"].dropna().unique())),
+        ("rq2_decision_timing_coded_proposed_evaluated_q1_v2.csv", "decision_timing_coded", proposed, RQ2_TIMING_ORDER),
+        ("rq2_observed_decision_timing_evaluated_q1_v2.csv", "observed_decision_timing", evaluated, RQ2_TIMING_ORDER),
     ]
-    for fig in figures:
-        require(fig.exists(), f"Figure missing: {fig.name}")
-        require(fig.stat().st_size > 1000, f"Figure file size too small: {fig.name} ({fig.stat().st_size} bytes)")
+    for filename, column, subset, order in specs:
+        expected = subset[column].value_counts().reindex(order, fill_value=0).rename_axis(column).reset_index(name="n")
+        require_table(pd.read_csv(out / filename), expected, filename, [column])
+    require_frame_equal(pd.read_csv(out / "rq2_adjudicated_columns_q1_v2.csv"), work[RQ2_ADJUDICATED_COLS], "RQ2 adjudicated CSV mismatch")
+    trip_cols = ["study_id", "cohort", "title", "doi", "year", "stage_primary", *RQ2_ADJUDICATED_COLS]
+    require_table(pd.read_csv(out / "rq2_tripartite_dataset_q1_v2.csv"), work[trip_cols], "RQ2 tripartite CSV", ["study_id"])
+    bad = work[~work["integration_maturity"].eq("Evaluated AI use") & ~work["observed_decision_timing"].eq("Not observed in assessed sources")]
+    require(bad.empty, "Non-evaluated studies have observed timing:\n" + bad[["study_id", "rq2_status", "observed_decision_timing"]].to_string(index=False))
+    denominator_actual = pd.read_csv(out / "rq2_denominators_q1_v2.csv").set_index(["subset", "group"])["denominator_n"].to_dict()
+    denominator_expected = {
+        ("all_rows", "All included"): len(work),
+        ("integration_maturity", "Research only"): int(maturity_counts["Research only"]),
+        ("integration_maturity", "Proposed only"): int(maturity_counts["Proposed only"]),
+        ("integration_maturity", "Evaluated AI use"): len(evaluated),
+        ("role_and_coded_timing", "Proposed/Evaluated"): len(proposed),
+        ("observed_timing", "Evaluated AI use"): len(evaluated),
+        **{("adjudicated_status", status): int(work["rq2_status"].eq(status).sum()) for status in status_order},
+    }
+    require(denominator_actual == denominator_expected, f"RQ2 denominator CSV mismatch: actual={denominator_actual}; expected={denominator_expected}")
 
-    print("========================================================================================================================")
-    print("RESUMEN DE AUDITORÍA Y VERIFICACIÓN COMPLETA (DENOMINADORES Y CUENTAS)")
-    print("========================================================================================================================")
-    
-    table_rows = [
-        {
-            "RQ": "RQ1",
-            "Gráfica / Análisis": "rq1_algorithm_bubbles_q1_v2 (Burbujas: Algoritmo x Etapa)",
-            "Denominador esperado": 428,
-            "Suma graficada": int(rq1_alg["count"].sum()),
-            "Papers omitidos": 0,
-            "Motivo": "Universo analítico completo (100% papers clasificados en 58 burbujas activas)",
-            "PASS/FAIL": "PASS" if int(rq1_alg["count"].sum()) == 428 else "FAIL",
-        },
-        {
-            "RQ": "RQ1",
-            "Gráfica / Análisis": "rq1_method_source_stage_heatmap_q1_v2 (Heatmap: Fuente x Técnica x Etapa)",
-            "Denominador esperado": 428,
-            "Suma graficada": int(rq1_counts["count"].sum()),
-            "Papers omitidos": 0,
-            "Motivo": "Universo analítico completo (240 celdas totales, 90 activas con conteos de 1 a 42)",
-            "PASS/FAIL": "PASS" if int(rq1_counts["count"].sum()) == 428 else "FAIL",
-        },
-        {
-            "RQ": "RQ2",
-            "Gráfica / Análisis": "rq2_integration_levels_and_timing_q1_v2 (Madurez, rol y timing RQ2)",
-            "Denominador esperado": 428,
-            "Suma graficada": int(rq2_stage_maturity.to_numpy().sum()),
-            "Papers omitidos": 0,
-            "Motivo": "Panel A usa 428; paneles B-C usan 117 Proposed/Evaluated; panel D usa 19 Evaluated only",
-            "PASS/FAIL": "PASS" if int(rq2_stage_maturity.to_numpy().sum()) == 428 and int(roles_csv["n"].sum()) == 117 and int(observed_csv["n"].sum()) == 19 else "FAIL",
-        },
-        {
-            "RQ": "RQ3",
-            "Gráfica / Análisis": "rq3_practice_lollipop_a_q1_v2 (Dot plot: Prescreening + Screening)",
-            "Denominador esperado": 121,
-            "Suma graficada": int(rq3_plot[rq3_plot["plot_stage"].isin(["Prescreening", "Screening"])]["combo_n"].sum()),
-            "Papers omitidos": int(rq3_omitted[rq3_omitted["plot_stage"].isin(["Prescreening", "Screening"])]["combo_n"].sum()),
-            "Motivo": "Perfiles con 0 prácticas positivas en las 4 dimensiones (7 papers en 5 perfiles)",
-            "PASS/FAIL": "PASS" if (114 + 7 == 121) else "FAIL",
-        },
-        {
-            "RQ": "RQ3",
-            "Gráfica / Análisis": "rq3_practice_lollipop_b_q1_v2 (Dot plot: Diagnosis)",
-            "Denominador esperado": 216,
-            "Suma graficada": int(rq3_plot[rq3_plot["plot_stage"] == "Diagnosis"]["combo_n"].sum()),
-            "Papers omitidos": int(rq3_omitted[rq3_omitted["plot_stage"] == "Diagnosis"]["combo_n"].sum()),
-            "Motivo": "Perfiles con 0 prácticas positivas en las 4 dimensiones (10 papers en 6 perfiles)",
-            "PASS/FAIL": "PASS" if (206 + 10 == 216) else "FAIL",
-        },
-        {
-            "RQ": "RQ3",
-            "Gráfica / Análisis": "rq3_practice_lollipop_c_q1_v2 (Dot plot: Monitoring/intervention)",
-            "Denominador esperado": 38,
-            "Suma graficada": int(rq3_plot[rq3_plot["plot_stage"] == "Monitoring/intervention"]["combo_n"].sum()),
-            "Papers omitidos": int(rq3_omitted[rq3_omitted["plot_stage"] == "Monitoring/intervention"]["combo_n"].sum()),
-            "Motivo": "Perfiles con 0 prácticas positivas en las 4 dimensiones (11 papers en 8 perfiles)",
-            "PASS/FAIL": "PASS" if (27 + 11 == 38) else "FAIL",
-        },
-        {
-            "RQ": "RQ3",
-            "Gráfica / Análisis": "rq3_practice_lollipop_d_q1_v2 (Dot plot: Prognosis + Unspecified)",
-            "Denominador esperado": 53,
-            "Suma graficada": int(rq3_plot[rq3_plot["plot_stage"].isin(["Prognosis", "Clinical stage not specified"])]["combo_n"].sum()),
-            "Papers omitidos": int(rq3_omitted[rq3_omitted["plot_stage"].isin(["Prognosis", "Clinical stage not specified"])]["combo_n"].sum()),
-            "Motivo": "Perfiles con 0 prácticas positivas en las 4 dimensiones (6 papers en 4 perfiles)",
-            "PASS/FAIL": "PASS" if (47 + 6 == 53) else "FAIL",
-        },
-        {
-            "RQ": "RQ3",
-            "Gráfica / Análisis": "rq3_global_practice_summary_q1_v2 (Resumen global 4 prácticas)",
-            "Denominador esperado": 428,
-            "Suma graficada": 428,
-            "Papers omitidos": 0,
-            "Motivo": "Evaluación global en los 428 papers (Reported + Not reported + Not ascertainable)",
-            "PASS/FAIL": "PASS",
-        },
+
+def validate_rq3_dynamic(inc: pd.DataFrame) -> None:
+    from rq3_script import build_combo_summary, build_plot_summary
+
+    out = BASE_DIR / "rq3_results_q1_v2"
+    fields = ["external_validation", "multisource_integration", "xai_broad", "cross_site_robustness"]
+    expected_combo = build_combo_summary(inc)
+    combo = pd.read_csv(out / "supplement" / "rq3_combo_summary_q1_v2.csv")
+    require_table(combo, expected_combo[combo.columns], "RQ3 raw profile CSV", ["stage_norm", "modality_norm", "method_norm"])
+    expected_plot = build_plot_summary(expected_combo)
+    plot = pd.read_csv(out / "rq3_lollipop_combos_q1_v2.csv")
+    require_table(plot, expected_plot[plot.columns], "RQ3 plotted profile CSV", ["plot_stage", "plot_modality", "plot_method", "specification_group"])
+    require(int(plot["combo_n"].sum()) == len(inc), f"RQ3 figure profiles cover {plot['combo_n'].sum()} studies, expected {len(inc)}")
+    obsolete = out / "rq3_omitted_zero_profiles_q1_v2.csv"
+    require(not obsolete.exists(), f"Obsolete output still exists: {obsolete.name}")
+    labels = {"external_validation": "External validation", "multisource_integration": "Multisource integration", "xai_broad": "Explicit explainability (broad)", "cross_site_robustness": "Cross-site evaluation"}
+    global_expected = []
+    for field in fields:
+        values = inc[field].astype(str).str.strip()
+        reported = int(values.eq("Reported").sum())
+        global_expected.append({"practice_field": field, "practice": labels[field], "reported_n": reported, "not_reported_n": int(values.eq("Not reported in assessed sources").sum()), "not_ascertainable_n": int(values.eq("Not ascertainable").sum()), "total_n": len(inc), "reported_rate": reported / len(inc)})
+        status_cols = [f"{field}_{status}_count" for status in ("reported", "not_reported", "not_ascertainable")]
+        affected = plot[plot[status_cols].sum(axis=1).ne(plot["combo_n"])][["plot_label", "combo_n", *status_cols]]
+        require(affected.empty, f"RQ3 {field} status counts do not equal profile denominator:\n{affected.to_string(index=False)}")
+    require_table(pd.read_csv(out / "rq3_global_practice_summary_q1_v2.csv"), pd.DataFrame(global_expected), "RQ3 global CSV", ["practice_field"])
+    denominator_actual = pd.read_csv(out / "rq3_denominators_q1_v2.csv").set_index(["subset", "group"])["denominator_n"].to_dict()
+    denominator_expected = {("all_rows", "Evaluated studies"): len(inc)}
+    denominator_expected.update({("practice_signal", labels[field]): len(inc) for field in fields})
+    denominator_expected.update({
+        ("additional_practice_signal", "Formal attribution/explanation (strict)"): len(inc),
+        ("additional_practice_signal", "Multisite data availability"): len(inc),
+        ("additional_practice_signal", "Prospective AI evaluation"): len(inc),
+    })
+    require(denominator_actual == denominator_expected, f"RQ3 denominator CSV mismatch: actual={denominator_actual}; expected={denominator_expected}")
+    combined = pd.read_csv(BASE_DIR / "rq_denominators_q1_v2.csv")
+    analytical = combined[combined["rq"].isin(["RQ1", "RQ2", "RQ3"])].reset_index(drop=True)
+    expected_analytical = pd.concat([
+        pd.read_csv(BASE_DIR / "rq1_results_q1_v2" / "rq1_denominators_q1_v2.csv"),
+        pd.read_csv(BASE_DIR / "rq2_results_q1_v2" / "rq2_denominators_q1_v2.csv"),
+        pd.read_csv(out / "rq3_denominators_q1_v2.csv"),
+    ], ignore_index=True)
+    require_frame_equal(analytical, expected_analytical, "Combined denominator CSV mismatch")
+
+
+def validate_figures_dynamic() -> None:
+    stems = [
+        BASE_DIR / "rq1_results_q1_v2" / "rq1_algorithm_bubbles_q1_v2",
+        BASE_DIR / "rq1_results_q1_v2" / "rq1_method_source_stage_heatmap_q1_v2",
+        BASE_DIR / "rq2_results_q1_v2" / "rq2_integration_levels_and_timing_q1_v2",
+        *[BASE_DIR / "rq3_results_q1_v2" / f"rq3_practice_lollipop_{letter}_q1_v2" for letter in "abcd"],
     ]
+    for stem in stems:
+        for suffix in (".png", ".pdf", ".svg"):
+            path = stem.with_suffix(suffix)
+            require(path.exists() and path.stat().st_size > 1000, f"Missing or empty figure: {path.name}")
+        with Image.open(stem.with_suffix(".png")) as image:
+            dpi = image.info.get("dpi", (0, 0))
+            require(min(dpi) >= 590, f"{stem.name}.png is not 600 dpi (metadata={dpi})")
+    captions = "\n".join(path.read_text(encoding="utf-8") for path in (BASE_DIR / "rq3_results_q1_v2").glob("*caption.txt"))
+    require(not re.search(r"\bimplement(?:ed|ation)\b", captions, re.IGNORECASE), "RQ3 captions still use implemented/implementation instead of reported")
 
-    # Print formatted markdown table without requiring tabulate
-    headers = ["RQ", "Gráfica / Análisis", "Denominador esperado", "Suma graficada", "Papers omitidos", "Motivo", "PASS/FAIL"]
-    col_widths = {h: len(h) for h in headers}
-    for row in table_rows:
-        for h in headers:
-            col_widths[h] = max(col_widths[h], len(str(row[h])))
 
-    header_line = "| " + " | ".join(f"{h:<{col_widths[h]}}" for h in headers) + " |"
-    separator_line = "| " + " | ".join("-" * col_widths[h] for h in headers) + " |"
-    print(header_line)
-    print(separator_line)
-    for row in table_rows:
-        row_line = "| " + " | ".join(f"{str(row[h]):<{col_widths[h]}}" for h in headers) + " |"
-        print(row_line)
-    print("========================================================================================================================")
-    print("TODAS LAS CUENTAS CUADRAN AL 100% CON BASE_CIERRE Y CON LAS HOJAS RESUMEN DEL EXCEL.")
+def dynamic_main() -> None:
+    require(MASTER_FILE.exists(), f"Master file not found: {MASTER_FILE.name}")
+    base_df = pd.read_excel(MASTER_FILE, sheet_name="BASE_CIERRE", skiprows=3)
+    inc = base_df[base_df["include_main"].eq(1)].copy()
+    checks = [
+        ("BASE_CIERRE corpus, uniqueness, and categories", lambda: validate_base_dynamic(base_df, inc)),
+        ("Excel summary sheets vs BASE_CIERRE", lambda: validate_excel_dynamic(inc)),
+        ("RQ1 CSVs vs BASE_CIERRE", lambda: validate_rq1_dynamic(inc)),
+        ("RQ2 CSVs vs BASE_CIERRE", lambda: validate_rq2_dynamic(inc)),
+        ("RQ3 CSVs and three-state profiles vs BASE_CIERRE", lambda: validate_rq3_dynamic(inc)),
+        ("PNG/PDF/SVG exports and terminology", validate_figures_dynamic),
+        ("No legacy input references", check_no_legacy_references),
+    ]
+    failures = 0
+    for name, check in checks:
+        try:
+            check()
+        except Exception as exc:
+            failures += 1
+            print(f"FAIL | {name}\n{exc}\n")
+        else:
+            print(f"PASS | {name}")
+    print(f"\nExecuted {len(checks)} validation groups: {len(checks) - failures} PASS, {failures} FAIL.")
+    if failures:
+        sys.exit(1)
+    print(f"Verified {len(inc)} unique included studies directly against BASE_CIERRE and every analytical CSV.")
 
 
 if __name__ == "__main__":
-    main()
+    dynamic_main()

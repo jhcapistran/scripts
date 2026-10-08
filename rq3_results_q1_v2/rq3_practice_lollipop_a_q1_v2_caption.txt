@@ -1,8 +1,7 @@
-RQ3A (prescreening and screening). Compact dot plot showing how frequently four methodological practices are implemented within combinations of
+RQ3A (prescreening and screening). Stacked bars show the adjudicated status of four methodological practices within combinations of
         clinical stage, data source, and AI technique in ASD studies from Maestro_IA_TEA_cierre_2026-09-08.xlsx. Each row represents one fully specified profile
-        or one aggregated partially specified profile with at least one positive methodological-practice signal. Profiles with unspecified data source, AI technique,
-        or clinical stage were collapsed into compact classes for readability, while preserving their counts in the plotted n/N labels. Marker position
-        encodes within-profile frequency, and adjacent labels report raw counts as n/N. Together, the four RQ3 figures display
-        44 positive profiles covering 394 reports. An additional
-        23 zero-positive profiles covering 34 reports remain in the analytical
-        universe but were omitted from the visual because they do not contribute positive methodological-practice evidence for RQ3.
+        or one aggregated partially specified profile. Green, gray, and amber encode Reported, Not reported in assessed sources, and Not ascertainable,
+        respectively; labels give the three raw counts in that order and the row label gives the profile denominator. Profiles with unspecified data source,
+        AI technique, or clinical stage are collapsed into compact classes without duplicating reports. Together, the four RQ3 figures display
+        67 profiles covering all 428 reports, including 23 profiles covering 34 reports
+        in which none of the four practices was reported (marked with an open circle and a pale background).

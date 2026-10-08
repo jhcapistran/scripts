@@ -11,7 +11,7 @@ Este repositorio genera las figuras y tablas CSV de RQ1–RQ3 usando exclusivame
 .\.venv\Scripts\python.exe validate_outputs_q1_v2.py
 ```
 
-`run_all_q1_v2.py` ejecuta secuencialmente `rq1_script.py`, `rq2_script.py` y `rq3_script.py`.
+`run_all_q1_v2.py` ejecuta secuencialmente `rq1_script.py`, `rq2_script.py`, `rq3_script.py` y la validación final `validate_outputs_q1_v2.py`.
 
 ## Política de conteos y denominadores
 
@@ -22,7 +22,9 @@ Los conteos provienen exclusivamente de `Maestro_IA_TEA_cierre_2026-09-08.xlsx`:
 - **Corpus incluido en la síntesis analítica principal**: 428 estudios únicos (253 históricos + 175 de actualización), identificados con `include_main == 1`.
 - **RQ1**: 397 resueltos en las 5 etapas clínicas funcionales (Diagnosis: 216, Screening: 113, Monitoring/intervention: 38, Prognosis: 22, Prescreening: 8) y 31 no especificados (*Not specified*). Total = 428.
 - **RQ2**: Clasificación adjudicada de madurez de integración (`rq2_status`): Research only: 311, Proposed only: 98, Evaluated AI use: 19 (8 en punto de uso, 10 en intervención, 1 en plataforma).
-- **RQ3**: Cuatro prácticas primarias analizadas por perfil (90 perfiles en `RQ3_PERFILES`): External validation: 24 (5.6%), Multisource integration: 77 (18.0%), Explicit explainability broad: 126 (29.4%), Cross-site evaluation: 12 (2.8%).
+- **RQ3**: Cuatro prácticas primarias analizadas por perfil (90 perfiles en `RQ3_PERFILES`): External validation: 24 (5.6%), Multisource integration: 77 (18.0%), Explicit explainability broad: 126 (29.4%), Cross-site evaluation: 12 (2.8%). Las cuatro figuras muestran todo el corpus y distinguen `Reported`, `Not reported in assessed sources` y `Not ascertainable`; los perfiles parcialmente especificados se agrupan de forma explícita para legibilidad, sin duplicar estudios.
+
+La validación reconstruye dinámicamente los cruces, perfiles, categorías, porcentajes y denominadores desde `BASE_CIERRE`, y compara esas reconstrucciones con las hojas resumen del maestro y con cada CSV analítico. Un fallo imprime los registros o celdas afectados y termina con código distinto de cero.
 
 ## Sin inferencia de valores faltantes
 
