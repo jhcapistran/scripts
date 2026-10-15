@@ -4,7 +4,6 @@ from pathlib import Path
 
 import matplotlib
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import scienceplots
 
@@ -17,8 +16,12 @@ MASTER_FILE = BASE_DIR / "Maestro_IA_TEA_cierre_2026-09-08.xlsx"
 SHEET_NAME = "BASE_CIERRE"
 OUTPUT_DIR = BASE_DIR / "rq2_results_q1_v2"
 
-FIGURE_STEM = "rq2_integration_levels_and_timing_q1_v2"
-LEGACY_OUTPUT_STEMS = ["rq2_heatmap_and_timing_q1_v2"]
+MATURITY_FIGURE_STEM = "rq2_integration_maturity_by_stage_q1_v2"
+TIMING_FIGURE_STEM = "rq2_decision_timing_comparison_q1_v2"
+LEGACY_OUTPUT_STEMS = [
+    "rq2_integration_levels_and_timing_q1_v2",
+    "rq2_heatmap_and_timing_q1_v2",
+]
 
 STAGE_ORDER = [
     "Prescreening",
@@ -38,6 +41,17 @@ STATUS_ORDER = [
     "Research only",
 ]
 TIMING_ORDER = ["Pre-decision", "In-decision", "Post-decision"]
+
+MATURITY_COLORS = {
+    "Research only": "#B8C0C8",
+    "Proposed only": "#0072B2",
+    "Evaluated AI use": "#D55E00",
+}
+TIMING_COLORS = {
+    "Pre-decision": "#0072B2",
+    "In-decision": "#E69F00",
+    "Post-decision": "#009E73",
+}
 
 ADJUDICATED_COLS = [
     "rq2_status",
@@ -121,15 +135,75 @@ def count_series(series: pd.Series, order: list[str], count_name: str = "n") -> 
     )
 
 
-def add_bar_labels(ax: plt.Axes, bars, total: int, horizontal: bool = False) -> None:
-    for bar in bars:
-        value = int(bar.get_width() if horizontal else bar.get_height())
-        share = value / total if total else 0
-        label = f"{value} ({share:.1%})"
-        if horizontal:
-            ax.text(value + max(total * 0.015, 0.5), bar.get_y() + bar.get_height() / 2, label, va="center", fontsize=9.5)
-        else:
-            ax.text(bar.get_x() + bar.get_width() / 2, value + max(total * 0.015, 0.5), label, ha="center", fontsize=10)
+def plot_stacked_percent(
+    ax: plt.Axes,
+    counts: pd.DataFrame,
+    order: list[str],
+    colors: dict[str, str],
+    inside_threshold: float,
+) -> None:
+    totals = counts.sum(axis=1)
+    percentages = counts.div(totals, axis=0).mul(100)
+    left = pd.Series(0.0, index=counts.index)
+    for category in order:
+        bars = ax.barh(
+            counts.index,
+            percentages[category],
+            left=left,
+            height=0.62,
+            color=colors[category],
+            edgecolor="white",
+            linewidth=0.8,
+            label=category,
+        )
+        for idx, bar in enumerate(bars):
+            value = int(counts.iloc[idx][category])
+            share = float(percentages.iloc[idx][category])
+            if not value:
+                continue
+            label = f"{value} ({share:.1f}%)"
+            center = float(left.iloc[idx]) + share / 2
+            if share >= inside_threshold:
+                text_color = "#1F2933" if category == "Research only" else "white"
+                ax.text(center, bar.get_y() + bar.get_height() / 2, label, ha="center", va="center", color=text_color, fontsize=8.5, fontweight="semibold")
+            else:
+                endpoint = float(left.iloc[idx]) + share
+                terminal_segment = endpoint >= 99
+                if terminal_segment:
+                    ax.annotate(
+                        label,
+                        xy=(endpoint, bar.get_y() + bar.get_height() / 2),
+                        xytext=(102.5, bar.get_y() + bar.get_height() / 2),
+                        ha="left",
+                        va="center",
+                        fontsize=8.2,
+                        color="#374151",
+                        arrowprops={"arrowstyle": "-", "color": "#6B7280", "lw": 0.7},
+                        clip_on=False,
+                    )
+                else:
+                    ax.annotate(
+                        label,
+                        xy=(center, bar.get_y() + bar.get_height()),
+                        xytext=(center, bar.get_y() + bar.get_height() + 0.24),
+                        ha="center",
+                        va="center",
+                        fontsize=8.2,
+                        color="#374151",
+                        arrowprops={"arrowstyle": "-", "color": "#6B7280", "lw": 0.7},
+                        clip_on=False,
+                    )
+        left += percentages[category]
+
+
+def style_percent_axis(ax: plt.Axes) -> None:
+    ax.set_xlim(0, 100)
+    ax.set_xticks([0, 25, 50, 75, 100], labels=["0%", "25%", "50%", "75%", "100%"])
+    ax.grid(axis="x", color="#D9DEE3", linewidth=0.6, zorder=0)
+    ax.set_axisbelow(True)
+    ax.spines[["top", "right", "left"]].set_visible(False)
+    ax.tick_params(axis="x", which="both", top=False)
+    ax.tick_params(axis="y", which="both", left=False, right=False)
 
 
 def main() -> None:
@@ -143,6 +217,7 @@ def main() -> None:
     require_expected_counts(df)
 
     proposed_or_evaluated = df[df["integration_maturity"].isin(["Proposed only", "Evaluated AI use"])].copy()
+    proposed_only = df[df["integration_maturity"] == "Proposed only"].copy()
     evaluated = df[df["integration_maturity"] == "Evaluated AI use"].copy()
 
     stage_maturity = (
@@ -155,6 +230,7 @@ def main() -> None:
     )
     role_counts = count_series(proposed_or_evaluated["rq2_role"], sorted(proposed_or_evaluated["rq2_role"].dropna().unique()), "n")
     timing_coded = count_series(proposed_or_evaluated["decision_timing_coded"], TIMING_ORDER, "n")
+    timing_proposed = count_series(proposed_only["decision_timing_coded"], TIMING_ORDER, "n")
     timing_observed = count_series(evaluated["observed_decision_timing"], TIMING_ORDER, "n")
 
     stage_maturity.to_csv(OUTPUT_DIR / "rq2_stage_x_integration_maturity_q1_v2.csv")
@@ -197,78 +273,50 @@ def main() -> None:
         })
     pd.DataFrame(denominator_rows).to_csv(OUTPUT_DIR / "rq2_denominators_q1_v2.csv", index=False)
 
-    fig = plt.figure(figsize=(12.5, 10.5), facecolor="white")
-    gs = fig.add_gridspec(2, 2, width_ratios=[1.2, 1], height_ratios=[1.12, 1], hspace=0.42, wspace=0.36)
-
-    heat_ax = fig.add_subplot(gs[0, 0])
-    heat_values = stage_maturity.to_numpy(dtype=float)
-    img = heat_ax.imshow(heat_values, cmap="Blues", aspect="auto")
-    threshold = heat_values.min() + (heat_values.max() - heat_values.min()) * 0.52
-    row_totals = heat_values.sum(axis=1)
-    for row_idx in range(heat_values.shape[0]):
-        for col_idx in range(heat_values.shape[1]):
-            value = int(heat_values[row_idx, col_idx])
-            share = 0.0 if row_totals[row_idx] == 0 else value / row_totals[row_idx]
-            label = f"{value}\n{share:.1%}" if value else "0"
-            color = "white" if value and heat_values[row_idx, col_idx] >= threshold else "#1a1a2e"
-            heat_ax.text(col_idx, row_idx, label, ha="center", va="center", fontsize=9.5, fontweight="bold", color=color, linespacing=1.25)
-    heat_ax.set_xticks(range(len(MATURITY_ORDER)))
-    heat_ax.set_xticklabels(["Research\nonly", "Proposed\nonly", "Evaluated\nAI use"], fontsize=10)
-    heat_ax.set_yticks(range(len(STAGE_ORDER)))
-    heat_ax.set_yticklabels(STAGE_ORDER, fontsize=10)
-    heat_ax.set_title("A. Integration maturity x clinical stage (n=428)", loc="left", fontsize=12.5, fontweight="bold")
-    heat_ax.set_xlabel("Adjudicated integration maturity", fontsize=11)
-    heat_ax.set_ylabel("Clinical stage", fontsize=11)
-    cbar = fig.colorbar(img, ax=heat_ax, shrink=0.72, pad=0.03)
-    cbar.set_label("Report count", fontsize=10)
-
-    role_ax = fig.add_subplot(gs[0, 1])
-    role_plot = role_counts.sort_values("n", ascending=True)
-    bars = role_ax.barh(role_plot["rq2_role"], role_plot["n"], color="#4c78a8")
-    add_bar_labels(role_ax, bars, len(proposed_or_evaluated), horizontal=True)
-    role_ax.set_title("B. Functional AI role, Proposed/Evaluated (n=117)", loc="left", fontsize=12.5, fontweight="bold")
-    role_ax.set_xlabel("Reports")
-    role_ax.set_xlim(0, max(role_plot["n"]) * 1.28)
-    role_ax.tick_params(axis="y", labelsize=9.5)
-    role_ax.spines[["top", "right"]].set_visible(False)
-
-    coded_ax = fig.add_subplot(gs[1, 0])
-    bars = coded_ax.bar(timing_coded["decision_timing_coded"], timing_coded["n"], color="#59a14f")
-    add_bar_labels(coded_ax, bars, len(proposed_or_evaluated))
-    coded_ax.set_title("C. Coded decision timing, Proposed/Evaluated (n=117)", loc="left", fontsize=12.5, fontweight="bold")
-    coded_ax.set_ylabel("Reports")
-    coded_ax.set_ylim(0, max(timing_coded["n"]) * 1.22)
-    coded_ax.spines[["top", "right"]].set_visible(False)
-
-    observed_ax = fig.add_subplot(gs[1, 1])
-    bars = observed_ax.bar(timing_observed["observed_decision_timing"], timing_observed["n"], color="#e15759")
-    add_bar_labels(observed_ax, bars, len(evaluated))
-    observed_ax.set_title("D. Observed decision timing, Evaluated only (n=19)", loc="left", fontsize=12.5, fontweight="bold")
-    observed_ax.set_ylabel("Reports")
-    observed_ax.set_ylim(0, max(timing_observed["n"]) * 1.25)
-    observed_ax.spines[["top", "right"]].set_visible(False)
-
-    fig.suptitle("RQ2. Clinical integration maturity, AI role, and decision timing", fontsize=15, fontweight="bold", y=0.995)
-    fig.text(
-        0.5,
-        0.01,
-        "Panels B-C use adjudicated proposed/evaluated clinical or translational use; Panel D is restricted to observed timing in evaluated AI use.",
-        ha="center",
-        fontsize=10.5,
-    )
-    save_figure_variants(fig, OUTPUT_DIR / FIGURE_STEM)
+    stage_labels = [f"{stage}  (n={int(stage_maturity.loc[stage].sum())})" for stage in STAGE_ORDER]
+    maturity_plot = stage_maturity.copy()
+    maturity_plot.index = stage_labels
+    fig, ax = plt.subplots(figsize=(7.4, 4.4), facecolor="white")
+    plot_stacked_percent(ax, maturity_plot, MATURITY_ORDER, MATURITY_COLORS, inside_threshold=8)
+    style_percent_axis(ax)
+    ax.set_xlabel("Within-stage proportion (%)")
+    ax.invert_yaxis()
+    handles, labels = ax.get_legend_handles_labels()
+    fig.legend(handles, labels, ncol=3, loc="upper left", bbox_to_anchor=(0.28, 0.98), frameon=False, fontsize=9, handlelength=1.4, columnspacing=1.5)
+    fig.subplots_adjust(left=0.28, right=0.86, top=0.86, bottom=0.15)
+    save_figure_variants(fig, OUTPUT_DIR / MATURITY_FIGURE_STEM)
 
     write_caption(
-        OUTPUT_DIR / f"{FIGURE_STEM}_caption.txt",
-        f"""
-        Figure 4. RQ2 clinical integration levels and timing. Panel A shows integration maturity by clinical stage for all
-        {len(df)} included studies from BASE_CIERRE: Research only = {maturity_counts['Research only']},
-        Proposed only = {maturity_counts['Proposed only']}, and Evaluated AI use = {evaluated_n}. Panel B summarizes
-        the adjudicated functional role of AI among Proposed/Evaluated studies (n={len(proposed_or_evaluated)}). Panel C
-        reports adjudicated decision_timing_coded in the same Proposed/Evaluated subset. Panel D is deliberately restricted
-        to observed_decision_timing among the {evaluated_n} Evaluated AI use studies, distinguishing observed timing from
-        proposed or coded timing. No values are inferred from stage_primary or automated rules.
-        """,
+        OUTPUT_DIR / f"{MATURITY_FIGURE_STEM}_caption.txt",
+        f"Figure 4. Integration maturity across clinical stages. Bars show the within-stage distribution of Research only, "
+        f"Proposed only, and Evaluated AI use among all {len(df)} included studies. Stage totals are shown beside the labels; "
+        "segment labels give counts and within-stage percentages. Proposed only denotes a stated clinical or translational "
+        "application without observed workflow evaluation, whereas Evaluated AI use denotes point-of-use, intervention, or "
+        "care-delivery evaluation in the assessed sources.",
+    )
+
+    timing_matrix = pd.DataFrame(
+        [timing_proposed.set_index("decision_timing_coded")["n"], timing_observed.set_index("observed_decision_timing")["n"]],
+        index=[f"Proposed only (n={len(proposed_only)})", f"Evaluated AI use (n={len(evaluated)})"],
+    )[TIMING_ORDER]
+    fig, ax = plt.subplots(figsize=(7.5, 2.9), facecolor="white")
+    plot_stacked_percent(ax, timing_matrix, TIMING_ORDER, TIMING_COLORS, inside_threshold=9)
+    style_percent_axis(ax)
+    ax.set_xlabel("Within-group proportion (%)")
+    ax.set_ylim(-0.5, 1.72)
+    ax.invert_yaxis()
+    handles, labels = ax.get_legend_handles_labels()
+    fig.legend(handles, labels, ncol=3, loc="upper left", bbox_to_anchor=(0.27, 0.85), frameon=False, fontsize=9, handlelength=1.4, columnspacing=1.5)
+    fig.subplots_adjust(left=0.27, right=0.95, top=0.65, bottom=0.23)
+    save_figure_variants(fig, OUTPUT_DIR / TIMING_FIGURE_STEM)
+
+    write_caption(
+        OUTPUT_DIR / f"{TIMING_FIGURE_STEM}_caption.txt",
+        "Figure 5. Decision timing by integration maturity. Mutually exclusive groups are compared: Proposed only studies "
+        f"(n={len(proposed_only)}) use decision timing coded according to the intended function, whereas Evaluated AI use "
+        f"studies (n={evaluated_n}) use the timing of evaluated use observed in the assessed sources. Segment labels give "
+        "counts and within-group percentages. The comparison does not represent temporal progression, system transition, "
+        "or a causal relationship.",
     )
 
 

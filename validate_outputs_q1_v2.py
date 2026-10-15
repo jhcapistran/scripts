@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 import re
 import sys
+import xml.etree.ElementTree as ET
 import pandas as pd
 from PIL import Image
 
@@ -214,19 +215,38 @@ def validate_rq2_dynamic(inc: pd.DataFrame) -> None:
     stage_order = ["Prescreening", "Screening", "Diagnosis", "Prognosis", "Monitoring/intervention", "Not specified"]
     maturity_table = pd.crosstab(work["stage_primary"], work["integration_maturity"]).reindex(index=stage_order, columns=RQ2_MATURITY_ORDER, fill_value=0).rename_axis("stage_norm").reset_index()
     require_table(pd.read_csv(out / "rq2_stage_x_integration_maturity_q1_v2.csv"), maturity_table, "RQ2 maturity CSV", ["stage_norm"])
+    stage_expected = {"Prescreening": 8, "Screening": 113, "Diagnosis": 216, "Prognosis": 22, "Monitoring/intervention": 38, "Not specified": 31}
+    stage_actual = maturity_table.set_index("stage_norm")[RQ2_MATURITY_ORDER].sum(axis=1).to_dict()
+    require(stage_actual == stage_expected, f"RQ2 stage totals changed: actual={stage_actual}; expected={stage_expected}")
+    require(maturity_table[RQ2_MATURITY_ORDER].to_numpy().sum() == len(work), "RQ2 stage-by-maturity cells do not sum to 428")
     status_order = ["Evaluated at point of use", "Evaluated AI-supported intervention", "Evaluated care-delivery platform", "Proposed only", "Research only"]
     status_table = pd.crosstab(work["stage_primary"], work["rq2_status"]).reindex(index=stage_order, columns=status_order, fill_value=0).rename_axis("stage_norm").reset_index()
     require_table(pd.read_csv(out / "rq2_stage_x_integration_status_q1_v2.csv"), status_table, "RQ2 status CSV", ["stage_norm"])
-    proposed = work[work["integration_maturity"].isin(["Proposed only", "Evaluated AI use"])]
+    proposed_or_evaluated = work[work["integration_maturity"].isin(["Proposed only", "Evaluated AI use"])]
+    proposed_only = work[work["integration_maturity"].eq("Proposed only")]
     evaluated = work[work["integration_maturity"].eq("Evaluated AI use")]
     specs = [
-        ("rq2_role_proposed_evaluated_q1_v2.csv", "rq2_role", proposed, sorted(proposed["rq2_role"].dropna().unique())),
-        ("rq2_decision_timing_coded_proposed_evaluated_q1_v2.csv", "decision_timing_coded", proposed, RQ2_TIMING_ORDER),
+        ("rq2_role_proposed_evaluated_q1_v2.csv", "rq2_role", proposed_or_evaluated, sorted(proposed_or_evaluated["rq2_role"].dropna().unique())),
+        ("rq2_decision_timing_coded_proposed_evaluated_q1_v2.csv", "decision_timing_coded", proposed_or_evaluated, RQ2_TIMING_ORDER),
         ("rq2_observed_decision_timing_evaluated_q1_v2.csv", "observed_decision_timing", evaluated, RQ2_TIMING_ORDER),
     ]
     for filename, column, subset, order in specs:
         expected = subset[column].value_counts().reindex(order, fill_value=0).rename_axis(column).reset_index(name="n")
         require_table(pd.read_csv(out / filename), expected, filename, [column])
+        require(abs((expected["n"] / len(subset)).sum() - 1.0) < 1e-12, f"Percentages for {filename} do not sum to 100%")
+    role_csv = pd.read_csv(out / "rq2_role_proposed_evaluated_q1_v2.csv")
+    require(len(role_csv) == 8 and int(role_csv["n"].sum()) == 117, "RQ2 role CSV must contain eight categories summing to 117")
+    coded_csv = pd.read_csv(out / "rq2_decision_timing_coded_proposed_evaluated_q1_v2.csv")
+    observed_csv = pd.read_csv(out / "rq2_observed_decision_timing_evaluated_q1_v2.csv")
+    require(coded_csv["n"].tolist() == [59, 32, 26], f"Coded timing changed: {coded_csv['n'].tolist()}")
+    require(observed_csv["n"].tolist() == [4, 1, 14], f"Observed timing changed: {observed_csv['n'].tolist()}")
+    proposed_timing = proposed_only["decision_timing_coded"].value_counts().reindex(RQ2_TIMING_ORDER, fill_value=0)
+    observed_timing = evaluated["observed_decision_timing"].value_counts().reindex(RQ2_TIMING_ORDER, fill_value=0)
+    require(proposed_timing.tolist() == [55, 31, 12], f"Proposed-only timing changed: {proposed_timing.tolist()}")
+    require(observed_timing.tolist() == [4, 1, 14], f"Evaluated timing changed: {observed_timing.tolist()}")
+    require((proposed_timing / len(proposed_only) * 100).round(1).tolist() == [56.1, 31.6, 12.2], "Proposed-only timing percentages changed")
+    require((observed_timing / len(evaluated) * 100).round(1).tolist() == [21.1, 5.3, 73.7], "Evaluated timing percentages changed")
+    require(len(proposed_only) + len(evaluated) == len(proposed_or_evaluated) == 117, "RQ2 timing groups are not mutually exclusive and exhaustive within n=117")
     require_frame_equal(pd.read_csv(out / "rq2_adjudicated_columns_q1_v2.csv"), work[RQ2_ADJUDICATED_COLS], "RQ2 adjudicated CSV mismatch")
     trip_cols = ["study_id", "cohort", "title", "doi", "year", "stage_primary", *RQ2_ADJUDICATED_COLS]
     require_table(pd.read_csv(out / "rq2_tripartite_dataset_q1_v2.csv"), work[trip_cols], "RQ2 tripartite CSV", ["study_id"])
@@ -238,7 +258,7 @@ def validate_rq2_dynamic(inc: pd.DataFrame) -> None:
         ("integration_maturity", "Research only"): int(maturity_counts["Research only"]),
         ("integration_maturity", "Proposed only"): int(maturity_counts["Proposed only"]),
         ("integration_maturity", "Evaluated AI use"): len(evaluated),
-        ("role_and_coded_timing", "Proposed/Evaluated"): len(proposed),
+        ("role_and_coded_timing", "Proposed/Evaluated"): len(proposed_or_evaluated),
         ("observed_timing", "Evaluated AI use"): len(evaluated),
         **{("adjudicated_status", status): int(work["rq2_status"].eq(status).sum()) for status in status_order},
     }
@@ -246,17 +266,31 @@ def validate_rq2_dynamic(inc: pd.DataFrame) -> None:
 
 
 def validate_rq3_dynamic(inc: pd.DataFrame) -> None:
-    from rq3_script import build_combo_summary, build_plot_summary
+    from rq3_script import build_combo_summary, build_plot_summary, build_selected_profile_summary, build_stage_summary
 
     out = BASE_DIR / "rq3_results_q1_v2"
     fields = ["external_validation", "multisource_integration", "xai_broad", "cross_site_robustness"]
     expected_combo = build_combo_summary(inc)
     combo = pd.read_csv(out / "supplement" / "rq3_combo_summary_q1_v2.csv")
     require_table(combo, expected_combo[combo.columns], "RQ3 raw profile CSV", ["stage_norm", "modality_norm", "method_norm"])
+    require(len(combo) == 90, f"RQ3 raw profile count changed: {len(combo)}, expected 90")
     expected_plot = build_plot_summary(expected_combo)
     plot = pd.read_csv(out / "rq3_lollipop_combos_q1_v2.csv")
     require_table(plot, expected_plot[plot.columns], "RQ3 plotted profile CSV", ["plot_stage", "plot_modality", "plot_method", "specification_group"])
+    require(len(plot) == 67, f"RQ3 pre-compaction profile count changed: {len(plot)}, expected 67")
     require(int(plot["combo_n"].sum()) == len(inc), f"RQ3 figure profiles cover {plot['combo_n'].sum()} studies, expected {len(inc)}")
+    expected_stage = build_stage_summary(inc)
+    stage = pd.read_csv(out / "rq3_stage_practice_summary_q1_v2.csv")
+    require_table(stage, expected_stage, "RQ3 stage-practice CSV", ["stage"])
+    require(int(stage["stage_n"].sum()) == len(inc), f"RQ3 stage denominators sum to {stage['stage_n'].sum()}, expected {len(inc)}")
+    expected_selected = build_selected_profile_summary(expected_combo)
+    selected = pd.read_csv(out / "rq3_ai_data_stage_matrix_q1_v2.csv")
+    require_table(selected, expected_selected[selected.columns], "RQ3 selected-profile matrix CSV", ["plot_stage", "plot_modality", "plot_method", "profile_group"])
+    require(len(selected) == 17, f"RQ3 Figure 8 has {len(selected)} profiles, expected 17")
+    require(int(selected["combo_n"].sum()) == 277, f"RQ3 Figure 8 covers {selected['combo_n'].sum()} studies, expected 277")
+    require(set(selected["plot_stage"]) == {"Prescreening", "Screening", "Diagnosis", "Prognosis", "Monitoring/intervention"}, "RQ3 Figure 8 does not represent all five clinical stages")
+    require(selected["specification_group"].eq("Fully specified profile").all(), "RQ3 Figure 8 contains a partially specified profile")
+    require(not selected["plot_modality"].eq("Other profiles combined").any(), "RQ3 Figure 8 still contains aggregated profile rows")
     obsolete = out / "rq3_omitted_zero_profiles_q1_v2.csv"
     require(not obsolete.exists(), f"Obsolete output still exists: {obsolete.name}")
     labels = {"external_validation": "External validation", "multisource_integration": "Multisource integration", "xai_broad": "Explicit explainability (broad)", "cross_site_robustness": "Cross-site evaluation"}
@@ -268,6 +302,8 @@ def validate_rq3_dynamic(inc: pd.DataFrame) -> None:
         status_cols = [f"{field}_{status}_count" for status in ("reported", "not_reported", "not_ascertainable")]
         affected = plot[plot[status_cols].sum(axis=1).ne(plot["combo_n"])][["plot_label", "combo_n", *status_cols]]
         require(affected.empty, f"RQ3 {field} status counts do not equal profile denominator:\n{affected.to_string(index=False)}")
+        selected_affected = selected[selected[status_cols].sum(axis=1).ne(selected["combo_n"])][["plot_label", "combo_n", *status_cols]]
+        require(selected_affected.empty, f"RQ3 selected {field} status counts do not equal profile denominator:\n{selected_affected.to_string(index=False)}")
     require_table(pd.read_csv(out / "rq3_global_practice_summary_q1_v2.csv"), pd.DataFrame(global_expected), "RQ3 global CSV", ["practice_field"])
     denominator_actual = pd.read_csv(out / "rq3_denominators_q1_v2.csv").set_index(["subset", "group"])["denominator_n"].to_dict()
     denominator_expected = {("all_rows", "Evaluated studies"): len(inc)}
@@ -292,16 +328,33 @@ def validate_figures_dynamic() -> None:
     stems = [
         BASE_DIR / "rq1_results_q1_v2" / "rq1_algorithm_bubbles_q1_v2",
         BASE_DIR / "rq1_results_q1_v2" / "rq1_method_source_stage_heatmap_q1_v2",
-        BASE_DIR / "rq2_results_q1_v2" / "rq2_integration_levels_and_timing_q1_v2",
-        *[BASE_DIR / "rq3_results_q1_v2" / f"rq3_practice_lollipop_{letter}_q1_v2" for letter in "abcd"],
+        BASE_DIR / "rq2_results_q1_v2" / "rq2_integration_maturity_by_stage_q1_v2",
+        BASE_DIR / "rq2_results_q1_v2" / "rq2_decision_timing_comparison_q1_v2",
+        BASE_DIR / "rq3_results_q1_v2" / "rq3_figure6_practice_reporting_q1_v2",
+        BASE_DIR / "rq3_results_q1_v2" / "rq3_figure7_stage_practice_heatmap_q1_v2",
+        BASE_DIR / "rq3_results_q1_v2" / "rq3_figure8_ai_data_stage_matrix_q1_v2",
     ]
     for stem in stems:
         for suffix in (".png", ".pdf", ".svg"):
             path = stem.with_suffix(suffix)
             require(path.exists() and path.stat().st_size > 1000, f"Missing or empty figure: {path.name}")
+        require(stem.with_suffix(".pdf").read_bytes().startswith(b"%PDF"), f"Invalid PDF export: {stem.name}.pdf")
+        try:
+            ET.parse(stem.with_suffix(".svg"))
+        except ET.ParseError as exc:
+            raise AssertionError(f"Invalid SVG export: {stem.name}.svg") from exc
+        with Image.open(stem.with_suffix(".png")) as image:
+            image.verify()
         with Image.open(stem.with_suffix(".png")) as image:
             dpi = image.info.get("dpi", (0, 0))
             require(min(dpi) >= 590, f"{stem.name}.png is not 600 dpi (metadata={dpi})")
+    rq2_out = BASE_DIR / "rq2_results_q1_v2"
+    for legacy in ("rq2_integration_levels_and_timing_q1_v2", "rq2_heatmap_and_timing_q1_v2"):
+        require(not any((rq2_out / f"{legacy}{suffix}").exists() for suffix in (".png", ".pdf", ".svg", "_caption.txt")), f"Legacy RQ2 figure still exists: {legacy}")
+    rq3_out = BASE_DIR / "rq3_results_q1_v2"
+    for letter in "abcd":
+        legacy = f"rq3_practice_lollipop_{letter}_q1_v2"
+        require(not any((rq3_out / f"{legacy}{suffix}").exists() for suffix in (".png", ".pdf", ".svg", "_caption.txt")), f"Legacy RQ3 figure still exists: {legacy}")
     captions = "\n".join(path.read_text(encoding="utf-8") for path in (BASE_DIR / "rq3_results_q1_v2").glob("*caption.txt"))
     require(not re.search(r"\bimplement(?:ed|ation)\b", captions, re.IGNORECASE), "RQ3 captions still use implemented/implementation instead of reported")
 

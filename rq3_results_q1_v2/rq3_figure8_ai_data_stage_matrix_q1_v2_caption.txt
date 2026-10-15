@@ -1,0 +1,6 @@
+Figure 8. Reporting of four methodological practices across selected, fully specified clinical stage-data source-AI technique profiles. Cell labels
+        give reported studies over the profile denominator; color encodes the percentage. The matrix shows profiles with n>=8 plus the most
+        frequent fully specified profile for each otherwise unrepresented clinical stage: 17 profiles covering
+        277 studies. It does not represent all 428 studies; the remaining studies are retained in Figures 6-7 and the
+        complete analytical data. ML, machine learning; DL, deep learning; Clinical/questionnaire, structured clinical or questionnaire data;
+        Behavioral/gaze/movement, behavioral images, video, gaze, or movement data. Absence of reporting does not establish absence of practice.

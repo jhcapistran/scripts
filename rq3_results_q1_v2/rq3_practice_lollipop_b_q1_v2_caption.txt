@@ -1,4 +1,0 @@
-RQ3B (diagnosis). Companion dot plot for diagnosis profiles from Maestro_IA_TEA_cierre_2026-09-08.xlsx. The same aggregation rule was used as in the
-        prescreening and screening figure: fully specified profiles are shown individually, while partially specified
-        profiles were collapsed into compact classes to preserve the counts without overextending the figure height.
-        Bars and labels distinguish Reported, Not reported in assessed sources, and Not ascertainable for every practice.

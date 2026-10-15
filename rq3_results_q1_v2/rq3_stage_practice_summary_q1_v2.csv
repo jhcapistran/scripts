@@ -1,0 +1,7 @@
+stage,stage_n,external_validation_reported_n,external_validation_not_reported_n,external_validation_not_ascertainable_n,external_validation_reported_rate,multisource_integration_reported_n,multisource_integration_not_reported_n,multisource_integration_not_ascertainable_n,multisource_integration_reported_rate,xai_broad_reported_n,xai_broad_not_reported_n,xai_broad_not_ascertainable_n,xai_broad_reported_rate,cross_site_robustness_reported_n,cross_site_robustness_not_reported_n,cross_site_robustness_not_ascertainable_n,cross_site_robustness_reported_rate
+Prescreening,8,0,8,0,0.0,1,6,1,0.125,5,3,0,0.625,0,8,0,0.0
+Screening,113,6,106,1,0.05309734513274336,15,92,6,0.13274336283185842,33,77,3,0.2920353982300885,2,111,0,0.017699115044247787
+Diagnosis,216,15,197,4,0.06944444444444445,37,174,5,0.1712962962962963,71,141,4,0.3287037037037037,10,205,1,0.046296296296296294
+Prognosis,22,0,22,0,0.0,10,12,0,0.45454545454545453,7,14,1,0.3181818181818182,0,22,0,0.0
+Monitoring/intervention,38,0,38,0,0.0,8,27,3,0.21052631578947367,2,35,1,0.05263157894736842,0,37,1,0.0
+Not specified,31,3,26,2,0.0967741935483871,6,24,1,0.1935483870967742,8,23,0,0.25806451612903225,0,31,0,0.0

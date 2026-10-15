@@ -5,6 +5,7 @@ from pathlib import Path
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
+from matplotlib.ticker import PercentFormatter
 import pandas as pd
 import scienceplots
 
@@ -50,13 +51,19 @@ MODALITY_ORDER = [
 
 METHOD_ORDER = ["Machine Learning", "Deep Learning", "Hybrid", "Not specified"]
 
-MIN_COMBO_N_FOR_FIGURE = 1
-TOP_COMBOS_FOR_FIGURE = 999
+MIN_PROFILE_N = 8
 
 STATUS_COLORS = {
-    "Reported": "#1b9e77",
-    "Not reported in assessed sources": "#d1d5db",
-    "Not ascertainable": "#e6ab02",
+    "Reported": "#2a6f77",
+    "Not reported": "#c9ced3",
+    "Not ascertainable": "#c79a3b",
+}
+
+PRACTICE_DISPLAY = {
+    "external_validation": "External\nvalidation",
+    "multisource_integration": "Multisource\nintegration",
+    "xai_broad": "Explicit\nexplainability",
+    "cross_site_robustness": "Cross-site\nevaluation",
 }
 
 
@@ -239,87 +246,136 @@ def build_global_summary(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def select_plot_combos(combo: pd.DataFrame) -> pd.DataFrame:
-    plot_df = build_plot_summary(combo)
-    plot_df = plot_df[plot_df["combo_n"] >= MIN_COMBO_N_FOR_FIGURE].copy()
-    return plot_df.head(TOP_COMBOS_FOR_FIGURE).sort_values(
-        ["stage_sort", "specification_group", "max_practice_rate", "combo_n", "positive_practice_total"],
-        ascending=[True, False, False, False, False],
-    ).reset_index(drop=True)
+def build_stage_summary(df: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    for stage in STAGE_ORDER:
+        stage_df = df[df["stage_primary"].astype(str).eq(stage)]
+        row = {"stage": stage, "stage_n": int(len(stage_df))}
+        for field in PRACTICE_COLS:
+            values = stage_df[field].astype(str).str.strip()
+            row[f"{field}_reported_n"] = int(values.eq("Reported").sum())
+            row[f"{field}_not_reported_n"] = int(values.eq("Not reported in assessed sources").sum())
+            row[f"{field}_not_ascertainable_n"] = int(values.eq("Not ascertainable").sum())
+            row[f"{field}_reported_rate"] = row[f"{field}_reported_n"] / len(stage_df)
+        rows.append(row)
+    return pd.DataFrame(rows)
 
 
-def draw_compact_dotplot(
-    combo: pd.DataFrame,
-    outpath: Path,
-    panel_specs: list[tuple[str, list[str]]],
-    layout: dict[str, float] | None = None,
-) -> None:
-    plot_df = select_plot_combos(combo)
-    if plot_df.empty:
-        raise ValueError("No Q3 combinations available to plot.")
-    layout = layout or {}
-
-    panel_data = [(title, plot_df[plot_df["plot_stage"].isin(stages)].reset_index(drop=True)) for title, stages in panel_specs]
-    panel_data = [(title, df_stage) for title, df_stage in panel_data if not df_stage.empty]
-
-    if not panel_data:
-        return
-
-    title, stage_df = panel_data[0]
-    total_rows = len(stage_df)
-    fig_height = max(layout.get("min_height", 5.8), layout.get("row_height", 0.36) * total_rows + 1.8)
-    fig, axes = plt.subplots(1, len(PRACTICE_COLS), sharey=True, figsize=(19, fig_height), facecolor="white")
-    y_positions = list(range(total_rows))
-
-    for ax, (col, (practice_label, _, _)) in zip(axes, PRACTICE_COLS.items()):
-        for row_idx, row in stage_df.iterrows():
-            if int(row["positive_practice_total"]) == 0:
-                ax.axhspan(row_idx - 0.48, row_idx + 0.48, color="#fff7d6", zorder=0)
-            left = 0.0
-            counts = []
-            for status, suffix in (
-                ("Reported", "reported"),
-                ("Not reported in assessed sources", "not_reported"),
-                ("Not ascertainable", "not_ascertainable"),
-            ):
-                count = int(row[f"{col}_{suffix}_count"])
-                rate = float(row[f"{col}_{suffix}_rate"])
-                ax.barh(row_idx, rate, left=left, height=0.72, color=STATUS_COLORS[status], edgecolor="white", linewidth=0.4)
-                left += rate
-                counts.append(count)
-            ax.text(1.02, row_idx, "/".join(map(str, counts)), va="center", ha="left", fontsize=7.2)
-
-        ax.set_title(practice_label, fontsize=11.5, fontweight="bold")
-        ax.set_xlim(0, 1.32)
-        ax.set_ylim(-0.5, total_rows - 0.5)
-        ax.set_xticks([0, 0.5, 1.0], ["0%", "50%", "100%"])
-        ax.set_xlabel("Share of profile", fontsize=9.5)
-        ax.grid(axis="x", color="#e5e7eb", linewidth=0.8)
-        ax.set_axisbelow(True)
-        ax.invert_yaxis()
-        ax.spines[["top", "right", "left"]].set_visible(False)
-        ax.tick_params(axis="y", length=0)
-
-    labels = [f"{'○ ' if int(row['positive_practice_total']) == 0 else ''}{row['plot_label']}" for _, row in stage_df.iterrows()]
-    axes[0].set_yticks(y_positions)
-    axes[0].set_yticklabels(labels, fontsize=8.5)
-    axes[0].set_ylabel("Profile (n = reports); ○ = no practice reported", fontsize=10.5, labelpad=18)
-    for ax in axes[1:]:
-        ax.tick_params(axis="y", labelleft=False)
-
-    fig.suptitle(title, fontsize=14.5, fontweight="bold", y=0.985)
-    legend_handles = [Patch(facecolor=color, label=status) for status, color in STATUS_COLORS.items()]
-    fig.legend(
-        handles=legend_handles,
-        frameon=False,
-        ncol=3,
-        loc="lower center",
-        bbox_to_anchor=(0.64, 0.01),
-        fontsize=10.5,
-        title="Cell labels: Reported / Not reported / Not ascertainable",
-        title_fontsize=9.5,
+def build_selected_profile_summary(combo: pd.DataFrame) -> pd.DataFrame:
+    profiles = combo.copy()
+    fully_specified = (
+        profiles["stage_norm"].astype(str).ne("Not specified")
+        & profiles["modality_norm"].astype(str).ne("Not specified")
+        & profiles["method_norm"].astype(str).ne("Not specified")
     )
-    fig.subplots_adjust(left=0.34, right=0.99, top=0.90, bottom=layout.get("bottom_margin", 0.15), wspace=0.16)
+    selected = profiles[fully_specified & profiles["combo_n"].ge(MIN_PROFILE_N)].copy()
+    selected["profile_group"] = f"n >= {MIN_PROFILE_N}"
+    missing_stages = set(STAGE_ORDER[:-1]) - set(selected["stage_norm"].astype(str))
+    representatives = (
+        profiles[fully_specified & profiles["stage_norm"].astype(str).isin(missing_stages)]
+        .sort_values(["stage_norm", "combo_n", "modality_norm", "method_norm"], ascending=[True, False, True, True])
+        .groupby("stage_norm", observed=True, sort=False)
+        .head(1)
+        .copy()
+    )
+    representatives["profile_group"] = "Stage representative"
+    selected = pd.concat([selected, representatives], ignore_index=True)
+    selected["plot_stage"] = selected["stage_norm"].astype(str)
+    selected["plot_modality"] = selected["modality_norm"].astype(str)
+    selected["plot_method"] = selected["method_norm"].astype(str)
+    selected["specification_group"] = "Fully specified profile"
+    selected["stage_sort"] = pd.Categorical(selected["plot_stage"], categories=STAGE_ORDER[:-1], ordered=True)
+    selected = selected.sort_values(
+        ["stage_sort", "combo_n", "plot_modality", "plot_method"],
+        ascending=[True, False, True, True],
+    ).reset_index(drop=True)
+    selected["plot_label"] = selected.apply(
+        lambda row: f"{row['plot_stage']} | {row['plot_modality']} | {row['plot_method']} (n={int(row['combo_n'])})",
+        axis=1,
+    )
+    return selected
+
+
+def draw_overall_status(global_summary: pd.DataFrame, outpath: Path) -> None:
+    fig, ax = plt.subplots(figsize=(7.2, 3.45), facecolor="white")
+    status_specs = [("Reported", "reported_n"), ("Not reported", "not_reported_n"), ("Not ascertainable", "not_ascertainable_n")]
+    for row_index, row in global_summary.iterrows():
+        left = 0.0
+        for status, column in status_specs:
+            count = int(row[column])
+            share = count / int(row["total_n"])
+            ax.barh(row_index, share, left=left, height=0.62, color=STATUS_COLORS[status], edgecolor="white", linewidth=0.6)
+            if share >= 0.075:
+                ax.text(left + share / 2, row_index, f"{count}\n({share:.1%})", ha="center", va="center", fontsize=8, color="white" if status == "Reported" else "#20252a")
+            elif count:
+                above = status == "Reported"
+                ax.annotate(
+                    f"{count}/428 ({share:.1%})",
+                    xy=(left + share / 2, row_index),
+                    xytext=(0.10 if above else 0.90, row_index - 0.38 if above else row_index + 0.38),
+                    ha="center",
+                    va="center",
+                    fontsize=7.2,
+                    arrowprops={"arrowstyle": "-", "color": "#6b737a", "linewidth": 0.7},
+                    clip_on=False,
+                )
+            left += share
+    ax.set_yticks(range(len(global_summary)), global_summary["practice"], fontsize=9)
+    ax.set_ylim(len(global_summary) - 0.35, -0.65)
+    ax.set_xlim(0, 1)
+    ax.xaxis.set_major_formatter(PercentFormatter(1))
+    ax.set_xlabel("Share of studies (N=428)", fontsize=9)
+    ax.grid(axis="x", color="#e3e6e8", linewidth=0.7)
+    ax.set_axisbelow(True)
+    ax.spines[["top", "right", "left"]].set_visible(False)
+    ax.tick_params(axis="both", which="both", length=0)
+    legend_labels = {"Reported": "Reported", "Not reported": "Not reported in assessed sources", "Not ascertainable": "Not ascertainable"}
+    ax.legend(handles=[Patch(facecolor=color, label=legend_labels[status]) for status, color in STATUS_COLORS.items()], frameon=False, ncol=3, loc="upper center", bbox_to_anchor=(0.5, -0.20), fontsize=7.5)
+    fig.subplots_adjust(left=0.34, right=0.98, top=0.94, bottom=0.28)
+    save_figure_variants(fig, outpath)
+
+
+def draw_reported_heatmap(summary: pd.DataFrame, outpath: Path, profile_matrix: bool = False) -> None:
+    rates = summary[[f"{field}_reported_rate" for field in PRACTICE_COLS]].to_numpy()
+    counts = summary[[f"{field}_reported_count" if profile_matrix else f"{field}_reported_n" for field in PRACTICE_COLS]].to_numpy()
+    denominators = summary["combo_n" if profile_matrix else "stage_n"].to_numpy()
+    fig, ax = plt.subplots(figsize=(7.2, 6.9 if profile_matrix else 3.8), facecolor="white")
+    image = ax.imshow(rates, cmap="Blues", vmin=0, vmax=1, aspect="auto", interpolation="nearest")
+    for row in range(len(summary)):
+        for col in range(len(PRACTICE_COLS)):
+            ax.text(col, row, f"{int(counts[row, col])}/{int(denominators[row])}", ha="center", va="center", fontsize=8.5 if profile_matrix else 9.5, color="white" if rates[row, col] >= 0.55 else "#17232b")
+    ax.set_xticks(range(len(PRACTICE_COLS)), [PRACTICE_DISPLAY[field] for field in PRACTICE_COLS], fontsize=8.5)
+    ax.xaxis.tick_top()
+    ax.tick_params(axis="both", length=0, pad=6)
+    ax.set_yticks(range(len(summary)))
+    if profile_matrix:
+        short_data = {
+            "Structured clinical/questionnaire data": "Clinical/questionnaire",
+            "Behavioral images/video/gaze/movement": "Behavioral/gaze/movement",
+            "Multiple source categories": "Multiple sources",
+            "Other biomedical/digital data": "Other biomedical/digital",
+        }
+        short_ai = {"Machine Learning": "ML", "Deep Learning": "DL", "Hybrid": "Hybrid"}
+        labels = []
+        previous_stage = None
+        for _, row in summary.iterrows():
+            stage = str(row["plot_stage"])
+            prefix = f"{stage}\n" if stage != previous_stage else ""
+            labels.append(f"{prefix}{short_data.get(str(row['plot_modality']), row['plot_modality'])} · {short_ai.get(str(row['plot_method']), row['plot_method'])} (n={int(row['combo_n'])})")
+            previous_stage = stage
+        ax.set_yticklabels(labels, fontsize=8)
+        for boundary in summary.groupby("plot_stage", observed=True, sort=False).size().cumsum().iloc[:-1]:
+            ax.axhline(boundary - 0.5, color="white", linewidth=2.2)
+    else:
+        ax.set_yticklabels([f"{row.stage} (N={int(row.stage_n)})" for row in summary.itertuples()], fontsize=9)
+        ax.axhline(4.5, color="white", linewidth=4)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    colorbar = fig.colorbar(image, ax=ax, orientation="horizontal", fraction=0.045, pad=0.08, aspect=35)
+    colorbar.ax.xaxis.set_major_formatter(PercentFormatter(1))
+    colorbar.set_label("Studies reporting the practice", fontsize=8)
+    colorbar.ax.tick_params(labelsize=7)
+    fig.subplots_adjust(left=0.48 if profile_matrix else 0.27, right=0.98, top=0.91, bottom=0.10 if profile_matrix else 0.18)
     save_figure_variants(fig, outpath)
 
 
@@ -380,10 +436,19 @@ def main() -> None:
     combo = build_combo_summary(df)
     global_summary = build_global_summary(df)
 
-    plot_combos = select_plot_combos(combo)
+    plot_combos = build_plot_summary(combo).sort_values(
+        ["stage_sort", "specification_group", "max_practice_rate", "combo_n", "positive_practice_total"],
+        ascending=[True, False, False, False, False],
+    ).reset_index(drop=True)
+    stage_summary = build_stage_summary(df)
+    selected_profiles = build_selected_profile_summary(combo)
+    if len(selected_profiles) != 17 or int(selected_profiles["combo_n"].sum()) != 277:
+        raise ValueError("Figure 8 selection must contain 17 profiles covering 277 studies.")
 
     combo.to_csv(SUPPLEMENT_DIR / "rq3_combo_summary_q1_v2.csv", index=False)
     plot_combos.to_csv(OUTPUT_DIR / "rq3_lollipop_combos_q1_v2.csv", index=False)
+    stage_summary.to_csv(OUTPUT_DIR / "rq3_stage_practice_summary_q1_v2.csv", index=False)
+    selected_profiles.to_csv(OUTPUT_DIR / "rq3_ai_data_stage_matrix_q1_v2.csv", index=False)
     (OUTPUT_DIR / "rq3_omitted_zero_profiles_q1_v2.csv").unlink(missing_ok=True)
     global_summary.to_csv(OUTPUT_DIR / "rq3_global_practice_summary_q1_v2.csv", index=False)
 
@@ -425,60 +490,39 @@ def main() -> None:
 
     pd.DataFrame(denominator_rows).to_csv(OUTPUT_DIR / "rq3_denominators_q1_v2.csv", index=False)
 
-    plotted_profiles_n = int(len(plot_combos))
-    plotted_studies_n = int(plot_combos["combo_n"].sum()) if not plot_combos.empty else 0
-    zero_profiles = plot_combos[plot_combos["positive_practice_total"] == 0]
-    zero_profiles_n = int(len(zero_profiles))
-    zero_studies_n = int(zero_profiles["combo_n"].sum())
-
-    figure_specs = [
-        ("rq3_practice_lollipop_a_q1_v2", "A. Prescreening and screening", ["Prescreening", "Screening"], {"row_height": 0.46, "base_height": 1.0, "min_height": 5.8}),
-        ("rq3_practice_lollipop_b_q1_v2", "B. Diagnosis", ["Diagnosis"], {"row_height": 0.47, "base_height": 1.02, "min_height": 6.0}),
-        ("rq3_practice_lollipop_c_q1_v2", "C. Monitoring/intervention", ["Monitoring/intervention"], {"row_height": 0.50, "base_height": 1.1, "min_height": 6.0, "bottom_margin": 0.24, "legend_y": 0.02}),
-        ("rq3_practice_lollipop_d_q1_v2", "D. Prognosis and unspecified stage", ["Prognosis", "Clinical stage not specified"], {"row_height": 0.40, "base_height": 0.9, "min_height": 4.6, "bottom_margin": 0.25, "xlabel_y": 0.105, "legend_y": 0.01}),
-    ]
-    for stem, title, stages, layout in figure_specs:
-        draw_compact_dotplot(combo, OUTPUT_DIR / stem, [(title, stages)], layout)
+    draw_overall_status(global_summary, OUTPUT_DIR / "rq3_figure6_practice_reporting_q1_v2")
+    draw_reported_heatmap(stage_summary, OUTPUT_DIR / "rq3_figure7_stage_practice_heatmap_q1_v2")
+    draw_reported_heatmap(selected_profiles, OUTPUT_DIR / "rq3_figure8_ai_data_stage_matrix_q1_v2", profile_matrix=True)
 
     write_caption(
-        OUTPUT_DIR / "rq3_practice_lollipop_a_q1_v2_caption.txt",
-        f"""
-        RQ3A (prescreening and screening). Stacked bars show the adjudicated status of four methodological practices within combinations of
-        clinical stage, data source, and AI technique in ASD studies from Maestro_IA_TEA_cierre_2026-09-08.xlsx. Each row represents one fully specified profile
-        or one aggregated partially specified profile. Green, gray, and amber encode Reported, Not reported in assessed sources, and Not ascertainable,
-        respectively; labels give the three raw counts in that order and the row label gives the profile denominator. Profiles with unspecified data source,
-        AI technique, or clinical stage are collapsed into compact classes without duplicating reports. Together, the four RQ3 figures display
-        {plotted_profiles_n} profiles covering all {plotted_studies_n} reports, including {zero_profiles_n} profiles covering {zero_studies_n} reports
-        in which none of the four practices was reported (marked with an open circle and a pale background).
+        OUTPUT_DIR / "rq3_figure6_practice_reporting_q1_v2_caption.txt",
+        """
+        Figure 6. Reporting status of four methodological practices across 428 included studies. Bars show the mutually exclusive adjudicated states
+        Reported, Not reported in assessed sources, and Not ascertainable. Absence of reporting does not establish absence of the practice.
         """,
     )
     write_caption(
-        OUTPUT_DIR / "rq3_practice_lollipop_b_q1_v2_caption.txt",
-        f"""
-        RQ3B (diagnosis). Companion dot plot for diagnosis profiles from Maestro_IA_TEA_cierre_2026-09-08.xlsx. The same aggregation rule was used as in the
-        prescreening and screening figure: fully specified profiles are shown individually, while partially specified
-        profiles were collapsed into compact classes to preserve the counts without overextending the figure height.
-        Bars and labels distinguish Reported, Not reported in assessed sources, and Not ascertainable for every practice.
+        OUTPUT_DIR / "rq3_figure7_stage_practice_heatmap_q1_v2_caption.txt",
+        """
+        Figure 7. Methodological practices reported across six clinical-stage categories. Cell labels give reported studies over the stage denominator;
+        color encodes the corresponding percentage. Not reported and not ascertainable records remain in every denominator.
         """,
     )
     write_caption(
-        OUTPUT_DIR / "rq3_practice_lollipop_c_q1_v2_caption.txt",
+        OUTPUT_DIR / "rq3_figure8_ai_data_stage_matrix_q1_v2_caption.txt",
         f"""
-        RQ3C (monitoring/intervention). Companion dot plot for monitoring/intervention profiles from Maestro_IA_TEA_cierre_2026-09-08.xlsx using the same
-        aggregation rule as the other RQ3 figures. The legend and count labels are separated from the plotting
-        area to avoid overlap.
+        Figure 8. Reporting of four methodological practices across selected, fully specified clinical stage-data source-AI technique profiles. Cell labels
+        give reported studies over the profile denominator; color encodes the percentage. The matrix shows profiles with n>={MIN_PROFILE_N} plus the most
+        frequent fully specified profile for each otherwise unrepresented clinical stage: {len(selected_profiles)} profiles covering
+        {int(selected_profiles['combo_n'].sum())} studies. It does not represent all 428 studies; the remaining studies are retained in Figures 6-7 and the
+        complete analytical data. ML, machine learning; DL, deep learning; Clinical/questionnaire, structured clinical or questionnaire data;
+        Behavioral/gaze/movement, behavioral images, video, gaze, or movement data. Absence of reporting does not establish absence of practice.
         """,
     )
-    write_caption(
-        OUTPUT_DIR / "rq3_practice_lollipop_d_q1_v2_caption.txt",
-        f"""
-        RQ3D (prognosis and unspecified stage). Companion dot plot for prognosis and unspecified clinical stage
-        profiles from Maestro_IA_TEA_cierre_2026-09-08.xlsx. The same aggregation rule was used as in the other RQ3 figures:
-        fully specified profiles are shown individually, while partially specified profiles were collapsed into compact
-        classes to preserve the counts without overextending the figure height. Marker position encodes within-profile
-        frequency, and adjacent labels report raw counts as n/N.
-        """,
-    )
+
+    for letter in "abcd":
+        for suffix in (".png", ".pdf", ".svg", "_caption.txt"):
+            (OUTPUT_DIR / f"rq3_practice_lollipop_{letter}_q1_v2{suffix}").unlink(missing_ok=True)
 
     refresh_master_denominator_table()
 
