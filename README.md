@@ -1,32 +1,54 @@
-# AI for autism review scripts
+# AI–ASD scoping review: figures for the 421-report manuscript
 
-Archivo maestro único y congelado: `Maestro_IA_TEA_cierre_2026-09-08.xlsx`.
+**Authoritative data:** [`Supplementary_Data_S1_simplificado_421.xlsx`](Supplementary_Data_S1_simplificado_421.xlsx), sheet `02_Included_reports` (421 unique reports, S001–S421).
 
-Este repositorio genera las figuras y tablas CSV de RQ1–RQ3 usando exclusivamente este archivo maestro final como única fuente de verdad (leyendo directamente la hoja `BASE_CIERRE` con `include_main == 1`). Los demás archivos XLSX del directorio son legacy y no deben usarse como input.
+**Exact figures inserted in the revised Word manuscript:** [`figures_manuscript_421/`](figures_manuscript_421/) contains **Figures 2–8**, extracted from `Manuscrito_IA_TEA_actualizado_421_Mendeley.docx`. PNG artwork is byte-for-byte identical to the embedded Word images for Figures 2, 3, 5, 6, 7 and 8. For Figure 4 the exact embedded vector (SVG), and a PDF rendered from it, are supplied; its PNG is intentionally omitted to avoid accepting a byte-mismatched transfer. PDFs preserve the same artwork (vector-based where SVG was available). The manuscript's **Figure 1 / PRISMA is not reproduced here**: its historical search counts still require reconciliation.
 
-## Flujo reproducible
+The outdated RQ1–RQ3 result folders and figures from the 428-report version were removed. The former 428-record master is preserved in [`archive/`](archive/) for traceability only; it is **not** an input to the new figures.
 
-```powershell
-.\.venv\Scripts\python.exe run_all_q1_v2.py
-.\.venv\Scripts\python.exe validate_outputs_q1_v2.py
+## Recalculate from the study-level dataset
+
+```bash
+python -m pip install -r requirements.txt
+python generate_manuscript_figures.py --check-only
+python generate_manuscript_figures.py
+python verify_figures_421.py
 ```
 
-`run_all_q1_v2.py` ejecuta secuencialmente `rq1_script.py`, `rq2_script.py`, `rq3_script.py` y la validación final `validate_outputs_q1_v2.py`.
+The generator reads the 19-field included-reports charting table, checks that the corpus has 421 unique DOIs and exactly the expected, distinct RQ2 maturity categories (307 research only, 95 proposed only, 18 evaluated AI use, 1 not ascertainable), and calculates the table/plot data for Figures 2–8 and Table 3.
 
-## Política de conteos y denominadores
+Freshly generated SVG, PNG, PDF and the underlying count CSVs are written to [`figures_recomputed_421/`](figures_recomputed_421/) (ignored by Git). The **frozen manuscript artwork is never overwritten** by routine regeneration. The recomputed charts use the same categories, counts, ordering, and general visual language; they need not be pixel-identical to the frozen manuscript artwork because font metrics and rendering dependencies can vary. This separation is intentional: one directory holds exact submission artwork, and the script independently reconstructs its descriptive data.
 
-Los conteos provienen exclusivamente de `Maestro_IA_TEA_cierre_2026-09-08.xlsx`:
+The original command remains available as a compatibility entry point:
 
-- **Registros conservados para auditoría**: 454 (276 históricos + 178 de actualización).
-- **Exclusiones de auditoría**: 26 (23 históricos + 3 de actualización), detalladas en `EXCLUSIONES_CIERRE` e identificadas con `include_main == 0`.
-- **Corpus incluido en la síntesis analítica principal**: 428 estudios únicos (253 históricos + 175 de actualización), identificados con `include_main == 1`.
-- **RQ1**: 397 resueltos en las 5 etapas clínicas funcionales (Diagnosis: 216, Screening: 113, Monitoring/intervention: 38, Prognosis: 22, Prescreening: 8) y 31 no especificados (*Not specified*). Total = 428.
-- **RQ2**: Clasificación adjudicada de madurez de integración (`rq2_status`): Research only: 311, Proposed only: 98, Evaluated AI use: 19 (8 en punto de uso, 10 en intervención, 1 en plataforma).
-- Las visualizaciones editoriales de **RQ2** son `rq2_integration_maturity_by_stage_q1_v2` (Figura 4) y `rq2_decision_timing_comparison_q1_v2` (Figura 5), exportadas en PNG, PDF y SVG. La tabla de roles funcionales se elaborará en Word a partir de `rq2_role_proposed_evaluated_q1_v2.csv`; el pipeline no genera una tercera figura ni un archivo de tabla adicional.
-- **RQ3**: Cuatro prácticas primarias analizadas en 428 estudios y 90 perfiles originales: External validation: 24 (5.6%), Multisource integration: 77 (18.0%), Explicit explainability broad: 126 (29.4%), Cross-site evaluation: 12 (2.8%). La Figura 6 (`rq3_figure6_practice_reporting_q1_v2`) distingue `Reported`, `Not reported in assessed sources` y `Not ascertainable`; la Figura 7 (`rq3_figure7_stage_practice_heatmap_q1_v2`) compara las seis etapas clínicas; y la Figura 8 (`rq3_figure8_ai_data_stage_matrix_q1_v2`) muestra 17 perfiles completamente especificados seleccionados, que cubren 277 estudios. Los demás estudios permanecen en las Figuras 6–7 y en los CSV analíticos completos. Las tres figuras se exportan en PNG a 600 dpi, PDF y SVG.
+```bash
+python run_all_q1_v2.py
+```
 
-La validación reconstruye dinámicamente los cruces, perfiles, categorías, porcentajes y denominadores desde `BASE_CIERRE`, y compara esas reconstrucciones con las hojas resumen del maestro y con cada CSV analítico. Un fallo imprime los registros o celdas afectados y termina con código distinto de cero.
+The `rq1_script.py`, `rq2_script.py`, and `rq3_script.py` entry points regenerate their corresponding pairs/trio of figures from the **same 421-report input**, not from the obsolete 428-record master.
 
-## Sin inferencia de valores faltantes
+## Figures in the manuscript
 
-No se imputa ni infiere ningún valor. Los estados "Not specified", "Not reported in assessed sources" y "Not ascertainable" se respetan explícitamente conforme a la codificación adjudicada del maestro de cierre.
+| Manuscript figure | What it shows | File |
+|---|---|---|
+| 2 | Principal algorithm family × functional stage | `figures_manuscript_421/Figure_02.png` |
+| 3 | AI category × primary data source × stage | `figures_manuscript_421/Figure_03.png` |
+| 4 | Clinical/care integration maturity by stage | `figures_manuscript_421/Figure_04.png` |
+| 5 | Intended versus observed decision timing (95 proposed; 18 evaluated) | `figures_manuscript_421/Figure_05.png` |
+| 6 | Reporting of four methodological practices (N=421) | `figures_manuscript_421/Figure_06.png` |
+| 7 | Methodological-practice reporting by functional stage | `figures_manuscript_421/Figure_07.png` |
+| 8 | Seventeen fully specified AI–data–stage profiles (275 reports) | `figures_manuscript_421/Figure_08.png` |
+
+Files ending `_caption.txt` from earlier result folders were deleted together with their obsolete versions. Current captions and interpretation live in the revised Word manuscript.
+
+## Interpretation and limits
+
+- Unit of analysis: **bibliographic report**, not independent dataset or participant cohort.
+- `Not specified`, `Not ascertainable`, and `Not reported in assessed sources` remain distinct; none is silently imputed as absence.
+- RQ2's 18 evaluated AI uses are point-of-use evaluation, AI-supported intervention, or AI-enabled care-delivery platform; they are *not* 18 validated clinical deployments.
+- The 17 displayed RQ3 profiles represent 275 of 421 reports, selected using **n ≥ 8** for fully specified profiles plus one largest profile for an otherwise unrepresented stage. Every report still contributes to the corpus-wide indicators.
+- The historical search and PRISMA counts have not been reconciled by this update; do not use the archived 428-report values for publication.
+
+## Verification
+
+`verify_figures_421.py` independently checks the data denominators, RQ3 indicators, the 17-profile rule, the presence and SHA-256 fingerprints of the exact frozen Word image files. It does not claim to replicate every original screening decision.

@@ -1,0 +1,118 @@
+{
+  "reference_source_document": "Manuscrito_IA_TEA_actualizado_421_Mendeley.docx",
+  "reference_docx_sha256": "ea088cceaef256729ebb0c3c30af2a0f111a0cae722e034f90288334ca27dd6e",
+  "corpus": "Supplementary_Data_S1_simplificado_421.xlsx",
+  "included_reports": 421,
+  "figure_01": "PRISMA pending historical reconciliation; not versioned as final artwork",
+  "figures": {
+    "2": {
+      "pdf": {
+        "file": "Figure_02.pdf",
+        "sha256": "1e29823ea39cd6279ffaa6fad05a7168545601f1d4f18e7dc30f65259ea8c45a",
+        "size_bytes": 23158
+      },
+      "png": {
+        "file": "Figure_02.png",
+        "sha256": "be780e4a876f20acfad926270bf5d1563462ec3535a26cf9fdc272f3b5ee810b",
+        "size_bytes": 395772
+      },
+      "svg": {
+        "file": "Figure_02.svg",
+        "sha256": "9ad04157063426626e30ba887fda3e3821c27c9a6c4573046ee7d4ecf5b84146",
+        "size_bytes": 64937
+      }
+    },
+    "3": {
+      "pdf": {
+        "file": "Figure_03.pdf",
+        "sha256": "bb180c1905c273c82ca351cb176d8e8e7a2bddc43cea37b7682267b20c395047",
+        "size_bytes": 20514
+      },
+      "png": {
+        "file": "Figure_03.png",
+        "sha256": "82ce551f3a66bde517c17735462740ea9bc931709d77b75ea03eac66b58c4efd",
+        "size_bytes": 327074
+      },
+      "svg": {
+        "file": "Figure_03.svg",
+        "sha256": "dd685e8da82984aac645feaac355ab8134a87d57c37095fbb6ccd77c71359669",
+        "size_bytes": 70750
+      }
+    },
+    "4": {
+      "pdf": {
+        "file": "Figure_04.pdf",
+        "sha256": "5bdac23e75ba207a466864b81d6f1a29bc2574cf7b617892932020fbfac8986d",
+        "size_bytes": 14096
+      },
+      "svg": {
+        "file": "Figure_04.svg",
+        "sha256": "1bd3e6c0ac53232f4c4b17349d8fca32282e758f8ac053d36d5b1dcfdb0aa334",
+        "size_bytes": 19670
+      }
+    },
+    "5": {
+      "pdf": {
+        "file": "Figure_05.pdf",
+        "sha256": "ced90c040b7b6b87cf523133a8118e6576ad415dd6a61b66dce3c7c7d5614414",
+        "size_bytes": 17388
+      },
+      "png": {
+        "file": "Figure_05.png",
+        "sha256": "fdb2ececbc879066f66926a5f6264b688aaddd3aaf0fd9726e1779f894b9eb58",
+        "size_bytes": 118292
+      },
+      "svg": {
+        "file": "Figure_05.svg",
+        "sha256": "fbc4d643d7379f2213c5e70465b4e33408ceea79ee455309d5482449553d4a5c",
+        "size_bytes": 10333
+      }
+    },
+    "6": {
+      "pdf": {
+        "file": "Figure_06.pdf",
+        "sha256": "05d9d2e00c8d3757a6ccdcb4cdb79903b4fb219dab8268e5edea66a455c5350c",
+        "size_bytes": 203832
+      },
+      "png": {
+        "file": "Figure_06.png",
+        "sha256": "a996bf9fe8c20988484a076be6c9c242434618940b5d1408e38a47cdf37e85a7",
+        "size_bytes": 214274
+      }
+    },
+    "7": {
+      "pdf": {
+        "file": "Figure_07.pdf",
+        "sha256": "33932e73271af659ede3e49c4a366db516f156e2cf53d19f1c2b123f77d5132e",
+        "size_bytes": 17783
+      },
+      "png": {
+        "file": "Figure_07.png",
+        "sha256": "6041389067cf081d5571b1b312aecdeb71730cf1cb5d7769af02e21d7fcdaff5",
+        "size_bytes": 234636
+      },
+      "svg": {
+        "file": "Figure_07.svg",
+        "sha256": "db51cee59ec2246f6a68a6df0297f5a82d1b4b920ed8f5a4695360942ae580ea",
+        "size_bytes": 15450
+      }
+    },
+    "8": {
+      "pdf": {
+        "file": "Figure_08.pdf",
+        "sha256": "e3b105ead493e4f173d06acefbb72b3cff8cb4b7fcd7f1e10c5cb8193c5cfb47",
+        "size_bytes": 22207
+      },
+      "png": {
+        "file": "Figure_08.png",
+        "sha256": "30d05120729e3da48b86d37c258fc19b598212041cde2dc3b25c8cf0d4da81ae",
+        "size_bytes": 529072
+      },
+      "svg": {
+        "file": "Figure_08.svg",
+        "sha256": "0b627022e1f269b514300d6b9893273f6dda0303782a9a373db74c018c71b12b",
+        "size_bytes": 31842
+      }
+    }
+  }
+}

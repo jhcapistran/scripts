@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="538.174687pt" height="273.719164pt" viewBox="0 0 538.174687 273.719164" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-21T19:35:51.770298</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 273.719164 
+L 538.174687 273.719164 
+L 538.174687 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 128.197812 211.338912 
+L 520.202812 211.338912 
+L 520.202812 36.1255 
+L 128.197812 36.1255 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g clip-path="url(#pa02926bb6c)">
+    <image xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAiEAAAD0CAYAAABNe/YyAAAE0ElEQVR4nO3YMWoUUBSGUWcyo4GgWCiJbbrYWlsGl+dCXISrEISQLoQEbTKRDGSKcQVj+13wnBX8xePxcRdX90/7F3DA43ZXT2Cwm822nsBglxen9QSGW9YDAID/kwgBABIiBABIiBAAICFCAICECAEAEiIEAEiIEAAgIUIAgIQIAQASIgQASIgQACAhQgCAhAgBABIiBABIiBAAICFCAICECAEAEiIEAEiIEAAgIUIAgIQIAQASIgQASIgQACAhQgCAhAgBABIiBABIiBAAICFCAICECAEAEiIEAEiIEAAgIUIAgIQIAQASIgQASIgQACAhQgCAhAgBABIiBABIiBAAILHY7vb7egRzXd39qScw2PvXL+sJDPb2xPvg31xCAICECAEAEiIEAEiIEAAgIUIAgIQIAQASIgQASIgQACAhQgCAhAgBABIiBABIiBAAICFCAICECAEAEiIEAEiIEAAgIUIAgIQIAQASIgQASIgQACAhQgCAhAgBABIiBABIiBAAICFCAICECAEAEiIEAEiIEAAgIUIAgIQIAQASIgQASIgQACAhQgCAhAgBABIiBABIiBAAICFCAICECAEAEiIEAEis6gHM9u3HbT2BwT59eFNPYLAvH8/qCQznEgIAJEQIAJAQIQBAQoQAAAkRAgAkRAgAkBAhAEBChAAACRECACRECACQECEAQEKEAAAJEQIAJEQIAJAQIQBAQoQAAAkRAgAkRAgAkBAhAEBChAAACRECACRECACQECEAQEKEAAAJEQIAJEQIAJAQIQBAQoQAAAkRAgAkRAgAkBAhAEBChAAACRECACRECACQECEAQEKEAAAJEQIAJEQIAJAQIQBAQoQAAInF/eZ5X49grt+Pz/UEBvv5a1NPYLDP5+/qCQznEgIAJEQIAJAQIQBAQoQAAAkRAgAkRAgAkBAhAEBChAAACRECACRECACQECEAQEKEAAAJEQIAJEQIAJAQIQBAQoQAAAkRAgAkRAgAkBAhAEBChAAACRECACRECACQECEAQEKEAAAJEQIAJEQIAJAQIQBAQoQAAAkRAgAkRAgAkBAhAEBChAAACRECACRECACQECEAQEKEAAAJEQIAJEQIAJAQIQBAQoQAAInV0XJRb2Cw47VO5bD10vvgsOP1UT2B4fwgAEBChAAACRECACRECACQECEAQEKEAAAJEQIAJEQIAJAQIQBAQoQAAAkRAgAkRAgAkBAhAEBChAAACRECACRECACQECEAQEKEAAAJEQIAJEQIAJAQIQBAQoQAAAkRAgAkRAgAkBAhAEBChAAACRECACRECACQECEAQEKEAAAJEQIAJEQIAJAQIQBAQoQAAAkRAgAkRAgAkBAhAEBChAAACRECACRWJ69W9QYGe3ja1RMY7Ov363oCg11enNYTGM4lBABIiBAAICFCAICECAEAEiIEAEiIEAAgIUIAgIQIAQASIgQASIgQACAhQgCAhAgBABIiBABIiBAAICFCAICECAEAEiIEAEiIEAAgIUIAgIQIAQASIgQASIgQACAhQgCAhAgBABIiBABIiBAAICFCAICECAEAEiIEAEiIEAAgIUIAgIQIAQASIgQASIgQACAhQgCAhAgBABIiBABIiBAAICFCAICECAEAEn8BnrUlwElO7VEAAAAASUVORK5CYII=" id="image0fd1091a36" transform="scale(1 -1) translate(0 -175.68)" x="128.197812" y="-35.658912" width="392.4" height="175.68"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1"/>
+     <g id="text_1">
+      <text style="font-size: 8px; font-family: 'Liberation Serif'" transform="translate(163.649687 22.5565)">External</text>
+      <text style="font-size: 8px; font-family: 'Liberation Serif'" transform="translate(161.202187 30.92175)">validation</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2"/>
+     <g id="text_2">
+      <text style="font-size: 8px; font-family: 'Liberation Serif'" transform="translate(255.869062 22.534)">Multisource</text>
+      <text style="font-size: 8px; font-family: 'Liberation Serif'" transform="translate(257.871562 30.89925)">integration</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3"/>
+     <g id="text_3">
+      <text style="font-size: 8px; font-family: 'Liberation Serif'" transform="translate(350.539062 22.534)">Explainability</text>
+      <text style="font-size: 8px; font-family: 'Liberation Serif'" transform="translate(361.429687 30.92175)">(broad)</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4"/>
+     <g id="text_4">
+      <text style="font-size: 8px; font-family: 'Liberation Serif'" transform="translate(453.090312 14.19125)">Cross-site /</text>
+      <text style="font-size: 8px; font-family: 'Liberation Serif'" transform="translate(450.542812 22.5565)">cross-dataset</text>
+      <text style="font-size: 8px; font-family: 'Liberation Serif'" transform="translate(454.541562 30.92175)">evaluation</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_5"/>
+     <g id="text_5">
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="124.697812" y="53.849196" transform="rotate(-0 124.697812 53.849196)">Prescreening (n=8)</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_6"/>
+     <g id="text_6">
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="124.697812" y="83.051431" transform="rotate(-0 124.697812 83.051431)">Screening (n=110)</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_7"/>
+     <g id="text_7">
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="124.697812" y="112.253666" transform="rotate(-0 124.697812 112.253666)">Diagnosis (n=214)</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_8"/>
+     <g id="text_8">
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="124.697812" y="141.455902" transform="rotate(-0 124.697812 141.455902)">Prognosis (n=22)</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_9"/>
+     <g id="text_9">
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="124.697812" y="170.658137" transform="rotate(-0 124.697812 170.658137)">Monitoring/ intervention (n=38)</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_10"/>
+     <g id="text_10">
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="124.697812" y="199.906075" transform="rotate(-0 124.697812 199.906075)">Not specified (n=29)</text>
+     </g>
+    </g>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="177.198437" y="53.131305" transform="rotate(-0 177.198437 53.131305)">0/8</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="275.199687" y="53.131305" transform="rotate(-0 275.199687 53.131305)">1/8</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #ffffff" x="373.200937" y="53.131305" transform="rotate(-0 373.200937 53.131305)">5/8</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="471.202187" y="53.131305" transform="rotate(-0 471.202187 53.131305)">0/8</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="177.198437" y="82.33354" transform="rotate(-0 177.198437 82.33354)">6/110</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="275.199687" y="82.33354" transform="rotate(-0 275.199687 82.33354)">14/110</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="373.200937" y="82.33354" transform="rotate(-0 373.200937 82.33354)">34/110</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="471.202187" y="82.33354" transform="rotate(-0 471.202187 82.33354)">3/110</text>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="177.198437" y="111.535776" transform="rotate(-0 177.198437 111.535776)">15/214</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="275.199687" y="111.535776" transform="rotate(-0 275.199687 111.535776)">36/214</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="373.200937" y="111.535776" transform="rotate(-0 373.200937 111.535776)">70/214</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="471.202187" y="111.535776" transform="rotate(-0 471.202187 111.535776)">14/214</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="177.198437" y="140.738011" transform="rotate(-0 177.198437 140.738011)">0/22</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="275.199687" y="140.738011" transform="rotate(-0 275.199687 140.738011)">10/22</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="373.200937" y="140.738011" transform="rotate(-0 373.200937 140.738011)">7/22</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="471.202187" y="140.738011" transform="rotate(-0 471.202187 140.738011)">0/22</text>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="177.198437" y="169.940246" transform="rotate(-0 177.198437 169.940246)">0/38</text>
+   </g>
+   <g id="text_28">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="275.199687" y="169.940246" transform="rotate(-0 275.199687 169.940246)">7/38</text>
+   </g>
+   <g id="text_29">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="373.200937" y="169.940246" transform="rotate(-0 373.200937 169.940246)">3/38</text>
+   </g>
+   <g id="text_30">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="471.202187" y="169.940246" transform="rotate(-0 471.202187 169.940246)">0/38</text>
+   </g>
+   <g id="text_31">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="177.198437" y="199.142482" transform="rotate(-0 177.198437 199.142482)">4/29</text>
+   </g>
+   <g id="text_32">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="275.199687" y="199.142482" transform="rotate(-0 275.199687 199.142482)">6/29</text>
+   </g>
+   <g id="text_33">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="373.200937" y="199.142482" transform="rotate(-0 373.200937 199.142482)">9/29</text>
+   </g>
+   <g id="text_34">
+    <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #202020" x="471.202187" y="199.142482" transform="rotate(-0 471.202187 199.142482)">0/29</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_3">
+    <path d="M 128.197812 237.727289 
+L 520.202812 237.727289 
+L 520.202812 227.927164 
+L 128.197812 227.927164 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <image xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAiEAAAAOCAYAAAD5csxNAAABJUlEQVR4nO3WwW6DMAwA0Gz//787TEp6GGMQcAJjknd479AS4tgkpZLfPj5bK6WUr89SWlkvVt+XUUw03zY5yiRmDR3kmMX0z1EGOe7u5S/O406d/5ajLgHbn7RfU8Pf5Xx+F7N812BtNL/fw1KnG8/m9/XO93tcu487u1cne6vDHF3d/n53ppfqt65+t9db9S+cZV+v9fWDMz6r0+c4zA/2EtaNcp6+n0HdSc7Rc/yMx+d0JeZZjvnaWn9b//hHPdbtYgc5ZjGzXHfqRXGP9rA7j7q/F46D+5fWTsalbF7qSb1o/LD+ewEASKAJAQBSaEIAgBSaEAAghSYEAEihCQEAUmhCAIAUmhAAIIUmBABIoQkBAFJoQgCAFJoQACCFJgQASPECJoEW3H7YyyEAAAAASUVORK5CYII=" id="image109fbd77a3" transform="scale(1 -1) translate(0 -10.08)" x="128.16" y="-227.52" width="392.4" height="10.08"/>
+   <g id="matplotlib.axis_3">
+    <g id="xtick_5">
+     <g id="line2d_11">
+      <defs>
+       <path id="mbb757a7006" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mbb757a7006" x="128.197812" y="237.727289" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_35">
+      <text style="font-size: 8px; font-family: 'Liberation Serif'; text-anchor: middle" x="128.197812" y="250.278539" transform="rotate(-0 128.197812 250.278539)">0%</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#mbb757a7006" x="226.199062" y="237.727289" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_36">
+      <text style="font-size: 8px; font-family: 'Liberation Serif'; text-anchor: middle" x="226.199062" y="250.278539" transform="rotate(-0 226.199062 250.278539)">25%</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_13">
+      <g>
+       <use xlink:href="#mbb757a7006" x="324.200312" y="237.727289" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_37">
+      <text style="font-size: 8px; font-family: 'Liberation Serif'; text-anchor: middle" x="324.200312" y="250.278539" transform="rotate(-0 324.200312 250.278539)">50%</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#mbb757a7006" x="422.201562" y="237.727289" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_38">
+      <text style="font-size: 8px; font-family: 'Liberation Serif'; text-anchor: middle" x="422.201562" y="250.278539" transform="rotate(-0 422.201562 250.278539)">75%</text>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_15">
+      <g>
+       <use xlink:href="#mbb757a7006" x="520.202812" y="237.727289" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_39">
+      <text style="font-size: 8px; font-family: 'Liberation Serif'; text-anchor: middle" x="520.202812" y="250.278539" transform="rotate(-0 520.202812 250.278539)">100%</text>
+     </g>
+    </g>
+    <g id="text_40">
+     <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle" x="324.200312" y="262.921351" transform="rotate(-0 324.200312 262.921351)">Reports documenting the practice (%)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_4"/>
+   <g id="LineCollection_1"/>
+   <g id="patch_4">
+    <path d="M 128.197812 237.727289 
+L 128.197812 232.827226 
+L 128.197812 227.927164 
+L 520.202812 227.927164 
+L 520.202812 232.827226 
+L 520.202812 237.727289 
+L 128.197812 237.727289 
+z
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pa02926bb6c">
+   <rect x="128.197812" y="36.1255" width="392.005" height="175.213412"/>
+  </clipPath>
+ </defs>
+</svg>
