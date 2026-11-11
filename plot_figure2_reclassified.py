@@ -94,7 +94,7 @@ def render(df,out):
     ax.tick_params(length=0)
     for spine in ax.spines.values(): spine.set_visible(False)
     ax.set_xlabel("Primary functional stage",fontsize=9.5,labelpad=7)
-    ax.set_ylabel("Algorithm family",fontsize=9.5,labelpad=12)
+    ax.set_ylabel("Algorithm family / identification status",fontsize=9.5,labelpad=12)
     for ext in ("png","pdf","svg"):
         fig.savefig(out/("Figure_02."+ext),
                     dpi=330 if ext=="png" else None,facecolor="white")
