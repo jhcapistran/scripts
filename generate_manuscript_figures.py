@@ -1,7 +1,7 @@
 """Recompute AI-ASD manuscript Figures 2-8 from the final 421-report supplement.
 
 The **exact artwork already inserted in the Word manuscript** is versioned separately
-under ``figures_manuscript_421``. This script makes a fresh, data-derived rendering in
+under ``figures_manuscript_421``. This script makes a fresh, data-derived rendering (including revised RQ1 allocation) in
 ``figures_recomputed_421`` and exports the aggregate tables for independent auditing.
 
 It deliberately does not regenerate Figure 1 (PRISMA), because the historical search
@@ -124,26 +124,23 @@ def simplify_stage(s):
     return 'Monitoring/\nintervention' if s=='Monitoring/intervention' else s
 
 
-def draw_figure2(df,out):
-    table=df.groupby(['Algorithm family','Primary functional stage']).size().unstack(fill_value=0).reindex(index=ALGORITHMS,columns=STAGES,fill_value=0)
-    long=table.stack().rename('Reports').reset_index()
-    long.to_csv(out/'figure_02_algorithm_stage.csv',index=False)
-    fig,ax=plt.subplots(figsize=(10.4,9.0))
-    norm=Normalize(0,max(1,int(table.values.max())))
-    cmap=plt.get_cmap('viridis')
-    for yi,a in enumerate(ALGORITHMS):
-        for xi,s in enumerate(STAGES):
-            n=int(table.loc[a,s]);
-            if n<=0: continue
-            size=90+500*math.sqrt(n/table.values.max())
-            ax.scatter(xi,yi,s=size,c=[cmap(norm(n))],edgecolors='white',linewidths=0.7,zorder=3)
-            ax.text(xi,yi,str(n),ha='center',va='center',fontsize=8,color='white' if norm(n)<0.48 else '#22303e',fontweight='bold',zorder=4)
-    ax.set_yticks(range(len(ALGORITHMS)),[s.replace('Multiple/not uniquely specified','Multiple / not\nuniquely specified').replace('Composite/ensemble pipeline','Composite/ensemble\npipeline').replace('Other specified method','Other specified\nmethod') for s in ALGORITHMS],fontsize=9)
-    ax.invert_yaxis();ax.set_xticks(range(len(STAGES)),[simplify_stage(x) for x in STAGES],fontsize=9)
-    ax.set_xlim(-.5,len(STAGES)-.5);ax.set_axisbelow(True);ax.grid(axis='both',color='#e4e8ed',linewidth=.65)
-    ax.set_xlabel('Primary functional stage');ax.set_ylabel('Algorithm family')
-    for sp in ax.spines.values():sp.set_visible(False)
-    fig.tight_layout();save_all(fig,out,'Figure_02')
+def draw_figure2(df, out):
+    """Reclassified 421-report RQ1 figure, matched to the original bubble plot.
+
+    Uses an explicit, independently auditable per-report allocation CSV.
+    Never changes or rewrites the frozen embedded manuscript assets.
+    """
+    from plot_figure2_reclassified import render, FAMILIES, COUNTS
+    mapping = pd.read_csv(BASE_DIR / 'rq1_algorithm_family_421.csv', dtype='string')
+    if len(mapping) != 421 or mapping['Report ID'].tolist() != df['Report ID'].tolist():
+        raise ValueError('RQ1 revised classification must match all 421 report IDs')
+    if set(mapping['Revised allocation']) != set(FAMILIES):
+        raise ValueError('Unexpected family in RQ1 revised allocation')
+    work = df.copy()
+    work['Revised allocation'] = mapping['Revised allocation'].to_numpy()
+    if [int((work['Revised allocation'] == f).sum()) for f in FAMILIES] != COUNTS:
+        raise ValueError('RQ1 category totals differ from audited 421-report allocation')
+    render(work, out)
 
 
 def draw_figure3(df,out):

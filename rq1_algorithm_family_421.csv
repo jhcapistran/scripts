@@ -1,0 +1,422 @@
+Report ID,Revised allocation
+S001,Random forests
+S002,Multiple models: no unique principal family
+S003,Principal family not resolved
+S004,Multiple models: no unique principal family
+S005,Multiple models: no unique principal family
+S006,Transformers
+S007,MLP / feedforward neural networks
+S008,Multiple models: no unique principal family
+S009,Principal family not resolved
+S010,Principal family not resolved
+S011,Principal family not resolved
+S012,Support vector machines / regression
+S013,Neural networks: subtype unresolved
+S014,Support vector machines / regression
+S015,Multiple models: no unique principal family
+S016,Support vector machines / regression
+S017,Decision trees / rules
+S018,MLP / feedforward neural networks
+S019,Convolutional neural networks
+S020,Random forests
+S021,Multiple models: no unique principal family
+S022,Neural networks: subtype unresolved
+S023,Multiple models: no unique principal family
+S024,Convolutional neural networks
+S025,Neural networks: subtype unresolved
+S026,Multiple models: no unique principal family
+S027,Naive Bayes
+S028,Random forests
+S029,Autoencoders
+S030,Multiple models: no unique principal family
+S031,Recurrent neural networks
+S032,Boosted-tree methods
+S033,Random forests
+S034,Multiple models: no unique principal family
+S035,Multiple models: no unique principal family
+S036,Multiple models: no unique principal family
+S037,Multiple models: no unique principal family
+S038,Logistic regression
+S039,Support vector machines / regression
+S040,Transformers
+S041,Multiple models: no unique principal family
+S042,Graph neural networks
+S043,Graph neural networks
+S044,Convolutional neural networks
+S045,Multiple models: no unique principal family
+S046,Random forests
+S047,Decision trees / rules
+S048,Decision trees / rules
+S049,Random forests
+S050,Convolutional neural networks
+S051,Other specified computational methods
+S052,Random forests
+S053,Multiple models: no unique principal family
+S054,Neural networks: subtype unresolved
+S055,Random forests
+S056,Graph neural networks
+S057,Principal family not resolved
+S058,Clustering
+S059,Convolutional neural networks
+S060,Graph neural networks
+S061,Principal family not resolved
+S062,Convolutional neural networks
+S063,Convolutional neural networks
+S064,Support vector machines / regression
+S065,Neural networks: subtype unresolved
+S066,Principal family not resolved
+S067,Multiple models: no unique principal family
+S068,Neural networks: subtype unresolved
+S069,Convolutional neural networks
+S070,Boosted-tree methods
+S071,Convolutional neural networks
+S072,Principal family not resolved
+S073,Random forests
+S074,Multiple models: no unique principal family
+S075,Principal family not resolved
+S076,Principal family not resolved
+S077,Transformers
+S078,Random forests
+S079,MLP / feedforward neural networks
+S080,Multiple models: no unique principal family
+S081,Other linear / regression models
+S082,Random forests
+S083,Multiple models: no unique principal family
+S084,Support vector machines / regression
+S085,Support vector machines / regression
+S086,Logistic regression
+S087,Support vector machines / regression
+S088,Naive Bayes
+S089,Clustering
+S090,Support vector machines / regression
+S091,Principal family not resolved
+S092,Neural networks: subtype unresolved
+S093,Multiple models: no unique principal family
+S094,MLP / feedforward neural networks
+S095,Boosted-tree methods
+S096,Clustering
+S097,Multiple models: no unique principal family
+S098,Support vector machines / regression
+S099,Convolutional neural networks
+S100,Principal family not resolved
+S101,Random forests
+S102,Clustering
+S103,Decision trees / rules
+S104,Support vector machines / regression
+S105,Support vector machines / regression
+S106,Neural networks: subtype unresolved
+S107,Autoencoders
+S108,Support vector machines / regression
+S109,Convolutional neural networks
+S110,Convolutional neural networks
+S111,Convolutional neural networks
+S112,Transformers
+S113,Other specified computational methods
+S114,Support vector machines / regression
+S115,Decision trees / rules
+S116,Decision trees / rules
+S117,Neural networks: subtype unresolved
+S118,Principal family not resolved
+S119,Logistic regression
+S120,Principal family not resolved
+S121,Boosted-tree methods
+S122,Multiple models: no unique principal family
+S123,Convolutional neural networks
+S124,Multiple models: no unique principal family
+S125,Convolutional neural networks
+S126,Convolutional neural networks
+S127,Logistic regression
+S128,Graph neural networks
+S129,Multiple models: no unique principal family
+S130,Other linear / regression models
+S131,Neural networks: subtype unresolved
+S132,Support vector machines / regression
+S133,Convolutional neural networks
+S134,Convolutional neural networks
+S135,Convolutional neural networks
+S136,Support vector machines / regression
+S137,Other specified computational methods
+S138,Multiple models: no unique principal family
+S139,Random forests
+S140,Boosted-tree methods
+S141,Boosted-tree methods
+S142,Multiple models: no unique principal family
+S143,Neural networks: subtype unresolved
+S144,Random forests
+S145,Support vector machines / regression
+S146,Decision trees / rules
+S147,Other specified computational methods
+S148,Multiple models: no unique principal family
+S149,Convolutional neural networks
+S150,Random forests
+S151,Autoencoders
+S152,Random forests
+S153,Clustering
+S154,Principal family not resolved
+S155,Multiple models: no unique principal family
+S156,Decision trees / rules
+S157,MLP / feedforward neural networks
+S158,Support vector machines / regression
+S159,Multiple models: no unique principal family
+S160,Other linear / regression models
+S161,Multiple models: no unique principal family
+S162,Principal family not resolved
+S163,Principal family not resolved
+S164,Support vector machines / regression
+S165,Principal family not resolved
+S166,Random forests
+S167,Support vector machines / regression
+S168,Random forests
+S169,Support vector machines / regression
+S170,Transformers
+S171,Other specified neural architectures
+S172,Other specified neural architectures
+S173,Logistic regression
+S174,Random forests
+S175,Convolutional neural networks
+S176,Principal family not resolved
+S177,Principal family not resolved
+S178,Convolutional neural networks
+S179,Multiple models: no unique principal family
+S180,Support vector machines / regression
+S181,Multiple models: no unique principal family
+S182,Discriminant analysis
+S183,Principal family not resolved
+S184,Multiple models: no unique principal family
+S185,Graph neural networks
+S186,MLP / feedforward neural networks
+S187,Transformers
+S188,Support vector machines / regression
+S189,Multiple models: no unique principal family
+S190,Principal family not resolved
+S191,Principal family not resolved
+S192,Decision trees / rules
+S193,Logistic regression
+S194,Support vector machines / regression
+S195,Boosted-tree methods
+S196,Convolutional neural networks
+S197,Support vector machines / regression
+S198,Decision trees / rules
+S199,Convolutional neural networks
+S200,Convolutional neural networks
+S201,Neural networks: subtype unresolved
+S202,Recurrent neural networks
+S203,Support vector machines / regression
+S204,MLP / feedforward neural networks
+S205,Principal family not resolved
+S206,Principal family not resolved
+S207,k-nearest neighbors
+S208,Convolutional neural networks
+S209,Transformers
+S210,Transformers
+S211,Graph neural networks
+S212,Convolutional neural networks
+S213,Graph neural networks
+S214,Principal family not resolved
+S215,Support vector machines / regression
+S216,Boosted-tree methods
+S217,Decision trees / rules
+S218,Convolutional neural networks
+S219,Principal family not resolved
+S220,Multiple models: no unique principal family
+S221,Multiple models: no unique principal family
+S222,Clustering
+S223,Convolutional neural networks
+S224,MLP / feedforward neural networks
+S225,Neural networks: subtype unresolved
+S226,Transformers
+S227,Random forests
+S228,Support vector machines / regression
+S229,Graph neural networks
+S230,Convolutional neural networks
+S231,Multiple models: no unique principal family
+S232,MLP / feedforward neural networks
+S233,Support vector machines / regression
+S234,Principal family not resolved
+S235,Convolutional neural networks
+S236,Random forests
+S237,Decision trees / rules
+S238,Logistic regression
+S239,Principal family not resolved
+S240,Graph neural networks
+S241,Random forests
+S242,Neural networks: subtype unresolved
+S243,Support vector machines / regression
+S244,Transformers
+S245,Principal family not resolved
+S246,Boosted-tree methods
+S247,Principal family not resolved
+S248,Multiple models: no unique principal family
+S249,Principal family not resolved
+S250,Transformers
+S251,Multiple models: no unique principal family
+S252,Multiple models: no unique principal family
+S253,Decision trees / rules
+S254,Multiple models: no unique principal family
+S255,Transformers
+S256,Transformers
+S257,Transformers
+S258,Transformers
+S259,Clustering
+S260,Boosted-tree methods
+S261,Logistic regression
+S262,Other linear / regression models
+S263,Graph neural networks
+S264,Transformers
+S265,Random forests
+S266,Multiple models: no unique principal family
+S267,Multiple models: no unique principal family
+S268,Multiple models: no unique principal family
+S269,Neural networks: subtype unresolved
+S270,Other linear / regression models
+S271,Boosted-tree methods
+S272,Principal family not resolved
+S273,Multiple models: no unique principal family
+S274,Principal family not resolved
+S275,Decision trees / rules
+S276,Convolutional neural networks
+S277,Clustering
+S278,Transformers
+S279,Boosted-tree methods
+S280,Principal family not resolved
+S281,Logistic regression
+S282,Multiple models: no unique principal family
+S283,Convolutional neural networks
+S284,Multiple models: no unique principal family
+S285,k-nearest neighbors
+S286,Neural networks: subtype unresolved
+S287,Neural networks: subtype unresolved
+S288,Random forests
+S289,Decision trees / rules
+S290,Multiple models: no unique principal family
+S291,Boosted-tree methods
+S292,Multiple models: no unique principal family
+S293,Neural networks: subtype unresolved
+S294,Multiple models: no unique principal family
+S295,Neural networks: subtype unresolved
+S296,Transformers
+S297,Multiple models: no unique principal family
+S298,Multiple models: no unique principal family
+S299,Multiple models: no unique principal family
+S300,Multiple models: no unique principal family
+S301,Multiple models: no unique principal family
+S302,Multiple models: no unique principal family
+S303,Convolutional neural networks
+S304,Convolutional neural networks
+S305,Multiple models: no unique principal family
+S306,Principal family not resolved
+S307,Convolutional neural networks
+S308,Multiple models: no unique principal family
+S309,Multiple models: no unique principal family
+S310,Other specified computational methods
+S311,Convolutional neural networks
+S312,Multiple models: no unique principal family
+S313,Convolutional neural networks
+S314,Boosted-tree methods
+S315,Graph neural networks
+S316,Multiple models: no unique principal family
+S317,Principal family not resolved
+S318,Convolutional neural networks
+S319,Multiple models: no unique principal family
+S320,k-nearest neighbors
+S321,Multiple models: no unique principal family
+S322,Multiple models: no unique principal family
+S323,Random forests
+S324,Principal family not resolved
+S325,Convolutional neural networks
+S326,Principal family not resolved
+S327,Recurrent neural networks
+S328,Neural networks: subtype unresolved
+S329,Convolutional neural networks
+S330,Convolutional neural networks
+S331,Boosted-tree methods
+S332,Neural networks: subtype unresolved
+S333,Convolutional neural networks
+S334,Boosted-tree methods
+S335,Logistic regression
+S336,Neural networks: subtype unresolved
+S337,Convolutional neural networks
+S338,Principal family not resolved
+S339,Multiple models: no unique principal family
+S340,Principal family not resolved
+S341,Convolutional neural networks
+S342,Principal family not resolved
+S343,Decision trees / rules
+S344,Multiple models: no unique principal family
+S345,Neural networks: subtype unresolved
+S346,Random forests
+S347,Other specified computational methods
+S348,Clustering
+S349,Principal family not resolved
+S350,Multiple models: no unique principal family
+S351,MLP / feedforward neural networks
+S352,Transformers
+S353,Convolutional neural networks
+S354,Support vector machines / regression
+S355,Convolutional neural networks
+S356,Logistic regression
+S357,Neural networks: subtype unresolved
+S358,Transformers
+S359,Multiple models: no unique principal family
+S360,Support vector machines / regression
+S361,Neural networks: subtype unresolved
+S362,Principal family not resolved
+S363,Neural networks: subtype unresolved
+S364,Support vector machines / regression
+S365,Logistic regression
+S366,Multiple models: no unique principal family
+S367,Convolutional neural networks
+S368,Convolutional neural networks
+S369,Decision trees / rules
+S370,Multiple models: no unique principal family
+S371,Logistic regression
+S372,Boosted-tree methods
+S373,Boosted-tree methods
+S374,Convolutional neural networks
+S375,Neural networks: subtype unresolved
+S376,Convolutional neural networks
+S377,Principal family not resolved
+S378,Multiple models: no unique principal family
+S379,Multiple models: no unique principal family
+S380,Logistic regression
+S381,Principal family not resolved
+S382,Neural networks: subtype unresolved
+S383,Graph neural networks
+S384,Decision trees / rules
+S385,Multiple models: no unique principal family
+S386,Convolutional neural networks
+S387,Multiple models: no unique principal family
+S388,Convolutional neural networks
+S389,Multiple models: no unique principal family
+S390,Convolutional neural networks
+S391,Neural networks: subtype unresolved
+S392,Multiple models: no unique principal family
+S393,Multiple models: no unique principal family
+S394,Transformers
+S395,Random forests
+S396,Convolutional neural networks
+S397,Discriminant analysis
+S398,k-nearest neighbors
+S399,Boosted-tree methods
+S400,Logistic regression
+S401,Multiple models: no unique principal family
+S402,Principal family not resolved
+S403,Principal family not resolved
+S404,Principal family not resolved
+S405,Random forests
+S406,Random forests
+S407,Principal family not resolved
+S408,Multiple models: no unique principal family
+S409,Logistic regression
+S410,Graph neural networks
+S411,Multiple models: no unique principal family
+S412,Multiple models: no unique principal family
+S413,Multiple models: no unique principal family
+S414,Multiple models: no unique principal family
+S415,Transformers
+S416,Neural networks: subtype unresolved
+S417,Recurrent neural networks
+S418,Convolutional neural networks
+S419,Multiple models: no unique principal family
+S420,Recurrent neural networks
+S421,Principal family not resolved

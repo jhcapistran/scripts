@@ -52,3 +52,38 @@ Files ending `_caption.txt` from earlier result folders were deleted together wi
 ## Verification
 
 `verify_figures_421.py` independently checks the data denominators, RQ3 indicators, the 17-profile rule, the presence and SHA-256 fingerprints of the exact frozen Word image files. It does not claim to replicate every original screening decision.
+
+
+## Revised RQ1 Figure 2 (2026-11-11; staged for manuscript revision)
+
+The manuscript's original Figure 2 in `figures_manuscript_421/` remains **frozen** and unchanged.
+The revised chart uses `rq1_algorithm_family_421.csv`, an explicit report-level
+reconciliation of S001-S421 (421 unique DOI records); it does not overwrite the
+original 19-field supplement or recode RQ2/RQ3.
+
+Rebuild the revised figure with the original figure's visual design (serif labels,
+six functional stages, viridis bubbles, report counts inside bubbles):
+
+```bash
+python plot_figure2_reclassified.py
+python generate_manuscript_figures.py --figures 2
+```
+
+The standalone command writes PNG, PDF, SVG and validation CSVs to
+`figures_revised_421/`; the standard generator writes the same revised Figure 2
+to `figures_recomputed_421/`. The original artwork is approximately 494 × 438 pt;
+the revised artwork retains its 494 pt width and increases height to 518 pt to
+fit 21 rows, avoiding illegible or overlapping labels.
+
+An SVG preview of the revised bubble matrix is committed at
+`figures_revised_421/Figure_02.svg`. For submission, regenerate the PDF/PNG
+from `plot_figure2_reclassified.py` so the exported formats match Matplotlib.
+
+The final three rows ('Multiple models: no unique principal family',
+'Neural networks: subtype unresolved', 'Principal family not resolved')
+are *identification states*, not additional algorithm families; a dashed
+separator distinguishes them. No report disappears from the figure.
+The supplement's original `Algorithm family` column remains unchanged pending
+manuscript editorial review. RQ1 methodological coding of S113 is a separate
+outstanding question: network biomarker discovery is not automatically equivalent
+to a clinically evaluated diagnosis classifier.
