@@ -28,11 +28,11 @@ STAGES=["Prescreening","Screening","Diagnosis","Prognosis","Monitoring/intervent
 LABELS=[
 "CNN","SVM / SVR","Random forest","Transformer","Boosted trees",
 "Decision tree / rules","Logistic regression","GNN","MLP / feedforward NN",
-"Clustering","Other specified\\ncomputational methods","Other linear / regression",
+"Clustering","Other specified\ncomputational methods","Other linear / regression",
 "Recurrent neural network","k-nearest neighbors","Autoencoder","Discriminant analysis",
-"Naive Bayes","Other specified\\nneural architectures",
-"Multiple models /\\nno unique family","Neural network /\\nsubtype unresolved",
-"Principal family\\nnot resolved"]
+"Naive Bayes","Other specified\nneural architectures",
+"Multiple models /\nno unique family","Neural network /\nsubtype unresolved",
+"Principal family\nnot resolved"]
 DOI_SHA256="c0391238635a7c8e8c1a4608b1cb72d8a694b658774e326f0908d71df1055a8d"
 
 def load_inventory(source,allocation):
@@ -40,12 +40,12 @@ def load_inventory(source,allocation):
         df=pd.read_csv(source,dtype={"Report ID":"string"})
     else:
         df=pd.read_excel(source,sheet_name="02_Included_reports",header=1,dtype={"Report ID":"string"})
-    df=df.loc[df["Report ID"].fillna("").str.fullmatch(r"S\\d{3}")].copy()
+    df=df.loc[df["Report ID"].fillna("").str.fullmatch(r"S\d{3}")].copy()
     if len(df)!=421 or df["Report ID"].tolist()!=[f"S{i:03}" for i in range(1,422)]:
         raise ValueError("Expected S001-S421 exactly once and in order")
     dois=(df["DOI"].fillna("").astype(str).str.strip().str.lower()
-          .str.replace(r"^https?://(dx\\.)?doi\\.org/","",regex=True))
-    digest=hashlib.sha256(("\\n".join(dois)+"\\n").encode()).hexdigest()
+          .str.replace(r"^https?://(dx\.)?doi\.org/","",regex=True))
+    digest=hashlib.sha256(("\n".join(dois)+"\n").encode()).hexdigest()
     if digest!=DOI_SHA256: raise ValueError("DOI inventory mismatch: "+digest)
     if set(df["Primary functional stage"])-set(STAGES):
         raise ValueError("Unexpected functional stages")
@@ -86,7 +86,7 @@ def render(df,out):
             ax.text(x,y,str(n),fontsize=8.4,ha="center",va="center",
                     color="#122127" if norm(n)>=.70 else "white",zorder=4)
     ax.set_xticks(range(6),["Prescreening","Screening","Diagnosis","Prognosis",
-                              "Monitoring/\\nintervention","Not specified"],fontsize=8.5)
+                              "Monitoring/\nintervention","Not specified"],fontsize=8.5)
     ax.set_yticks(range(21),LABELS,fontsize=8.5)
     ax.set_xlim(-.48,5.52);ax.set_ylim(20.55,-.48)
     ax.grid(axis="both",color="#e5e7eb",linewidth=.6);ax.set_axisbelow(True)
