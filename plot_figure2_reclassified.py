@@ -69,6 +69,7 @@ def render(df,out):
     long=table.stack().rename("Reports").reset_index()
     long.columns=["Algorithm_family","Primary_functional_stage","Reports"]
     long.to_csv(out/"Figure_02_family_stage_counts.csv",index=False)
+    long.to_csv(out/"figure_02_algorithm_stage.csv",index=False)
     df[["Report ID","DOI","Primary functional stage","Revised allocation"]].to_csv(
         out/"Figure_02_report_allocation.csv",index=False)
     plt.rcParams.update({"font.family":"Liberation Serif","font.size":8.6,
