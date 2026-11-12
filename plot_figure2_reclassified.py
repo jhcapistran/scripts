@@ -23,7 +23,7 @@ FAMILIES=[
 "Discriminant analysis","Naive Bayes","Other specified neural architectures",
 "Multiple models: no unique principal family","Neural networks: subtype unresolved",
 "Principal family not resolved"]
-COUNTS=[56,33,29,22,19,18,16,14,10,9,6,5,5,4,3,2,2,2,85,30,51]
+COUNTS=[58,35,29,22,19,18,16,14,10,9,9,5,5,4,3,2,2,2,93,32,34]
 STAGES=["Prescreening","Screening","Diagnosis","Prognosis","Monitoring/intervention","Not specified"]
 LABELS=[
 "CNN","SVM / SVR","Random forest","Transformer","Boosted trees",
@@ -56,7 +56,7 @@ def load_inventory(source,allocation):
         raise ValueError("Unknown or missing family")
     df["Revised allocation"]=overlay["Revised allocation"].to_numpy()
     observed=[int((df["Revised allocation"]==f).sum()) for f in FAMILIES]
-    if observed!=COUNTS: raise ValueError("Family totals differ from audited baseline")
+    if observed!=COUNTS: raise ValueError("Family totals differ from adjudicated allocation")
     return df
 
 def render(df,out):
@@ -82,7 +82,7 @@ def render(df,out):
         for x,stage in enumerate(STAGES):
             n=int(table.loc[family,stage])
             if not n: continue
-            ax.scatter(x,y,s=46+365*(n/85)**.5,color=[cmap(norm(n))],
+            ax.scatter(x,y,s=46+365*(n/max(1,int(table.to_numpy().max())))**.5,color=[cmap(norm(n))],
                        edgecolors="white",linewidths=.45,zorder=3)
             ax.text(x,y,str(n),fontsize=8.4,ha="center",va="center",
                     color="#122127" if norm(n)>=.70 else "white",zorder=4)
@@ -95,7 +95,7 @@ def render(df,out):
     ax.tick_params(length=0)
     for spine in ax.spines.values(): spine.set_visible(False)
     ax.set_xlabel("Primary functional stage",fontsize=9.5,labelpad=7)
-    ax.set_ylabel("Algorithm family / identification status",fontsize=9.5,labelpad=12)
+    ax.set_ylabel("Principal algorithm classification",fontsize=9.5,labelpad=12)
     for ext in ("png","pdf","svg"):
         fig.savefig(out/("Figure_02."+ext),
                     dpi=330 if ext=="png" else None,facecolor="white")
