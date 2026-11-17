@@ -1,0 +1,25 @@
+Stage,Maturity,Reports
+Prescreening,Research only,7
+Prescreening,Proposed only,1
+Prescreening,Evaluated AI use,0
+Prescreening,Not ascertainable,0
+Screening,Research only,56
+Screening,Proposed only,50
+Screening,Evaluated AI use,4
+Screening,Not ascertainable,0
+Diagnosis,Research only,184
+Diagnosis,Proposed only,29
+Diagnosis,Evaluated AI use,1
+Diagnosis,Not ascertainable,0
+Prognosis,Research only,19
+Prognosis,Proposed only,3
+Prognosis,Evaluated AI use,0
+Prognosis,Not ascertainable,0
+Monitoring/intervention,Research only,12
+Monitoring/intervention,Proposed only,12
+Monitoring/intervention,Evaluated AI use,13
+Monitoring/intervention,Not ascertainable,1
+Not specified,Research only,29
+Not specified,Proposed only,0
+Not specified,Evaluated AI use,0
+Not specified,Not ascertainable,0

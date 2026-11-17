@@ -1,0 +1,13 @@
+Practice,Reporting_status,Reports
+External validation,Reported,25
+External validation,Not reported in assessed sources,389
+External validation,Not ascertainable,7
+Multisource integration,Reported,74
+Multisource integration,Not reported in assessed sources,331
+Multisource integration,Not ascertainable,16
+Explainability (broad),Reported,128
+Explainability (broad),Not reported in assessed sources,285
+Explainability (broad),Not ascertainable,8
+Cross-site / cross-dataset evaluation,Reported,17
+Cross-site / cross-dataset evaluation,Not reported in assessed sources,401
+Cross-site / cross-dataset evaluation,Not ascertainable,3

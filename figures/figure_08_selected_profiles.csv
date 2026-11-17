@@ -1,0 +1,69 @@
+Stage,Data_source,AI_category,Denominator,Practice,Reported
+Prescreening,Structured clinical/questionnaire data,Machine Learning,4,External validation,0
+Prescreening,Structured clinical/questionnaire data,Machine Learning,4,Multisource integration,0
+Prescreening,Structured clinical/questionnaire data,Machine Learning,4,Explainability (broad),4
+Prescreening,Structured clinical/questionnaire data,Machine Learning,4,Cross-site / cross-dataset evaluation,0
+Screening,Structured clinical/questionnaire data,Machine Learning,36,External validation,4
+Screening,Structured clinical/questionnaire data,Machine Learning,36,Multisource integration,3
+Screening,Structured clinical/questionnaire data,Machine Learning,36,Explainability (broad),16
+Screening,Structured clinical/questionnaire data,Machine Learning,36,Cross-site / cross-dataset evaluation,2
+Screening,Behavioral images/video/gaze/movement,Deep Learning,17,External validation,1
+Screening,Behavioral images/video/gaze/movement,Deep Learning,17,Multisource integration,0
+Screening,Behavioral images/video/gaze/movement,Deep Learning,17,Explainability (broad),3
+Screening,Behavioral images/video/gaze/movement,Deep Learning,17,Cross-site / cross-dataset evaluation,1
+Screening,Behavioral images/video/gaze/movement,Machine Learning,12,External validation,1
+Screening,Behavioral images/video/gaze/movement,Machine Learning,12,Multisource integration,3
+Screening,Behavioral images/video/gaze/movement,Machine Learning,12,Explainability (broad),2
+Screening,Behavioral images/video/gaze/movement,Machine Learning,12,Cross-site / cross-dataset evaluation,0
+Screening,Structured clinical/questionnaire data,Deep Learning,11,External validation,0
+Screening,Structured clinical/questionnaire data,Deep Learning,11,Multisource integration,0
+Screening,Structured clinical/questionnaire data,Deep Learning,11,Explainability (broad),2
+Screening,Structured clinical/questionnaire data,Deep Learning,11,Cross-site / cross-dataset evaluation,0
+Diagnosis,Neuroimaging,Deep Learning,47,External validation,3
+Diagnosis,Neuroimaging,Deep Learning,47,Multisource integration,4
+Diagnosis,Neuroimaging,Deep Learning,47,Explainability (broad),15
+Diagnosis,Neuroimaging,Deep Learning,47,Cross-site / cross-dataset evaluation,4
+Diagnosis,Neuroimaging,Machine Learning,34,External validation,2
+Diagnosis,Neuroimaging,Machine Learning,34,Multisource integration,3
+Diagnosis,Neuroimaging,Machine Learning,34,Explainability (broad),10
+Diagnosis,Neuroimaging,Machine Learning,34,Cross-site / cross-dataset evaluation,2
+Diagnosis,Biological/omics,Machine Learning,19,External validation,2
+Diagnosis,Biological/omics,Machine Learning,19,Multisource integration,2
+Diagnosis,Biological/omics,Machine Learning,19,Explainability (broad),10
+Diagnosis,Biological/omics,Machine Learning,19,Cross-site / cross-dataset evaluation,2
+Diagnosis,Physiological signals,Deep Learning,17,External validation,0
+Diagnosis,Physiological signals,Deep Learning,17,Multisource integration,0
+Diagnosis,Physiological signals,Deep Learning,17,Explainability (broad),2
+Diagnosis,Physiological signals,Deep Learning,17,Cross-site / cross-dataset evaluation,0
+Diagnosis,Structured clinical/questionnaire data,Machine Learning,17,External validation,2
+Diagnosis,Structured clinical/questionnaire data,Machine Learning,17,Multisource integration,5
+Diagnosis,Structured clinical/questionnaire data,Machine Learning,17,Explainability (broad),7
+Diagnosis,Structured clinical/questionnaire data,Machine Learning,17,Cross-site / cross-dataset evaluation,0
+Diagnosis,Physiological signals,Machine Learning,14,External validation,0
+Diagnosis,Physiological signals,Machine Learning,14,Multisource integration,0
+Diagnosis,Physiological signals,Machine Learning,14,Explainability (broad),5
+Diagnosis,Physiological signals,Machine Learning,14,Cross-site / cross-dataset evaluation,0
+Diagnosis,Behavioral images/video/gaze/movement,Deep Learning,9,External validation,0
+Diagnosis,Behavioral images/video/gaze/movement,Deep Learning,9,Multisource integration,0
+Diagnosis,Behavioral images/video/gaze/movement,Deep Learning,9,Explainability (broad),1
+Diagnosis,Behavioral images/video/gaze/movement,Deep Learning,9,Cross-site / cross-dataset evaluation,0
+Diagnosis,Multiple source categories,Machine Learning,9,External validation,1
+Diagnosis,Multiple source categories,Machine Learning,9,Multisource integration,8
+Diagnosis,Multiple source categories,Machine Learning,9,Explainability (broad),6
+Diagnosis,Multiple source categories,Machine Learning,9,Cross-site / cross-dataset evaluation,1
+Diagnosis,Behavioral images/video/gaze/movement,Machine Learning,8,External validation,0
+Diagnosis,Behavioral images/video/gaze/movement,Machine Learning,8,Multisource integration,2
+Diagnosis,Behavioral images/video/gaze/movement,Machine Learning,8,Explainability (broad),3
+Diagnosis,Behavioral images/video/gaze/movement,Machine Learning,8,Cross-site / cross-dataset evaluation,0
+Diagnosis,Multiple source categories,Deep Learning,8,External validation,3
+Diagnosis,Multiple source categories,Deep Learning,8,Multisource integration,8
+Diagnosis,Multiple source categories,Deep Learning,8,Explainability (broad),1
+Diagnosis,Multiple source categories,Deep Learning,8,Cross-site / cross-dataset evaluation,3
+Prognosis,Structured clinical/questionnaire data,Machine Learning,6,External validation,0
+Prognosis,Structured clinical/questionnaire data,Machine Learning,6,Multisource integration,3
+Prognosis,Structured clinical/questionnaire data,Machine Learning,6,Explainability (broad),2
+Prognosis,Structured clinical/questionnaire data,Machine Learning,6,Cross-site / cross-dataset evaluation,0
+Monitoring/intervention,Behavioral images/video/gaze/movement,Deep Learning,7,External validation,0
+Monitoring/intervention,Behavioral images/video/gaze/movement,Deep Learning,7,Multisource integration,0
+Monitoring/intervention,Behavioral images/video/gaze/movement,Deep Learning,7,Explainability (broad),1
+Monitoring/intervention,Behavioral images/video/gaze/movement,Deep Learning,7,Cross-site / cross-dataset evaluation,0

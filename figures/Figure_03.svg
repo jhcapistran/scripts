@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="658.326984pt" height="289.024313pt" viewBox="0 0 658.326984 289.024313" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1192.956pt" height="476.916711pt" viewBox="0 0 1192.956 476.916711" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-10-21T19:35:49.719056</dc:date>
+    <dc:date>2026-11-17T23:07:48.244925</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -21,1104 +21,1252 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M 0 289.024313 
-L 658.326984 289.024313 
-L 658.326984 0 
-L 0 0 
+   <path d="M -0 476.916711 
+L 1192.956 476.916711 
+L 1192.956 0 
+L -0 0 
 z
 " style="fill: #ffffff"/>
   </g>
   <g id="axes_1">
    <g id="patch_2">
-    <path d="M 146.696094 214.31364 
-L 604.422942 214.31364 
-L 604.422942 33.44743 
-L 146.696094 33.44743 
+    <path d="M 124.98675 410.091481 
+L 1122.70654 410.091481 
+L 1122.70654 7.2 
+L 124.98675 7.2 
 z
 " style="fill: #ffffff"/>
    </g>
-   <g clip-path="url(#p2b2741350c)">
+   <g clip-path="url(#paaf1ca0cec)">
     <image xlink:href="data:image/png;base64,
-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" id="image5a65d4db28" transform="scale(1 -1) translate(0 -181.44)" x="146.696094" y="-32.87364" width="457.92" height="181.44"/>
+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" id="image45169d8d5a" transform="scale(1 -1) translate(0 -366.48)" x="124.98675" y="-43.611481" width="997.92" height="366.48"/>
    </g>
    <g id="matplotlib.axis_1">
     <g id="xtick_1">
-     <g id="line2d_1"/>
+     <g id="line2d_1">
+      <defs>
+       <path id="me1834b7534" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#me1834b7534" x="145.772579" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_1">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(133.095374 266.547524) rotate(-65)">Machine Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(127.419375 441.340894) rotate(-65)">Machine</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(133.725915 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_2">
-     <g id="line2d_2"/>
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#me1834b7534" x="187.344237" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_2">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(156.275704 257.728759) rotate(-65)">Deep Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(173.099411 432.530449) rotate(-65)">Deep</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(175.297573 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_3">
-     <g id="line2d_3"/>
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#me1834b7534" x="228.915895" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_3">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(184.626174 237.839234) rotate(-65)">Hybrid</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(219.166095 437.117075) rotate(-65)">Hybrid</text>
      </g>
     </g>
     <g id="xtick_4">
-     <g id="line2d_4"/>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#me1834b7534" x="270.487553" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_4">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(196.241569 253.898182) rotate(-65)">Not specified</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(253.281196 453.176023) rotate(-65)">Not specified</text>
      </g>
     </g>
     <g id="xtick_5">
-     <g id="line2d_5"/>
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#me1834b7534" x="312.059211" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_5">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(209.383182 266.547524) rotate(-65)">Machine Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(293.706007 441.340894) rotate(-65)">Machine</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(300.012547 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_6">
-     <g id="line2d_6"/>
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#me1834b7534" x="353.630869" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_6">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(232.563512 257.728759) rotate(-65)">Deep Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(339.386042 432.530449) rotate(-65)">Deep</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(341.584204 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_7">
-     <g id="line2d_7"/>
+     <g id="line2d_7">
+      <g>
+       <use xlink:href="#me1834b7534" x="395.202526" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_7">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(260.913982 237.839234) rotate(-65)">Hybrid</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(385.452727 437.117075) rotate(-65)">Hybrid</text>
      </g>
     </g>
     <g id="xtick_8">
-     <g id="line2d_8"/>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#me1834b7534" x="436.774184" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_8">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(272.529377 253.898182) rotate(-65)">Not specified</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(419.567827 453.176023) rotate(-65)">Not specified</text>
      </g>
     </g>
     <g id="xtick_9">
-     <g id="line2d_9"/>
+     <g id="line2d_9">
+      <g>
+       <use xlink:href="#me1834b7534" x="478.345842" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_9">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(285.67099 266.547524) rotate(-65)">Machine Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(459.992638 441.340894) rotate(-65)">Machine</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(466.299178 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_10">
-     <g id="line2d_10"/>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#me1834b7534" x="519.9175" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_10">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(308.85132 257.728759) rotate(-65)">Deep Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(505.672674 432.530449) rotate(-65)">Deep</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(507.870836 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_11">
-     <g id="line2d_11"/>
+     <g id="line2d_11">
+      <g>
+       <use xlink:href="#me1834b7534" x="561.489158" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_11">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(337.20179 237.839234) rotate(-65)">Hybrid</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(551.739358 437.117075) rotate(-65)">Hybrid</text>
      </g>
     </g>
     <g id="xtick_12">
-     <g id="line2d_12"/>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#me1834b7534" x="603.060816" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_12">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(348.817185 253.898182) rotate(-65)">Not specified</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(585.854459 453.176023) rotate(-65)">Not specified</text>
      </g>
     </g>
     <g id="xtick_13">
-     <g id="line2d_13"/>
+     <g id="line2d_13">
+      <g>
+       <use xlink:href="#me1834b7534" x="644.632474" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_13">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(361.958798 266.547524) rotate(-65)">Machine Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(626.27927 441.340894) rotate(-65)">Machine</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(632.58581 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_14">
-     <g id="line2d_14"/>
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#me1834b7534" x="686.204132" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_14">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(385.139128 257.728759) rotate(-65)">Deep Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(671.959306 432.530449) rotate(-65)">Deep</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(674.157468 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_15">
-     <g id="line2d_15"/>
+     <g id="line2d_15">
+      <g>
+       <use xlink:href="#me1834b7534" x="727.77579" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_15">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(413.489598 237.839234) rotate(-65)">Hybrid</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(718.02599 437.117075) rotate(-65)">Hybrid</text>
      </g>
     </g>
     <g id="xtick_16">
-     <g id="line2d_16"/>
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#me1834b7534" x="769.347448" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_16">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(425.104993 253.898182) rotate(-65)">Not specified</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(752.141091 453.176023) rotate(-65)">Not specified</text>
      </g>
     </g>
     <g id="xtick_17">
-     <g id="line2d_17"/>
+     <g id="line2d_17">
+      <g>
+       <use xlink:href="#me1834b7534" x="810.919106" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_17">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(438.246606 266.547524) rotate(-65)">Machine Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(792.565902 441.340894) rotate(-65)">Machine</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(798.872442 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_18">
-     <g id="line2d_18"/>
+     <g id="line2d_18">
+      <g>
+       <use xlink:href="#me1834b7534" x="852.490764" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_18">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(461.426936 257.728759) rotate(-65)">Deep Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(838.245937 432.530449) rotate(-65)">Deep</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(840.444099 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_19">
-     <g id="line2d_19"/>
+     <g id="line2d_19">
+      <g>
+       <use xlink:href="#me1834b7534" x="894.062421" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_19">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(489.777406 237.839234) rotate(-65)">Hybrid</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(884.312622 437.117075) rotate(-65)">Hybrid</text>
      </g>
     </g>
     <g id="xtick_20">
-     <g id="line2d_20"/>
+     <g id="line2d_20">
+      <g>
+       <use xlink:href="#me1834b7534" x="935.634079" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_20">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(501.392801 253.898182) rotate(-65)">Not specified</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(918.427722 453.176023) rotate(-65)">Not specified</text>
      </g>
     </g>
     <g id="xtick_21">
-     <g id="line2d_21"/>
+     <g id="line2d_21">
+      <g>
+       <use xlink:href="#me1834b7534" x="977.205737" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_21">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(514.534414 266.547524) rotate(-65)">Machine Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(958.852533 441.340894) rotate(-65)">Machine</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(965.159073 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_22">
-     <g id="line2d_22"/>
+     <g id="line2d_22">
+      <g>
+       <use xlink:href="#me1834b7534" x="1018.777395" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_22">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(537.714744 257.728759) rotate(-65)">Deep Learning</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(1004.532569 432.530449) rotate(-65)">Deep</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(1006.730731 445.13611) rotate(-65)">Learning</text>
      </g>
     </g>
     <g id="xtick_23">
-     <g id="line2d_23"/>
+     <g id="line2d_23">
+      <g>
+       <use xlink:href="#me1834b7534" x="1060.349053" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_23">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(566.065214 237.839234) rotate(-65)">Hybrid</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(1050.599253 437.117075) rotate(-65)">Hybrid</text>
      </g>
     </g>
     <g id="xtick_24">
-     <g id="line2d_24"/>
+     <g id="line2d_24">
+      <g>
+       <use xlink:href="#me1834b7534" x="1101.920711" y="410.091481" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_24">
-      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(577.680609 253.898182) rotate(-65)">Not specified</text>
+      <text style="font-size: 7px; font-family: 'Liberation Serif'" transform="translate(1084.714354 453.176023) rotate(-65)">Not specified</text>
      </g>
     </g>
     <g id="text_25">
-     <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle" x="375.559518" y="278.226501" transform="rotate(-0 375.559518 278.226501)">AI category grouped by primary functional stage</text>
+     <text style="font-size: 8.6px; font-family: 'Liberation Serif'; text-anchor: middle" x="623.846645" y="467.860992" transform="rotate(-0 623.846645 467.860992)">AI category grouped by primary functional stage</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
     <g id="ytick_1">
-     <g id="line2d_25"/>
+     <g id="line2d_25">
+      <defs>
+       <path id="mb7f4189e5f" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mb7f4189e5f" x="124.98675" y="62.139747" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_26">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="143.196094" y="45.600662" transform="rotate(-0 143.196094 45.600662)">Neuroimaging</text>
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="117.98675" y="65.249669" transform="rotate(-0 117.98675 65.249669)">Neuroimaging</text>
      </g>
     </g>
     <g id="ytick_2">
-     <g id="line2d_26"/>
+     <g id="line2d_26">
+      <g>
+       <use xlink:href="#mb7f4189e5f" x="124.98675" y="98.766246" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_27">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="143.196094" y="63.699939" transform="rotate(-0 143.196094 63.699939)">Clinical/questionnaire</text>
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="117.98675" y="101.888824" transform="rotate(-0 117.98675 101.888824)">Clinical/questionnaire</text>
      </g>
     </g>
     <g id="ytick_3">
-     <g id="line2d_27"/>
+     <g id="line2d_27">
+      <g>
+       <use xlink:href="#mb7f4189e5f" x="124.98675" y="135.392744" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_28">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="143.196094" y="81.78656" transform="rotate(-0 143.196094 81.78656)">Behavioral/video/gaze/movement</text>
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="117.98675" y="138.515322" transform="rotate(-0 117.98675 138.515322)">Behavioral/gaze/movement</text>
      </g>
     </g>
     <g id="ytick_4">
-     <g id="line2d_28"/>
+     <g id="line2d_28">
+      <g>
+       <use xlink:href="#mb7f4189e5f" x="124.98675" y="172.019242" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_29">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="143.196094" y="99.873181" transform="rotate(-0 143.196094 99.873181)">Physiological signals</text>
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="117.98675" y="175.14182" transform="rotate(-0 117.98675 175.14182)">Physiological signals</text>
      </g>
     </g>
     <g id="ytick_5">
-     <g id="line2d_29"/>
+     <g id="line2d_29">
+      <g>
+       <use xlink:href="#mb7f4189e5f" x="124.98675" y="208.645741" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_30">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="143.196094" y="117.959802" transform="rotate(-0 143.196094 117.959802)">Multiple sources</text>
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="117.98675" y="211.768319" transform="rotate(-0 117.98675 211.768319)">Multiple sources</text>
      </g>
     </g>
     <g id="ytick_6">
-     <g id="line2d_30"/>
+     <g id="line2d_30">
+      <g>
+       <use xlink:href="#mb7f4189e5f" x="124.98675" y="245.272239" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_31">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="143.196094" y="136.046423" transform="rotate(-0 143.196094 136.046423)">Biological/omics</text>
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="117.98675" y="248.394817" transform="rotate(-0 117.98675 248.394817)">Biological/omics</text>
      </g>
     </g>
     <g id="ytick_7">
-     <g id="line2d_31"/>
+     <g id="line2d_31">
+      <g>
+       <use xlink:href="#mb7f4189e5f" x="124.98675" y="281.898737" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_32">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="143.196094" y="154.133044" transform="rotate(-0 143.196094 154.133044)">Text/language</text>
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="117.98675" y="285.021315" transform="rotate(-0 117.98675 285.021315)">Text/language</text>
      </g>
     </g>
     <g id="ytick_8">
-     <g id="line2d_32"/>
+     <g id="line2d_32">
+      <g>
+       <use xlink:href="#mb7f4189e5f" x="124.98675" y="318.525235" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_33">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="143.196094" y="172.265369" transform="rotate(-0 143.196094 172.265369)">Not specified</text>
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="117.98675" y="321.693517" transform="rotate(-0 117.98675 321.693517)">Not specified</text>
      </g>
     </g>
     <g id="ytick_9">
-     <g id="line2d_33"/>
+     <g id="line2d_33">
+      <g>
+       <use xlink:href="#mb7f4189e5f" x="124.98675" y="355.151734" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_34">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="143.196094" y="190.306287" transform="rotate(-0 143.196094 190.306287)">Audio/voice</text>
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="117.98675" y="358.274312" transform="rotate(-0 117.98675 358.274312)">Audio/voice</text>
      </g>
     </g>
     <g id="ytick_10">
-     <g id="line2d_34"/>
+     <g id="line2d_34">
+      <g>
+       <use xlink:href="#mb7f4189e5f" x="124.98675" y="391.778232" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
      <g id="text_35">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="143.196094" y="208.392908" transform="rotate(-0 143.196094 208.392908)">Other biomedical/digital</text>
+      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: end" x="117.98675" y="394.90081" transform="rotate(-0 117.98675 394.90081)">Other biomedical/digital</text>
      </g>
     </g>
     <g id="text_36">
-     <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle" x="15.579062" y="123.880535" transform="rotate(-90 15.579062 123.880535)">Primary data source</text>
+     <text style="font-size: 8.6px; font-family: 'Liberation Serif'; text-anchor: middle" x="13.167594" y="208.645741" transform="rotate(-90 13.167594 208.645741)">Primary data source</text>
     </g>
    </g>
    <g id="line2d_35">
-    <path d="M 222.983902 214.31364 
-L 222.983902 33.44743 
-" clip-path="url(#p2b2741350c)" style="fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: square"/>
+    <path d="M 291.273382 410.091481 
+L 291.273382 7.2 
+" clip-path="url(#paaf1ca0cec)" style="fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: square"/>
    </g>
    <g id="line2d_36">
-    <path d="M 299.27171 214.31364 
-L 299.27171 33.44743 
-" clip-path="url(#p2b2741350c)" style="fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: square"/>
+    <path d="M 457.560013 410.091481 
+L 457.560013 7.2 
+" clip-path="url(#paaf1ca0cec)" style="fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: square"/>
    </g>
    <g id="line2d_37">
-    <path d="M 375.559518 214.31364 
-L 375.559518 33.44743 
-" clip-path="url(#p2b2741350c)" style="fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: square"/>
+    <path d="M 623.846645 410.091481 
+L 623.846645 7.2 
+" clip-path="url(#paaf1ca0cec)" style="fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: square"/>
    </g>
    <g id="line2d_38">
-    <path d="M 451.847326 214.31364 
-L 451.847326 33.44743 
-" clip-path="url(#p2b2741350c)" style="fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: square"/>
+    <path d="M 790.133277 410.091481 
+L 790.133277 7.2 
+" clip-path="url(#paaf1ca0cec)" style="fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: square"/>
    </g>
    <g id="line2d_39">
-    <path d="M 528.135134 214.31364 
-L 528.135134 33.44743 
-" clip-path="url(#p2b2741350c)" style="fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: square"/>
-   </g>
-   <g id="patch_3">
-    <path d="M 146.696094 214.31364 
-L 146.696094 33.44743 
-" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
-   </g>
-   <g id="patch_4">
-    <path d="M 146.696094 214.31364 
-L 604.422942 214.31364 
-" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+    <path d="M 956.419908 410.091481 
+L 956.419908 7.2 
+" clip-path="url(#paaf1ca0cec)" style="fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: square"/>
    </g>
    <g id="text_37">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="156.23207" y="44.174021" transform="rotate(-0 156.23207 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="145.772579" y="63.774935" transform="rotate(-0 145.772579 63.774935)">0</text>
    </g>
    <g id="text_38">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="175.304022" y="44.174021" transform="rotate(-0 175.304022 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="187.344237" y="63.774935" transform="rotate(-0 187.344237 63.774935)">0</text>
    </g>
    <g id="text_39">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="194.375974" y="44.174021" transform="rotate(-0 194.375974 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="228.915895" y="63.774935" transform="rotate(-0 228.915895 63.774935)">0</text>
    </g>
    <g id="text_40">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="213.447926" y="44.174021" transform="rotate(-0 213.447926 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="270.487553" y="63.774935" transform="rotate(-0 270.487553 63.774935)">0</text>
    </g>
    <g id="text_41">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="232.519878" y="44.174021" transform="rotate(-0 232.519878 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="312.059211" y="63.774935" transform="rotate(-0 312.059211 63.774935)">0</text>
    </g>
    <g id="text_42">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="251.59183" y="44.174021" transform="rotate(-0 251.59183 44.174021)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="353.630869" y="63.774935" transform="rotate(-0 353.630869 63.774935)">1</text>
    </g>
    <g id="text_43">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="270.663782" y="44.174021" transform="rotate(-0 270.663782 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="395.202526" y="63.774935" transform="rotate(-0 395.202526 63.774935)">0</text>
    </g>
    <g id="text_44">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="289.735734" y="44.174021" transform="rotate(-0 289.735734 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="436.774184" y="63.774935" transform="rotate(-0 436.774184 63.774935)">0</text>
    </g>
    <g id="text_45">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #ffffff" x="308.807686" y="44.174021" transform="rotate(-0 308.807686 44.174021)">34</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #ffffff" x="478.345842" y="63.774935" transform="rotate(-0 478.345842 63.774935)">34</text>
    </g>
    <g id="text_46">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #ffffff" x="327.879638" y="44.174021" transform="rotate(-0 327.879638 44.174021)">47</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #ffffff" x="519.9175" y="63.774935" transform="rotate(-0 519.9175 63.774935)">47</text>
    </g>
    <g id="text_47">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="346.95159" y="44.174021" transform="rotate(-0 346.95159 44.174021)">7</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="561.489158" y="63.774935" transform="rotate(-0 561.489158 63.774935)">7</text>
    </g>
    <g id="text_48">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="366.023542" y="44.174021" transform="rotate(-0 366.023542 44.174021)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="603.060816" y="63.774935" transform="rotate(-0 603.060816 63.774935)">2</text>
    </g>
    <g id="text_49">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="385.095494" y="44.174021" transform="rotate(-0 385.095494 44.174021)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="644.632474" y="63.774935" transform="rotate(-0 644.632474 63.774935)">2</text>
    </g>
    <g id="text_50">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="404.167446" y="44.174021" transform="rotate(-0 404.167446 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="686.204132" y="63.774935" transform="rotate(-0 686.204132 63.774935)">0</text>
    </g>
    <g id="text_51">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="423.239398" y="44.174021" transform="rotate(-0 423.239398 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="727.77579" y="63.774935" transform="rotate(-0 727.77579 63.774935)">0</text>
    </g>
    <g id="text_52">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="442.31135" y="44.174021" transform="rotate(-0 442.31135 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="769.347448" y="63.774935" transform="rotate(-0 769.347448 63.774935)">0</text>
    </g>
    <g id="text_53">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="461.383302" y="44.174021" transform="rotate(-0 461.383302 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="810.919106" y="63.774935" transform="rotate(-0 810.919106 63.774935)">0</text>
    </g>
    <g id="text_54">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="480.455254" y="44.174021" transform="rotate(-0 480.455254 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="852.490764" y="63.774935" transform="rotate(-0 852.490764 63.774935)">0</text>
    </g>
    <g id="text_55">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="499.527206" y="44.174021" transform="rotate(-0 499.527206 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="894.062421" y="63.774935" transform="rotate(-0 894.062421 63.774935)">0</text>
    </g>
    <g id="text_56">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="518.599158" y="44.174021" transform="rotate(-0 518.599158 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="935.634079" y="63.774935" transform="rotate(-0 935.634079 63.774935)">0</text>
    </g>
    <g id="text_57">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="537.67111" y="44.174021" transform="rotate(-0 537.67111 44.174021)">5</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="977.205737" y="63.774935" transform="rotate(-0 977.205737 63.774935)">5</text>
    </g>
    <g id="text_58">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="556.743062" y="44.174021" transform="rotate(-0 556.743062 44.174021)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1018.777395" y="63.774935" transform="rotate(-0 1018.777395 63.774935)">2</text>
    </g>
    <g id="text_59">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="575.815014" y="44.174021" transform="rotate(-0 575.815014 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1060.349053" y="63.774935" transform="rotate(-0 1060.349053 63.774935)">0</text>
    </g>
    <g id="text_60">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="594.886966" y="44.174021" transform="rotate(-0 594.886966 44.174021)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1101.920711" y="63.774935" transform="rotate(-0 1101.920711 63.774935)">0</text>
    </g>
    <g id="text_61">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="156.23207" y="62.260642" transform="rotate(-0 156.23207 62.260642)">4</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="145.772579" y="100.401433" transform="rotate(-0 145.772579 100.401433)">4</text>
    </g>
    <g id="text_62">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="175.304022" y="62.260642" transform="rotate(-0 175.304022 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="187.344237" y="100.401433" transform="rotate(-0 187.344237 100.401433)">0</text>
    </g>
    <g id="text_63">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="194.375974" y="62.260642" transform="rotate(-0 194.375974 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="228.915895" y="100.401433" transform="rotate(-0 228.915895 100.401433)">0</text>
    </g>
    <g id="text_64">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="213.447926" y="62.260642" transform="rotate(-0 213.447926 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="270.487553" y="100.401433" transform="rotate(-0 270.487553 100.401433)">0</text>
    </g>
    <g id="text_65">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #ffffff" x="232.519878" y="62.260642" transform="rotate(-0 232.519878 62.260642)">36</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #ffffff" x="312.059211" y="100.401433" transform="rotate(-0 312.059211 100.401433)">36</text>
    </g>
    <g id="text_66">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="251.59183" y="62.260642" transform="rotate(-0 251.59183 62.260642)">11</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="353.630869" y="100.401433" transform="rotate(-0 353.630869 100.401433)">11</text>
    </g>
    <g id="text_67">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="270.663782" y="62.260642" transform="rotate(-0 270.663782 62.260642)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="395.202526" y="100.401433" transform="rotate(-0 395.202526 100.401433)">1</text>
    </g>
    <g id="text_68">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="289.735734" y="62.260642" transform="rotate(-0 289.735734 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="436.774184" y="100.401433" transform="rotate(-0 436.774184 100.401433)">0</text>
    </g>
    <g id="text_69">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="308.807686" y="62.260642" transform="rotate(-0 308.807686 62.260642)">17</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="478.345842" y="100.401433" transform="rotate(-0 478.345842 100.401433)">17</text>
    </g>
    <g id="text_70">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="327.879638" y="62.260642" transform="rotate(-0 327.879638 62.260642)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="519.9175" y="100.401433" transform="rotate(-0 519.9175 100.401433)">1</text>
    </g>
    <g id="text_71">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="346.95159" y="62.260642" transform="rotate(-0 346.95159 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="561.489158" y="100.401433" transform="rotate(-0 561.489158 100.401433)">0</text>
    </g>
    <g id="text_72">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="366.023542" y="62.260642" transform="rotate(-0 366.023542 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="603.060816" y="100.401433" transform="rotate(-0 603.060816 100.401433)">0</text>
    </g>
    <g id="text_73">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="385.095494" y="62.260642" transform="rotate(-0 385.095494 62.260642)">6</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="644.632474" y="100.401433" transform="rotate(-0 644.632474 100.401433)">6</text>
    </g>
    <g id="text_74">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="404.167446" y="62.260642" transform="rotate(-0 404.167446 62.260642)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="686.204132" y="100.401433" transform="rotate(-0 686.204132 100.401433)">2</text>
    </g>
    <g id="text_75">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="423.239398" y="62.260642" transform="rotate(-0 423.239398 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="727.77579" y="100.401433" transform="rotate(-0 727.77579 100.401433)">0</text>
    </g>
    <g id="text_76">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="442.31135" y="62.260642" transform="rotate(-0 442.31135 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="769.347448" y="100.401433" transform="rotate(-0 769.347448 100.401433)">0</text>
    </g>
    <g id="text_77">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="461.383302" y="62.260642" transform="rotate(-0 461.383302 62.260642)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="810.919106" y="100.401433" transform="rotate(-0 810.919106 100.401433)">2</text>
    </g>
    <g id="text_78">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="480.455254" y="62.260642" transform="rotate(-0 480.455254 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="852.490764" y="100.401433" transform="rotate(-0 852.490764 100.401433)">0</text>
    </g>
    <g id="text_79">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="499.527206" y="62.260642" transform="rotate(-0 499.527206 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="894.062421" y="100.401433" transform="rotate(-0 894.062421 100.401433)">0</text>
    </g>
    <g id="text_80">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="518.599158" y="62.260642" transform="rotate(-0 518.599158 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="935.634079" y="100.401433" transform="rotate(-0 935.634079 100.401433)">0</text>
    </g>
    <g id="text_81">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="537.67111" y="62.260642" transform="rotate(-0 537.67111 62.260642)">6</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="977.205737" y="100.401433" transform="rotate(-0 977.205737 100.401433)">6</text>
    </g>
    <g id="text_82">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="556.743062" y="62.260642" transform="rotate(-0 556.743062 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1018.777395" y="100.401433" transform="rotate(-0 1018.777395 100.401433)">0</text>
    </g>
    <g id="text_83">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="575.815014" y="62.260642" transform="rotate(-0 575.815014 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1060.349053" y="100.401433" transform="rotate(-0 1060.349053 100.401433)">0</text>
    </g>
    <g id="text_84">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="594.886966" y="62.260642" transform="rotate(-0 594.886966 62.260642)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1101.920711" y="100.401433" transform="rotate(-0 1101.920711 100.401433)">0</text>
    </g>
    <g id="text_85">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="156.23207" y="80.347263" transform="rotate(-0 156.23207 80.347263)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="145.772579" y="137.027931" transform="rotate(-0 145.772579 137.027931)">0</text>
    </g>
    <g id="text_86">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="175.304022" y="80.347263" transform="rotate(-0 175.304022 80.347263)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="187.344237" y="137.027931" transform="rotate(-0 187.344237 137.027931)">0</text>
    </g>
    <g id="text_87">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="194.375974" y="80.347263" transform="rotate(-0 194.375974 80.347263)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="228.915895" y="137.027931" transform="rotate(-0 228.915895 137.027931)">0</text>
    </g>
    <g id="text_88">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="213.447926" y="80.347263" transform="rotate(-0 213.447926 80.347263)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="270.487553" y="137.027931" transform="rotate(-0 270.487553 137.027931)">0</text>
    </g>
    <g id="text_89">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="232.519878" y="80.347263" transform="rotate(-0 232.519878 80.347263)">12</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="312.059211" y="137.027931" transform="rotate(-0 312.059211 137.027931)">12</text>
    </g>
    <g id="text_90">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="251.59183" y="80.347263" transform="rotate(-0 251.59183 80.347263)">17</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="353.630869" y="137.027931" transform="rotate(-0 353.630869 137.027931)">17</text>
    </g>
    <g id="text_91">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="270.663782" y="80.347263" transform="rotate(-0 270.663782 80.347263)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="395.202526" y="137.027931" transform="rotate(-0 395.202526 137.027931)">1</text>
    </g>
    <g id="text_92">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="289.735734" y="80.347263" transform="rotate(-0 289.735734 80.347263)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="436.774184" y="137.027931" transform="rotate(-0 436.774184 137.027931)">2</text>
    </g>
    <g id="text_93">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="308.807686" y="80.347263" transform="rotate(-0 308.807686 80.347263)">8</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="478.345842" y="137.027931" transform="rotate(-0 478.345842 137.027931)">8</text>
    </g>
    <g id="text_94">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="327.879638" y="80.347263" transform="rotate(-0 327.879638 80.347263)">9</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="519.9175" y="137.027931" transform="rotate(-0 519.9175 137.027931)">9</text>
    </g>
    <g id="text_95">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="346.95159" y="80.347263" transform="rotate(-0 346.95159 80.347263)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="561.489158" y="137.027931" transform="rotate(-0 561.489158 137.027931)">2</text>
    </g>
    <g id="text_96">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="366.023542" y="80.347263" transform="rotate(-0 366.023542 80.347263)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="603.060816" y="137.027931" transform="rotate(-0 603.060816 137.027931)">1</text>
    </g>
    <g id="text_97">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="385.095494" y="80.347263" transform="rotate(-0 385.095494 80.347263)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="644.632474" y="137.027931" transform="rotate(-0 644.632474 137.027931)">1</text>
    </g>
    <g id="text_98">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="404.167446" y="80.347263" transform="rotate(-0 404.167446 80.347263)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="686.204132" y="137.027931" transform="rotate(-0 686.204132 137.027931)">0</text>
    </g>
    <g id="text_99">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="423.239398" y="80.347263" transform="rotate(-0 423.239398 80.347263)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="727.77579" y="137.027931" transform="rotate(-0 727.77579 137.027931)">0</text>
    </g>
    <g id="text_100">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="442.31135" y="80.347263" transform="rotate(-0 442.31135 80.347263)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="769.347448" y="137.027931" transform="rotate(-0 769.347448 137.027931)">0</text>
    </g>
    <g id="text_101">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="461.383302" y="80.347263" transform="rotate(-0 461.383302 80.347263)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="810.919106" y="137.027931" transform="rotate(-0 810.919106 137.027931)">1</text>
    </g>
    <g id="text_102">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="480.455254" y="80.347263" transform="rotate(-0 480.455254 80.347263)">7</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="852.490764" y="137.027931" transform="rotate(-0 852.490764 137.027931)">7</text>
    </g>
    <g id="text_103">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="499.527206" y="80.347263" transform="rotate(-0 499.527206 80.347263)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="894.062421" y="137.027931" transform="rotate(-0 894.062421 137.027931)">2</text>
    </g>
    <g id="text_104">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="518.599158" y="80.347263" transform="rotate(-0 518.599158 80.347263)">3</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="935.634079" y="137.027931" transform="rotate(-0 935.634079 137.027931)">3</text>
    </g>
    <g id="text_105">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="537.67111" y="80.347263" transform="rotate(-0 537.67111 80.347263)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="977.205737" y="137.027931" transform="rotate(-0 977.205737 137.027931)">0</text>
    </g>
    <g id="text_106">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="556.743062" y="80.347263" transform="rotate(-0 556.743062 80.347263)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1018.777395" y="137.027931" transform="rotate(-0 1018.777395 137.027931)">0</text>
    </g>
    <g id="text_107">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="575.815014" y="80.347263" transform="rotate(-0 575.815014 80.347263)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1060.349053" y="137.027931" transform="rotate(-0 1060.349053 137.027931)">0</text>
    </g>
    <g id="text_108">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="594.886966" y="80.347263" transform="rotate(-0 594.886966 80.347263)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1101.920711" y="137.027931" transform="rotate(-0 1101.920711 137.027931)">0</text>
    </g>
    <g id="text_109">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="156.23207" y="98.433885" transform="rotate(-0 156.23207 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="145.772579" y="173.65443" transform="rotate(-0 145.772579 173.65443)">0</text>
    </g>
    <g id="text_110">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="175.304022" y="98.433885" transform="rotate(-0 175.304022 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="187.344237" y="173.65443" transform="rotate(-0 187.344237 173.65443)">0</text>
    </g>
    <g id="text_111">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="194.375974" y="98.433885" transform="rotate(-0 194.375974 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="228.915895" y="173.65443" transform="rotate(-0 228.915895 173.65443)">0</text>
    </g>
    <g id="text_112">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="213.447926" y="98.433885" transform="rotate(-0 213.447926 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="270.487553" y="173.65443" transform="rotate(-0 270.487553 173.65443)">0</text>
    </g>
    <g id="text_113">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="232.519878" y="98.433885" transform="rotate(-0 232.519878 98.433885)">3</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="312.059211" y="173.65443" transform="rotate(-0 312.059211 173.65443)">3</text>
    </g>
    <g id="text_114">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="251.59183" y="98.433885" transform="rotate(-0 251.59183 98.433885)">3</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="353.630869" y="173.65443" transform="rotate(-0 353.630869 173.65443)">3</text>
    </g>
    <g id="text_115">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="270.663782" y="98.433885" transform="rotate(-0 270.663782 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="395.202526" y="173.65443" transform="rotate(-0 395.202526 173.65443)">0</text>
    </g>
    <g id="text_116">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="289.735734" y="98.433885" transform="rotate(-0 289.735734 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="436.774184" y="173.65443" transform="rotate(-0 436.774184 173.65443)">0</text>
    </g>
    <g id="text_117">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="308.807686" y="98.433885" transform="rotate(-0 308.807686 98.433885)">14</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="478.345842" y="173.65443" transform="rotate(-0 478.345842 173.65443)">14</text>
    </g>
    <g id="text_118">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="327.879638" y="98.433885" transform="rotate(-0 327.879638 98.433885)">17</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="519.9175" y="173.65443" transform="rotate(-0 519.9175 173.65443)">17</text>
    </g>
    <g id="text_119">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="346.95159" y="98.433885" transform="rotate(-0 346.95159 98.433885)">3</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="561.489158" y="173.65443" transform="rotate(-0 561.489158 173.65443)">3</text>
    </g>
    <g id="text_120">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="366.023542" y="98.433885" transform="rotate(-0 366.023542 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="603.060816" y="173.65443" transform="rotate(-0 603.060816 173.65443)">0</text>
    </g>
    <g id="text_121">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="385.095494" y="98.433885" transform="rotate(-0 385.095494 98.433885)">3</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="644.632474" y="173.65443" transform="rotate(-0 644.632474 173.65443)">3</text>
    </g>
    <g id="text_122">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="404.167446" y="98.433885" transform="rotate(-0 404.167446 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="686.204132" y="173.65443" transform="rotate(-0 686.204132 173.65443)">0</text>
    </g>
    <g id="text_123">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="423.239398" y="98.433885" transform="rotate(-0 423.239398 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="727.77579" y="173.65443" transform="rotate(-0 727.77579 173.65443)">0</text>
    </g>
    <g id="text_124">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="442.31135" y="98.433885" transform="rotate(-0 442.31135 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="769.347448" y="173.65443" transform="rotate(-0 769.347448 173.65443)">0</text>
    </g>
    <g id="text_125">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="461.383302" y="98.433885" transform="rotate(-0 461.383302 98.433885)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="810.919106" y="173.65443" transform="rotate(-0 810.919106 173.65443)">1</text>
    </g>
    <g id="text_126">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="480.455254" y="98.433885" transform="rotate(-0 480.455254 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="852.490764" y="173.65443" transform="rotate(-0 852.490764 173.65443)">0</text>
    </g>
    <g id="text_127">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="499.527206" y="98.433885" transform="rotate(-0 499.527206 98.433885)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="894.062421" y="173.65443" transform="rotate(-0 894.062421 173.65443)">1</text>
    </g>
    <g id="text_128">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="518.599158" y="98.433885" transform="rotate(-0 518.599158 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="935.634079" y="173.65443" transform="rotate(-0 935.634079 173.65443)">0</text>
    </g>
    <g id="text_129">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="537.67111" y="98.433885" transform="rotate(-0 537.67111 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="977.205737" y="173.65443" transform="rotate(-0 977.205737 173.65443)">0</text>
    </g>
    <g id="text_130">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="556.743062" y="98.433885" transform="rotate(-0 556.743062 98.433885)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1018.777395" y="173.65443" transform="rotate(-0 1018.777395 173.65443)">1</text>
    </g>
    <g id="text_131">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="575.815014" y="98.433885" transform="rotate(-0 575.815014 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1060.349053" y="173.65443" transform="rotate(-0 1060.349053 173.65443)">0</text>
    </g>
    <g id="text_132">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="594.886966" y="98.433885" transform="rotate(-0 594.886966 98.433885)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1101.920711" y="173.65443" transform="rotate(-0 1101.920711 173.65443)">0</text>
    </g>
    <g id="text_133">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="156.23207" y="116.520506" transform="rotate(-0 156.23207 116.520506)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="145.772579" y="210.280928" transform="rotate(-0 145.772579 210.280928)">2</text>
    </g>
    <g id="text_134">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="175.304022" y="116.520506" transform="rotate(-0 175.304022 116.520506)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="187.344237" y="210.280928" transform="rotate(-0 187.344237 210.280928)">0</text>
    </g>
    <g id="text_135">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="194.375974" y="116.520506" transform="rotate(-0 194.375974 116.520506)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="228.915895" y="210.280928" transform="rotate(-0 228.915895 210.280928)">0</text>
    </g>
    <g id="text_136">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="213.447926" y="116.520506" transform="rotate(-0 213.447926 116.520506)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="270.487553" y="210.280928" transform="rotate(-0 270.487553 210.280928)">0</text>
    </g>
    <g id="text_137">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="232.519878" y="116.520506" transform="rotate(-0 232.519878 116.520506)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="312.059211" y="210.280928" transform="rotate(-0 312.059211 210.280928)">1</text>
    </g>
    <g id="text_138">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="251.59183" y="116.520506" transform="rotate(-0 251.59183 116.520506)">3</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="353.630869" y="210.280928" transform="rotate(-0 353.630869 210.280928)">3</text>
    </g>
    <g id="text_139">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="270.663782" y="116.520506" transform="rotate(-0 270.663782 116.520506)">3</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="395.202526" y="210.280928" transform="rotate(-0 395.202526 210.280928)">3</text>
    </g>
    <g id="text_140">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="289.735734" y="116.520506" transform="rotate(-0 289.735734 116.520506)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="436.774184" y="210.280928" transform="rotate(-0 436.774184 210.280928)">0</text>
    </g>
    <g id="text_141">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="308.807686" y="116.520506" transform="rotate(-0 308.807686 116.520506)">9</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="478.345842" y="210.280928" transform="rotate(-0 478.345842 210.280928)">9</text>
    </g>
    <g id="text_142">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="327.879638" y="116.520506" transform="rotate(-0 327.879638 116.520506)">8</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="519.9175" y="210.280928" transform="rotate(-0 519.9175 210.280928)">8</text>
    </g>
    <g id="text_143">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="346.95159" y="116.520506" transform="rotate(-0 346.95159 116.520506)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="561.489158" y="210.280928" transform="rotate(-0 561.489158 210.280928)">2</text>
    </g>
    <g id="text_144">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="366.023542" y="116.520506" transform="rotate(-0 366.023542 116.520506)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="603.060816" y="210.280928" transform="rotate(-0 603.060816 210.280928)">1</text>
    </g>
    <g id="text_145">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="385.095494" y="116.520506" transform="rotate(-0 385.095494 116.520506)">4</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="644.632474" y="210.280928" transform="rotate(-0 644.632474 210.280928)">4</text>
    </g>
    <g id="text_146">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="404.167446" y="116.520506" transform="rotate(-0 404.167446 116.520506)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="686.204132" y="210.280928" transform="rotate(-0 686.204132 210.280928)">0</text>
    </g>
    <g id="text_147">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="423.239398" y="116.520506" transform="rotate(-0 423.239398 116.520506)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="727.77579" y="210.280928" transform="rotate(-0 727.77579 210.280928)">0</text>
    </g>
    <g id="text_148">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="442.31135" y="116.520506" transform="rotate(-0 442.31135 116.520506)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="769.347448" y="210.280928" transform="rotate(-0 769.347448 210.280928)">0</text>
    </g>
    <g id="text_149">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="461.383302" y="116.520506" transform="rotate(-0 461.383302 116.520506)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="810.919106" y="210.280928" transform="rotate(-0 810.919106 210.280928)">0</text>
    </g>
    <g id="text_150">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="480.455254" y="116.520506" transform="rotate(-0 480.455254 116.520506)">5</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="852.490764" y="210.280928" transform="rotate(-0 852.490764 210.280928)">5</text>
    </g>
    <g id="text_151">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="499.527206" y="116.520506" transform="rotate(-0 499.527206 116.520506)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="894.062421" y="210.280928" transform="rotate(-0 894.062421 210.280928)">1</text>
    </g>
    <g id="text_152">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="518.599158" y="116.520506" transform="rotate(-0 518.599158 116.520506)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="935.634079" y="210.280928" transform="rotate(-0 935.634079 210.280928)">1</text>
    </g>
    <g id="text_153">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="537.67111" y="116.520506" transform="rotate(-0 537.67111 116.520506)">3</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="977.205737" y="210.280928" transform="rotate(-0 977.205737 210.280928)">3</text>
    </g>
    <g id="text_154">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="556.743062" y="116.520506" transform="rotate(-0 556.743062 116.520506)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1018.777395" y="210.280928" transform="rotate(-0 1018.777395 210.280928)">0</text>
    </g>
    <g id="text_155">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="575.815014" y="116.520506" transform="rotate(-0 575.815014 116.520506)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1060.349053" y="210.280928" transform="rotate(-0 1060.349053 210.280928)">0</text>
    </g>
    <g id="text_156">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="594.886966" y="116.520506" transform="rotate(-0 594.886966 116.520506)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1101.920711" y="210.280928" transform="rotate(-0 1101.920711 210.280928)">0</text>
    </g>
    <g id="text_157">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="156.23207" y="134.607127" transform="rotate(-0 156.23207 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="145.772579" y="246.907426" transform="rotate(-0 145.772579 246.907426)">0</text>
    </g>
    <g id="text_158">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="175.304022" y="134.607127" transform="rotate(-0 175.304022 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="187.344237" y="246.907426" transform="rotate(-0 187.344237 246.907426)">0</text>
    </g>
    <g id="text_159">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="194.375974" y="134.607127" transform="rotate(-0 194.375974 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="228.915895" y="246.907426" transform="rotate(-0 228.915895 246.907426)">0</text>
    </g>
    <g id="text_160">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="213.447926" y="134.607127" transform="rotate(-0 213.447926 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="270.487553" y="246.907426" transform="rotate(-0 270.487553 246.907426)">0</text>
    </g>
    <g id="text_161">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="232.519878" y="134.607127" transform="rotate(-0 232.519878 134.607127)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="312.059211" y="246.907426" transform="rotate(-0 312.059211 246.907426)">2</text>
    </g>
    <g id="text_162">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="251.59183" y="134.607127" transform="rotate(-0 251.59183 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="353.630869" y="246.907426" transform="rotate(-0 353.630869 246.907426)">0</text>
    </g>
    <g id="text_163">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="270.663782" y="134.607127" transform="rotate(-0 270.663782 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="395.202526" y="246.907426" transform="rotate(-0 395.202526 246.907426)">0</text>
    </g>
    <g id="text_164">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="289.735734" y="134.607127" transform="rotate(-0 289.735734 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="436.774184" y="246.907426" transform="rotate(-0 436.774184 246.907426)">0</text>
    </g>
    <g id="text_165">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="308.807686" y="134.607127" transform="rotate(-0 308.807686 134.607127)">19</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #ffffff" x="478.345842" y="246.907426" transform="rotate(-0 478.345842 246.907426)">19</text>
    </g>
    <g id="text_166">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="327.879638" y="134.607127" transform="rotate(-0 327.879638 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="519.9175" y="246.907426" transform="rotate(-0 519.9175 246.907426)">0</text>
    </g>
    <g id="text_167">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="346.95159" y="134.607127" transform="rotate(-0 346.95159 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="561.489158" y="246.907426" transform="rotate(-0 561.489158 246.907426)">0</text>
    </g>
    <g id="text_168">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="366.023542" y="134.607127" transform="rotate(-0 366.023542 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="603.060816" y="246.907426" transform="rotate(-0 603.060816 246.907426)">0</text>
    </g>
    <g id="text_169">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="385.095494" y="134.607127" transform="rotate(-0 385.095494 134.607127)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="644.632474" y="246.907426" transform="rotate(-0 644.632474 246.907426)">2</text>
    </g>
    <g id="text_170">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="404.167446" y="134.607127" transform="rotate(-0 404.167446 134.607127)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="686.204132" y="246.907426" transform="rotate(-0 686.204132 246.907426)">1</text>
    </g>
    <g id="text_171">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="423.239398" y="134.607127" transform="rotate(-0 423.239398 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="727.77579" y="246.907426" transform="rotate(-0 727.77579 246.907426)">0</text>
    </g>
    <g id="text_172">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="442.31135" y="134.607127" transform="rotate(-0 442.31135 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="769.347448" y="246.907426" transform="rotate(-0 769.347448 246.907426)">0</text>
    </g>
    <g id="text_173">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="461.383302" y="134.607127" transform="rotate(-0 461.383302 134.607127)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="810.919106" y="246.907426" transform="rotate(-0 810.919106 246.907426)">1</text>
    </g>
    <g id="text_174">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="480.455254" y="134.607127" transform="rotate(-0 480.455254 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="852.490764" y="246.907426" transform="rotate(-0 852.490764 246.907426)">0</text>
    </g>
    <g id="text_175">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="499.527206" y="134.607127" transform="rotate(-0 499.527206 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="894.062421" y="246.907426" transform="rotate(-0 894.062421 246.907426)">0</text>
    </g>
    <g id="text_176">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="518.599158" y="134.607127" transform="rotate(-0 518.599158 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="935.634079" y="246.907426" transform="rotate(-0 935.634079 246.907426)">0</text>
    </g>
    <g id="text_177">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="537.67111" y="134.607127" transform="rotate(-0 537.67111 134.607127)">7</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="977.205737" y="246.907426" transform="rotate(-0 977.205737 246.907426)">7</text>
    </g>
    <g id="text_178">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="556.743062" y="134.607127" transform="rotate(-0 556.743062 134.607127)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1018.777395" y="246.907426" transform="rotate(-0 1018.777395 246.907426)">2</text>
    </g>
    <g id="text_179">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="575.815014" y="134.607127" transform="rotate(-0 575.815014 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1060.349053" y="246.907426" transform="rotate(-0 1060.349053 246.907426)">0</text>
    </g>
    <g id="text_180">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="594.886966" y="134.607127" transform="rotate(-0 594.886966 134.607127)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1101.920711" y="246.907426" transform="rotate(-0 1101.920711 246.907426)">0</text>
    </g>
    <g id="text_181">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="156.23207" y="152.693748" transform="rotate(-0 156.23207 152.693748)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="145.772579" y="283.533925" transform="rotate(-0 145.772579 283.533925)">1</text>
    </g>
    <g id="text_182">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="175.304022" y="152.693748" transform="rotate(-0 175.304022 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="187.344237" y="283.533925" transform="rotate(-0 187.344237 283.533925)">0</text>
    </g>
    <g id="text_183">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="194.375974" y="152.693748" transform="rotate(-0 194.375974 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="228.915895" y="283.533925" transform="rotate(-0 228.915895 283.533925)">0</text>
    </g>
    <g id="text_184">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="213.447926" y="152.693748" transform="rotate(-0 213.447926 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="270.487553" y="283.533925" transform="rotate(-0 270.487553 283.533925)">0</text>
    </g>
    <g id="text_185">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="232.519878" y="152.693748" transform="rotate(-0 232.519878 152.693748)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="312.059211" y="283.533925" transform="rotate(-0 312.059211 283.533925)">1</text>
    </g>
    <g id="text_186">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="251.59183" y="152.693748" transform="rotate(-0 251.59183 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="353.630869" y="283.533925" transform="rotate(-0 353.630869 283.533925)">0</text>
    </g>
    <g id="text_187">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="270.663782" y="152.693748" transform="rotate(-0 270.663782 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="395.202526" y="283.533925" transform="rotate(-0 395.202526 283.533925)">0</text>
    </g>
    <g id="text_188">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="289.735734" y="152.693748" transform="rotate(-0 289.735734 152.693748)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="436.774184" y="283.533925" transform="rotate(-0 436.774184 283.533925)">1</text>
    </g>
    <g id="text_189">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="308.807686" y="152.693748" transform="rotate(-0 308.807686 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="478.345842" y="283.533925" transform="rotate(-0 478.345842 283.533925)">0</text>
    </g>
    <g id="text_190">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="327.879638" y="152.693748" transform="rotate(-0 327.879638 152.693748)">5</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="519.9175" y="283.533925" transform="rotate(-0 519.9175 283.533925)">5</text>
    </g>
    <g id="text_191">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="346.95159" y="152.693748" transform="rotate(-0 346.95159 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="561.489158" y="283.533925" transform="rotate(-0 561.489158 283.533925)">0</text>
    </g>
    <g id="text_192">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="366.023542" y="152.693748" transform="rotate(-0 366.023542 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="603.060816" y="283.533925" transform="rotate(-0 603.060816 283.533925)">0</text>
    </g>
    <g id="text_193">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="385.095494" y="152.693748" transform="rotate(-0 385.095494 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="644.632474" y="283.533925" transform="rotate(-0 644.632474 283.533925)">0</text>
    </g>
    <g id="text_194">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="404.167446" y="152.693748" transform="rotate(-0 404.167446 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="686.204132" y="283.533925" transform="rotate(-0 686.204132 283.533925)">0</text>
    </g>
    <g id="text_195">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="423.239398" y="152.693748" transform="rotate(-0 423.239398 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="727.77579" y="283.533925" transform="rotate(-0 727.77579 283.533925)">0</text>
    </g>
    <g id="text_196">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="442.31135" y="152.693748" transform="rotate(-0 442.31135 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="769.347448" y="283.533925" transform="rotate(-0 769.347448 283.533925)">0</text>
    </g>
    <g id="text_197">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="461.383302" y="152.693748" transform="rotate(-0 461.383302 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="810.919106" y="283.533925" transform="rotate(-0 810.919106 283.533925)">0</text>
    </g>
    <g id="text_198">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="480.455254" y="152.693748" transform="rotate(-0 480.455254 152.693748)">3</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="852.490764" y="283.533925" transform="rotate(-0 852.490764 283.533925)">3</text>
    </g>
    <g id="text_199">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="499.527206" y="152.693748" transform="rotate(-0 499.527206 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="894.062421" y="283.533925" transform="rotate(-0 894.062421 283.533925)">0</text>
    </g>
    <g id="text_200">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="518.599158" y="152.693748" transform="rotate(-0 518.599158 152.693748)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="935.634079" y="283.533925" transform="rotate(-0 935.634079 283.533925)">2</text>
    </g>
    <g id="text_201">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="537.67111" y="152.693748" transform="rotate(-0 537.67111 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="977.205737" y="283.533925" transform="rotate(-0 977.205737 283.533925)">0</text>
    </g>
    <g id="text_202">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="556.743062" y="152.693748" transform="rotate(-0 556.743062 152.693748)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1018.777395" y="283.533925" transform="rotate(-0 1018.777395 283.533925)">2</text>
    </g>
    <g id="text_203">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="575.815014" y="152.693748" transform="rotate(-0 575.815014 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1060.349053" y="283.533925" transform="rotate(-0 1060.349053 283.533925)">0</text>
    </g>
    <g id="text_204">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="594.886966" y="152.693748" transform="rotate(-0 594.886966 152.693748)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1101.920711" y="283.533925" transform="rotate(-0 1101.920711 283.533925)">0</text>
    </g>
    <g id="text_205">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="156.23207" y="170.780369" transform="rotate(-0 156.23207 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="145.772579" y="320.160423" transform="rotate(-0 145.772579 320.160423)">0</text>
    </g>
    <g id="text_206">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="175.304022" y="170.780369" transform="rotate(-0 175.304022 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="187.344237" y="320.160423" transform="rotate(-0 187.344237 320.160423)">0</text>
    </g>
    <g id="text_207">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="194.375974" y="170.780369" transform="rotate(-0 194.375974 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="228.915895" y="320.160423" transform="rotate(-0 228.915895 320.160423)">0</text>
    </g>
    <g id="text_208">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="213.447926" y="170.780369" transform="rotate(-0 213.447926 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="270.487553" y="320.160423" transform="rotate(-0 270.487553 320.160423)">0</text>
    </g>
    <g id="text_209">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="232.519878" y="170.780369" transform="rotate(-0 232.519878 170.780369)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="312.059211" y="320.160423" transform="rotate(-0 312.059211 320.160423)">1</text>
    </g>
    <g id="text_210">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="251.59183" y="170.780369" transform="rotate(-0 251.59183 170.780369)">6</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="353.630869" y="320.160423" transform="rotate(-0 353.630869 320.160423)">6</text>
    </g>
    <g id="text_211">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="270.663782" y="170.780369" transform="rotate(-0 270.663782 170.780369)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="395.202526" y="320.160423" transform="rotate(-0 395.202526 320.160423)">1</text>
    </g>
    <g id="text_212">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="289.735734" y="170.780369" transform="rotate(-0 289.735734 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="436.774184" y="320.160423" transform="rotate(-0 436.774184 320.160423)">0</text>
    </g>
    <g id="text_213">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="308.807686" y="170.780369" transform="rotate(-0 308.807686 170.780369)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="478.345842" y="320.160423" transform="rotate(-0 478.345842 320.160423)">1</text>
    </g>
    <g id="text_214">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="327.879638" y="170.780369" transform="rotate(-0 327.879638 170.780369)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="519.9175" y="320.160423" transform="rotate(-0 519.9175 320.160423)">2</text>
    </g>
    <g id="text_215">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="346.95159" y="170.780369" transform="rotate(-0 346.95159 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="561.489158" y="320.160423" transform="rotate(-0 561.489158 320.160423)">0</text>
    </g>
    <g id="text_216">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="366.023542" y="170.780369" transform="rotate(-0 366.023542 170.780369)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="603.060816" y="320.160423" transform="rotate(-0 603.060816 320.160423)">1</text>
    </g>
    <g id="text_217">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="385.095494" y="170.780369" transform="rotate(-0 385.095494 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="644.632474" y="320.160423" transform="rotate(-0 644.632474 320.160423)">0</text>
    </g>
    <g id="text_218">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="404.167446" y="170.780369" transform="rotate(-0 404.167446 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="686.204132" y="320.160423" transform="rotate(-0 686.204132 320.160423)">0</text>
    </g>
    <g id="text_219">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="423.239398" y="170.780369" transform="rotate(-0 423.239398 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="727.77579" y="320.160423" transform="rotate(-0 727.77579 320.160423)">0</text>
    </g>
    <g id="text_220">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="442.31135" y="170.780369" transform="rotate(-0 442.31135 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="769.347448" y="320.160423" transform="rotate(-0 769.347448 320.160423)">0</text>
    </g>
    <g id="text_221">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="461.383302" y="170.780369" transform="rotate(-0 461.383302 170.780369)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="810.919106" y="320.160423" transform="rotate(-0 810.919106 320.160423)">1</text>
    </g>
    <g id="text_222">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="480.455254" y="170.780369" transform="rotate(-0 480.455254 170.780369)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="852.490764" y="320.160423" transform="rotate(-0 852.490764 320.160423)">1</text>
    </g>
    <g id="text_223">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="499.527206" y="170.780369" transform="rotate(-0 499.527206 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="894.062421" y="320.160423" transform="rotate(-0 894.062421 320.160423)">0</text>
    </g>
    <g id="text_224">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="518.599158" y="170.780369" transform="rotate(-0 518.599158 170.780369)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="935.634079" y="320.160423" transform="rotate(-0 935.634079 320.160423)">1</text>
    </g>
    <g id="text_225">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="537.67111" y="170.780369" transform="rotate(-0 537.67111 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="977.205737" y="320.160423" transform="rotate(-0 977.205737 320.160423)">0</text>
    </g>
    <g id="text_226">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="556.743062" y="170.780369" transform="rotate(-0 556.743062 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1018.777395" y="320.160423" transform="rotate(-0 1018.777395 320.160423)">0</text>
    </g>
    <g id="text_227">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="575.815014" y="170.780369" transform="rotate(-0 575.815014 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1060.349053" y="320.160423" transform="rotate(-0 1060.349053 320.160423)">0</text>
    </g>
    <g id="text_228">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="594.886966" y="170.780369" transform="rotate(-0 594.886966 170.780369)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1101.920711" y="320.160423" transform="rotate(-0 1101.920711 320.160423)">0</text>
    </g>
    <g id="text_229">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="156.23207" y="188.86699" transform="rotate(-0 156.23207 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="145.772579" y="356.786921" transform="rotate(-0 145.772579 356.786921)">0</text>
    </g>
    <g id="text_230">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="175.304022" y="188.86699" transform="rotate(-0 175.304022 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="187.344237" y="356.786921" transform="rotate(-0 187.344237 356.786921)">0</text>
    </g>
    <g id="text_231">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="194.375974" y="188.86699" transform="rotate(-0 194.375974 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="228.915895" y="356.786921" transform="rotate(-0 228.915895 356.786921)">0</text>
    </g>
    <g id="text_232">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="213.447926" y="188.86699" transform="rotate(-0 213.447926 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="270.487553" y="356.786921" transform="rotate(-0 270.487553 356.786921)">0</text>
    </g>
    <g id="text_233">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="232.519878" y="188.86699" transform="rotate(-0 232.519878 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="312.059211" y="356.786921" transform="rotate(-0 312.059211 356.786921)">0</text>
    </g>
    <g id="text_234">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="251.59183" y="188.86699" transform="rotate(-0 251.59183 188.86699)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="353.630869" y="356.786921" transform="rotate(-0 353.630869 356.786921)">2</text>
    </g>
    <g id="text_235">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="270.663782" y="188.86699" transform="rotate(-0 270.663782 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="395.202526" y="356.786921" transform="rotate(-0 395.202526 356.786921)">0</text>
    </g>
    <g id="text_236">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="289.735734" y="188.86699" transform="rotate(-0 289.735734 188.86699)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="436.774184" y="356.786921" transform="rotate(-0 436.774184 356.786921)">1</text>
    </g>
    <g id="text_237">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="308.807686" y="188.86699" transform="rotate(-0 308.807686 188.86699)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="478.345842" y="356.786921" transform="rotate(-0 478.345842 356.786921)">1</text>
    </g>
    <g id="text_238">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="327.879638" y="188.86699" transform="rotate(-0 327.879638 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="519.9175" y="356.786921" transform="rotate(-0 519.9175 356.786921)">0</text>
    </g>
    <g id="text_239">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="346.95159" y="188.86699" transform="rotate(-0 346.95159 188.86699)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="561.489158" y="356.786921" transform="rotate(-0 561.489158 356.786921)">1</text>
    </g>
    <g id="text_240">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="366.023542" y="188.86699" transform="rotate(-0 366.023542 188.86699)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="603.060816" y="356.786921" transform="rotate(-0 603.060816 356.786921)">1</text>
    </g>
    <g id="text_241">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="385.095494" y="188.86699" transform="rotate(-0 385.095494 188.86699)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="644.632474" y="356.786921" transform="rotate(-0 644.632474 356.786921)">1</text>
    </g>
    <g id="text_242">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="404.167446" y="188.86699" transform="rotate(-0 404.167446 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="686.204132" y="356.786921" transform="rotate(-0 686.204132 356.786921)">0</text>
    </g>
    <g id="text_243">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="423.239398" y="188.86699" transform="rotate(-0 423.239398 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="727.77579" y="356.786921" transform="rotate(-0 727.77579 356.786921)">0</text>
    </g>
    <g id="text_244">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="442.31135" y="188.86699" transform="rotate(-0 442.31135 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="769.347448" y="356.786921" transform="rotate(-0 769.347448 356.786921)">0</text>
    </g>
    <g id="text_245">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="461.383302" y="188.86699" transform="rotate(-0 461.383302 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="810.919106" y="356.786921" transform="rotate(-0 810.919106 356.786921)">0</text>
    </g>
    <g id="text_246">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="480.455254" y="188.86699" transform="rotate(-0 480.455254 188.86699)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="852.490764" y="356.786921" transform="rotate(-0 852.490764 356.786921)">1</text>
    </g>
    <g id="text_247">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="499.527206" y="188.86699" transform="rotate(-0 499.527206 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="894.062421" y="356.786921" transform="rotate(-0 894.062421 356.786921)">0</text>
    </g>
    <g id="text_248">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="518.599158" y="188.86699" transform="rotate(-0 518.599158 188.86699)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="935.634079" y="356.786921" transform="rotate(-0 935.634079 356.786921)">1</text>
    </g>
    <g id="text_249">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="537.67111" y="188.86699" transform="rotate(-0 537.67111 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="977.205737" y="356.786921" transform="rotate(-0 977.205737 356.786921)">0</text>
    </g>
    <g id="text_250">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="556.743062" y="188.86699" transform="rotate(-0 556.743062 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1018.777395" y="356.786921" transform="rotate(-0 1018.777395 356.786921)">0</text>
    </g>
    <g id="text_251">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="575.815014" y="188.86699" transform="rotate(-0 575.815014 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1060.349053" y="356.786921" transform="rotate(-0 1060.349053 356.786921)">0</text>
    </g>
    <g id="text_252">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="594.886966" y="188.86699" transform="rotate(-0 594.886966 188.86699)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1101.920711" y="356.786921" transform="rotate(-0 1101.920711 356.786921)">0</text>
    </g>
    <g id="text_253">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="156.23207" y="206.953611" transform="rotate(-0 156.23207 206.953611)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="145.772579" y="393.413419" transform="rotate(-0 145.772579 393.413419)">1</text>
    </g>
    <g id="text_254">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="175.304022" y="206.953611" transform="rotate(-0 175.304022 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="187.344237" y="393.413419" transform="rotate(-0 187.344237 393.413419)">0</text>
    </g>
    <g id="text_255">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="194.375974" y="206.953611" transform="rotate(-0 194.375974 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="228.915895" y="393.413419" transform="rotate(-0 228.915895 393.413419)">0</text>
    </g>
    <g id="text_256">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="213.447926" y="206.953611" transform="rotate(-0 213.447926 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="270.487553" y="393.413419" transform="rotate(-0 270.487553 393.413419)">0</text>
    </g>
    <g id="text_257">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="232.519878" y="206.953611" transform="rotate(-0 232.519878 206.953611)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="312.059211" y="393.413419" transform="rotate(-0 312.059211 393.413419)">1</text>
    </g>
    <g id="text_258">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="251.59183" y="206.953611" transform="rotate(-0 251.59183 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="353.630869" y="393.413419" transform="rotate(-0 353.630869 393.413419)">0</text>
    </g>
    <g id="text_259">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="270.663782" y="206.953611" transform="rotate(-0 270.663782 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="395.202526" y="393.413419" transform="rotate(-0 395.202526 393.413419)">0</text>
    </g>
    <g id="text_260">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="289.735734" y="206.953611" transform="rotate(-0 289.735734 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="436.774184" y="393.413419" transform="rotate(-0 436.774184 393.413419)">0</text>
    </g>
    <g id="text_261">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="308.807686" y="206.953611" transform="rotate(-0 308.807686 206.953611)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="478.345842" y="393.413419" transform="rotate(-0 478.345842 393.413419)">1</text>
    </g>
    <g id="text_262">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="327.879638" y="206.953611" transform="rotate(-0 327.879638 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="519.9175" y="393.413419" transform="rotate(-0 519.9175 393.413419)">0</text>
    </g>
    <g id="text_263">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="346.95159" y="206.953611" transform="rotate(-0 346.95159 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="561.489158" y="393.413419" transform="rotate(-0 561.489158 393.413419)">0</text>
    </g>
    <g id="text_264">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="366.023542" y="206.953611" transform="rotate(-0 366.023542 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="603.060816" y="393.413419" transform="rotate(-0 603.060816 393.413419)">0</text>
    </g>
    <g id="text_265">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="385.095494" y="206.953611" transform="rotate(-0 385.095494 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="644.632474" y="393.413419" transform="rotate(-0 644.632474 393.413419)">0</text>
    </g>
    <g id="text_266">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="404.167446" y="206.953611" transform="rotate(-0 404.167446 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="686.204132" y="393.413419" transform="rotate(-0 686.204132 393.413419)">0</text>
    </g>
    <g id="text_267">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="423.239398" y="206.953611" transform="rotate(-0 423.239398 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="727.77579" y="393.413419" transform="rotate(-0 727.77579 393.413419)">0</text>
    </g>
    <g id="text_268">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="442.31135" y="206.953611" transform="rotate(-0 442.31135 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="769.347448" y="393.413419" transform="rotate(-0 769.347448 393.413419)">0</text>
    </g>
    <g id="text_269">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="461.383302" y="206.953611" transform="rotate(-0 461.383302 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="810.919106" y="393.413419" transform="rotate(-0 810.919106 393.413419)">0</text>
    </g>
    <g id="text_270">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="480.455254" y="206.953611" transform="rotate(-0 480.455254 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="852.490764" y="393.413419" transform="rotate(-0 852.490764 393.413419)">0</text>
    </g>
    <g id="text_271">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="499.527206" y="206.953611" transform="rotate(-0 499.527206 206.953611)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="894.062421" y="393.413419" transform="rotate(-0 894.062421 393.413419)">1</text>
    </g>
    <g id="text_272">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="518.599158" y="206.953611" transform="rotate(-0 518.599158 206.953611)">2</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="935.634079" y="393.413419" transform="rotate(-0 935.634079 393.413419)">2</text>
    </g>
    <g id="text_273">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="537.67111" y="206.953611" transform="rotate(-0 537.67111 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="977.205737" y="393.413419" transform="rotate(-0 977.205737 393.413419)">0</text>
    </g>
    <g id="text_274">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="556.743062" y="206.953611" transform="rotate(-0 556.743062 206.953611)">1</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1018.777395" y="393.413419" transform="rotate(-0 1018.777395 393.413419)">1</text>
    </g>
    <g id="text_275">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="575.815014" y="206.953611" transform="rotate(-0 575.815014 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1060.349053" y="393.413419" transform="rotate(-0 1060.349053 393.413419)">0</text>
    </g>
    <g id="text_276">
-    <text style="font-size: 7px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #262626" x="594.886966" y="206.953611" transform="rotate(-0 594.886966 206.953611)">0</text>
+    <text style="font-size: 6.8px; font-family: 'Liberation Serif'; text-anchor: middle; fill: #525454" x="1101.920711" y="393.413419" transform="rotate(-0 1101.920711 393.413419)">0</text>
    </g>
    <g id="text_277">
-    <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: middle" x="184.839998" y="24.27075" transform="rotate(-0 184.839998 24.27075)">Prescreening</text>
+    <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: middle" x="208.130066" y="25.82083" transform="rotate(-0 208.130066 25.82083)">Prescreening</text>
    </g>
    <g id="text_278">
-    <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: middle" x="261.127806" y="24.27075" transform="rotate(-0 261.127806 24.27075)">Screening</text>
+    <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: middle" x="374.416697" y="25.82083" transform="rotate(-0 374.416697 25.82083)">Screening</text>
    </g>
    <g id="text_279">
-    <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: middle" x="337.415614" y="24.27075" transform="rotate(-0 337.415614 24.27075)">Diagnosis</text>
+    <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: middle" x="540.703329" y="25.82083" transform="rotate(-0 540.703329 25.82083)">Diagnosis</text>
    </g>
    <g id="text_280">
-    <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: middle" x="413.703422" y="24.27075" transform="rotate(-0 413.703422 24.27075)">Prognosis</text>
+    <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: middle" x="706.989961" y="25.82083" transform="rotate(-0 706.989961 25.82083)">Prognosis</text>
    </g>
    <g id="text_281">
-    <text style="font-size: 9px; font-family: 'Liberation Serif'" transform="translate(468.240761 14.859844)">Monitoring/</text>
-    <text style="font-size: 9px; font-family: 'Liberation Serif'" transform="translate(468.247089 24.296062)">intervention</text>
+    <text style="font-size: 9px; font-family: 'Liberation Serif'" transform="translate(851.526124 21.115377)">Monitoring/</text>
+    <text style="font-size: 9px; font-family: 'Liberation Serif'" transform="translate(851.532452 30.551596)">intervention</text>
    </g>
    <g id="text_282">
-    <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: middle" x="566.279038" y="24.296062" transform="rotate(-0 566.279038 24.296062)">Not specified</text>
+    <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: middle" x="1039.563224" y="25.891846" transform="rotate(-0 1039.563224 25.891846)">Not specified</text>
    </g>
   </g>
   <g id="axes_2">
-   <g id="patch_5">
-    <path d="M 611.574924 214.31364 
-L 620.618234 214.31364 
-L 620.618234 33.44743 
-L 611.574924 33.44743 
+   <g id="patch_3">
+    <path d="M 1140.62965 385.917992 
+L 1158.356875 385.917992 
+L 1158.356875 31.373489 
+L 1140.62965 31.373489 
 z
 " style="fill: #ffffff"/>
    </g>
    <image xlink:href="data:image/png;base64,
-iVBORw0KGgoAAAANSUhEUgAAAA0AAAD7CAYAAACxIB54AAABY0lEQVR4nO2aUQrDMAxDHcj977ezbE32UXYAv8FDhPZfyJLlpGkz9n7taj5zVxtTs2r1QXsjJgAK1wTLQ0xAE2MSm3sBkNgnEiMvEaxPlibTCG00sjWZ5bUxNfuKqiYgguVBpiExLVFTNBOL0ZOIP5jCY3TmaIAYxY8GACFNKBEI9F6kT6IRoLxLc88DXWiePE19TL4m1ifEZBnRP7By9zRN2YlgS1ifKF6TtxOyl4/03T3a8jM1PTG6QX0ic3I/T2B/oOgXKnZSE0HWl0TwcZSePtMtJyAgSizvTMsR09OnG6SNe/q6h/pE3AM/hWoWWViKuDcYUxtDNWlGgN+5NQdjOs+IusBf1vTsic1tY9TseTHK7tNIX/faGDXlWnniwuKNBmJioDZGnVytPLbCiu4RpgPH3SsP7rmASRx3rTx4FU+7grw+AMTK00BieeGJsEDwznw2yLt5e+RoeDHK7pNl+RcG5dt1w6aFogAAAABJRU5ErkJggg==" id="image6b71bf5108" transform="scale(1 -1) translate(0 -180.72)" x="611.28" y="-33.12" width="9.36" height="180.72"/>
+iVBORw0KGgoAAAANSUhEUgAAABkAAAHtCAYAAADsndXYAAACZ0lEQVR4nO2d0W3sMBDE5MD995dicroWxA8tAoJsYDGemZV8D3559v7d6zI/twestda713UhQ0rW+lwfMuTJ9nhiUVJPCPUEoUqXRcnW9GTCE1EZizAhTxCinpgOLUtPTJ5YlHgaX08IHiWqMloiLPJEo0TkiaYnpYswla77Q2aU3G/JXE/uU7oQI568ez/Xh3ge19BaKcKA1goiTxBdJBAiT0w96Yw/x3PGix6XSEkLEuApY54g6gmiiwSiCzeiniBGPBFF2HP8mpRYVv2fyJP7Qzp+EfUEUU8QKUFM9eR+40WPS6RkYIgnwqULkRJEVyKE6JoqStfAkDxB1BM2xLQg7w9JCUJUxlY9ISUIUU88r9iedIn+0V/jyURPTI/LE+GBIZURoVJST84pXQhTujyeDAzJE8RITzIe0ZsWQuRJPSF4FmTpQpQuRJ4gREpGPg0RfRMkUtL/33XOkJKB8zdPEK16REoQJiUDRckTxNB3vz0uQEoQJiWiy12r/pyUIDpPEO0uhMmTmV/uWvXnpATxfjRrZeCPIUwp0bzHL83uekSe3B9STxAmJZrGD/xtu/U+oseVknMqI2KkjHmCEPWkyx2hdCFqPMJznnS5Q1RGhOlKVLoAeYJ4n65EgJQgTBfudhcakvGA3uMRpQvRhRth8kSk5P4Qz/FbuhCliw0R/XKX8YA8QZgWZOkClC5E6UJM/S6s8aQX0/82JOMRIk/2wIdaQ0oG4tXXsghRupZGiaknKTmndCFGPGnVI4owwuSJRskqXYCUIExKBn66yxNESuCQVj0gJQjVRaJVf05KEG1hxIiSL3WD5WNRiqn6AAAAAElFTkSuQmCC" id="imagea25fd532b4" transform="scale(1 -1) translate(0 -354.96)" x="1140.48" y="-30.96" width="18" height="354.96"/>
    <g id="matplotlib.axis_3"/>
    <g id="matplotlib.axis_4">
     <g id="ytick_11">
      <g id="line2d_40">
       <defs>
-       <path id="m55dcc8e5a3" d="M 0 0 
+       <path id="m31d36116fc" d="M 0 0 
 L 3.5 0 
 " style="stroke: #000000; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#m55dcc8e5a3" x="620.618234" y="214.31364" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m31d36116fc" x="1158.356875" y="385.917992" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_283">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: start" x="627.618234" y="217.436218" transform="rotate(-0 627.618234 217.436218)">0</text>
+      <text style="font-size: 8.6px; font-family: 'Liberation Serif'; text-anchor: start" x="1165.356875" y="388.901789" transform="rotate(-0 1165.356875 388.901789)">0</text>
      </g>
     </g>
     <g id="ytick_12">
      <g id="line2d_41">
       <g>
-       <use xlink:href="#m55dcc8e5a3" x="620.618234" y="175.831468" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m31d36116fc" x="1158.356875" y="310.482992" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_284">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: start" x="627.618234" y="178.954046" transform="rotate(-0 627.618234 178.954046)">10</text>
+      <text style="font-size: 8.6px; font-family: 'Liberation Serif'; text-anchor: start" x="1165.356875" y="313.466788" transform="rotate(-0 1165.356875 313.466788)">10</text>
      </g>
     </g>
     <g id="ytick_13">
      <g id="line2d_42">
       <g>
-       <use xlink:href="#m55dcc8e5a3" x="620.618234" y="137.349295" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m31d36116fc" x="1158.356875" y="235.047991" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_285">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: start" x="627.618234" y="140.471873" transform="rotate(-0 627.618234 140.471873)">20</text>
+      <text style="font-size: 8.6px; font-family: 'Liberation Serif'; text-anchor: start" x="1165.356875" y="238.031788" transform="rotate(-0 1165.356875 238.031788)">20</text>
      </g>
     </g>
     <g id="ytick_14">
      <g id="line2d_43">
       <g>
-       <use xlink:href="#m55dcc8e5a3" x="620.618234" y="98.867123" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m31d36116fc" x="1158.356875" y="159.61299" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_286">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: start" x="627.618234" y="101.989701" transform="rotate(-0 627.618234 101.989701)">30</text>
+      <text style="font-size: 8.6px; font-family: 'Liberation Serif'; text-anchor: start" x="1165.356875" y="162.596787" transform="rotate(-0 1165.356875 162.596787)">30</text>
      </g>
     </g>
     <g id="ytick_15">
      <g id="line2d_44">
       <g>
-       <use xlink:href="#m55dcc8e5a3" x="620.618234" y="60.38495" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m31d36116fc" x="1158.356875" y="84.177989" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_287">
-      <text style="font-size: 9px; font-family: 'Liberation Serif'; text-anchor: start" x="627.618234" y="63.507528" transform="rotate(-0 627.618234 63.507528)">40</text>
+      <text style="font-size: 8.6px; font-family: 'Liberation Serif'; text-anchor: start" x="1165.356875" y="87.161786" transform="rotate(-0 1165.356875 87.161786)">40</text>
      </g>
     </g>
     <g id="text_288">
-     <text style="font-size: 10px; font-family: 'Liberation Serif'; text-anchor: middle" x="647.557297" y="123.880535" transform="rotate(-90 647.557297 123.880535)">Reports</text>
+     <text style="font-size: 8.6px; font-family: 'Liberation Serif'; text-anchor: middle" x="1183.924469" y="208.645741" transform="rotate(-90 1183.924469 208.645741)">Reports</text>
     </g>
    </g>
    <g id="LineCollection_1"/>
-   <g id="patch_6">
-    <path d="M 611.574924 214.31364 
-L 616.096579 214.31364 
-L 620.618234 214.31364 
-L 620.618234 33.44743 
-L 616.096579 33.44743 
-L 611.574924 33.44743 
-L 611.574924 214.31364 
+   <g id="patch_4">
+    <path d="M 1140.62965 385.917992 
+L 1149.493263 385.917992 
+L 1158.356875 385.917992 
+L 1158.356875 31.373489 
+L 1149.493263 31.373489 
+L 1140.62965 31.373489 
+L 1140.62965 385.917992 
 z
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
   </g>
  </g>
  <defs>
-  <clipPath id="p2b2741350c">
-   <rect x="146.696094" y="33.44743" width="457.726848" height="180.86621"/>
+  <clipPath id="paaf1ca0cec">
+   <rect x="124.98675" y="7.2" width="997.71979" height="402.891481"/>
   </clipPath>
  </defs>
 </svg>

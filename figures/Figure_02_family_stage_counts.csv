@@ -1,0 +1,127 @@
+Algorithm_family,Primary_functional_stage,Reports
+Convolutional neural networks,Prescreening,0
+Convolutional neural networks,Screening,18
+Convolutional neural networks,Diagnosis,33
+Convolutional neural networks,Prognosis,0
+Convolutional neural networks,Monitoring/intervention,6
+Convolutional neural networks,Not specified,2
+Support vector machines / regression,Prescreening,1
+Support vector machines / regression,Screening,7
+Support vector machines / regression,Diagnosis,24
+Support vector machines / regression,Prognosis,5
+Support vector machines / regression,Monitoring/intervention,1
+Support vector machines / regression,Not specified,0
+Random forests,Prescreening,1
+Random forests,Screening,10
+Random forests,Diagnosis,16
+Random forests,Prognosis,3
+Random forests,Monitoring/intervention,0
+Random forests,Not specified,4
+Transformers,Prescreening,0
+Transformers,Screening,3
+Transformers,Diagnosis,9
+Transformers,Prognosis,2
+Transformers,Monitoring/intervention,5
+Transformers,Not specified,3
+Boosted-tree methods,Prescreening,0
+Boosted-tree methods,Screening,7
+Boosted-tree methods,Diagnosis,12
+Boosted-tree methods,Prognosis,1
+Boosted-tree methods,Monitoring/intervention,1
+Boosted-tree methods,Not specified,0
+Decision trees / rules,Prescreening,3
+Decision trees / rules,Screening,8
+Decision trees / rules,Diagnosis,5
+Decision trees / rules,Prognosis,2
+Decision trees / rules,Monitoring/intervention,0
+Decision trees / rules,Not specified,1
+Logistic regression,Prescreening,1
+Logistic regression,Screening,4
+Logistic regression,Diagnosis,9
+Logistic regression,Prognosis,1
+Logistic regression,Monitoring/intervention,1
+Logistic regression,Not specified,2
+Graph neural networks,Prescreening,0
+Graph neural networks,Screening,0
+Graph neural networks,Diagnosis,14
+Graph neural networks,Prognosis,0
+Graph neural networks,Monitoring/intervention,0
+Graph neural networks,Not specified,0
+MLP / feedforward neural networks,Prescreening,0
+MLP / feedforward neural networks,Screening,2
+MLP / feedforward neural networks,Diagnosis,7
+MLP / feedforward neural networks,Prognosis,0
+MLP / feedforward neural networks,Monitoring/intervention,1
+MLP / feedforward neural networks,Not specified,0
+Clustering,Prescreening,0
+Clustering,Screening,1
+Clustering,Diagnosis,7
+Clustering,Prognosis,0
+Clustering,Monitoring/intervention,1
+Clustering,Not specified,3
+Other specified computational methods,Prescreening,0
+Other specified computational methods,Screening,2
+Other specified computational methods,Diagnosis,6
+Other specified computational methods,Prognosis,0
+Other specified computational methods,Monitoring/intervention,1
+Other specified computational methods,Not specified,4
+Other linear / regression models,Prescreening,0
+Other linear / regression models,Screening,1
+Other linear / regression models,Diagnosis,2
+Other linear / regression models,Prognosis,1
+Other linear / regression models,Monitoring/intervention,0
+Other linear / regression models,Not specified,2
+Recurrent neural networks,Prescreening,0
+Recurrent neural networks,Screening,4
+Recurrent neural networks,Diagnosis,1
+Recurrent neural networks,Prognosis,0
+Recurrent neural networks,Monitoring/intervention,0
+Recurrent neural networks,Not specified,0
+k-nearest neighbors,Prescreening,0
+k-nearest neighbors,Screening,1
+k-nearest neighbors,Diagnosis,4
+k-nearest neighbors,Prognosis,0
+k-nearest neighbors,Monitoring/intervention,0
+k-nearest neighbors,Not specified,0
+Autoencoders,Prescreening,0
+Autoencoders,Screening,1
+Autoencoders,Diagnosis,2
+Autoencoders,Prognosis,0
+Autoencoders,Monitoring/intervention,0
+Autoencoders,Not specified,0
+Discriminant analysis,Prescreening,0
+Discriminant analysis,Screening,1
+Discriminant analysis,Diagnosis,1
+Discriminant analysis,Prognosis,0
+Discriminant analysis,Monitoring/intervention,0
+Discriminant analysis,Not specified,0
+Naive Bayes,Prescreening,0
+Naive Bayes,Screening,0
+Naive Bayes,Diagnosis,2
+Naive Bayes,Prognosis,0
+Naive Bayes,Monitoring/intervention,0
+Naive Bayes,Not specified,0
+Other specified neural architectures,Prescreening,0
+Other specified neural architectures,Screening,0
+Other specified neural architectures,Diagnosis,2
+Other specified neural architectures,Prognosis,0
+Other specified neural architectures,Monitoring/intervention,0
+Other specified neural architectures,Not specified,0
+Multiple models: no unique principal family,Prescreening,2
+Multiple models: no unique principal family,Screening,28
+Multiple models: no unique principal family,Diagnosis,45
+Multiple models: no unique principal family,Prognosis,6
+Multiple models: no unique principal family,Monitoring/intervention,9
+Multiple models: no unique principal family,Not specified,5
+Neural networks: subtype unresolved,Prescreening,0
+Neural networks: subtype unresolved,Screening,12
+Neural networks: subtype unresolved,Diagnosis,12
+Neural networks: subtype unresolved,Prognosis,1
+Neural networks: subtype unresolved,Monitoring/intervention,5
+Neural networks: subtype unresolved,Not specified,2
+Principal family not resolved,Prescreening,0
+Principal family not resolved,Screening,0
+Principal family not resolved,Diagnosis,1
+Principal family not resolved,Prognosis,0
+Principal family not resolved,Monitoring/intervention,7
+Principal family not resolved,Not specified,1
