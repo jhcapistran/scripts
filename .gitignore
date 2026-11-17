@@ -1,5 +1,5 @@
 __pycache__/
 *.py[cod]
 .venv/
-figures_recomputed_421/
+*.tmp.xlsx
 .DS_Store

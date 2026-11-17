@@ -1,7 +1,7 @@
-"""Figure 2: revised RQ1 algorithm families, styled to match frozen 2026 artwork.
-Run: python plot_figure2_reclassified.py
-Optional: --input PATH --output-dir PATH
-CPU-only; requires matplotlib, numpy, pandas and openpyxl.
+"""Figure 2: current principal algorithm-family allocation by functional stage.
+Input: current 421-report supplement and rq1_algorithm_family_421.csv.
+Output: figures/Figure_02.{png,pdf,svg} and validation CSVs.
+CPU-only (no GPU required).
 """
 from __future__ import annotations
 import argparse
@@ -23,7 +23,7 @@ FAMILIES=[
 "Discriminant analysis","Naive Bayes","Other specified neural architectures",
 "Multiple models: no unique principal family","Neural networks: subtype unresolved",
 "Principal family not resolved"]
-COUNTS=[56,33,29,22,19,18,16,14,10,9,6,5,5,4,3,2,2,2,85,30,51]
+COUNTS=[59,38,34,22,21,19,18,14,10,12,13,6,5,5,3,2,2,2,95,32,9]
 STAGES=["Prescreening","Screening","Diagnosis","Prognosis","Monitoring/intervention","Not specified"]
 LABELS=[
 "CNN","SVM / SVR","Random forest","Transformer","Boosted trees",
@@ -52,25 +52,23 @@ def load_inventory(source,allocation):
     overlay=pd.read_csv(allocation,dtype="string")
     if len(overlay)!=421 or overlay["Report ID"].tolist()!=df["Report ID"].tolist():
         raise ValueError("RQ1 overlay ID mismatch")
-    if set(overlay["Revised allocation"])!=set(FAMILIES):
+    if set(overlay["Algorithm family"])!=set(FAMILIES):
         raise ValueError("Unknown or missing family")
-    df["Revised allocation"]=overlay["Revised allocation"].to_numpy()
-    observed=[int((df["Revised allocation"]==f).sum()) for f in FAMILIES]
+    df["Algorithm family"]=overlay["Algorithm family"].to_numpy()
+    observed=[int((df["Algorithm family"]==f).sum()) for f in FAMILIES]
     if observed!=COUNTS: raise ValueError("Family totals differ from audited baseline")
     return df
 
 def render(df,out):
-    if out.resolve()==(ROOT/"figures_manuscript_421").resolve():
-        raise ValueError("Frozen manuscript figures must not be overwritten")
     out.mkdir(parents=True,exist_ok=True)
-    table=(df.groupby(["Revised allocation","Primary functional stage"]).size()
+    table=(df.groupby(["Algorithm family","Primary functional stage"]).size()
            .unstack(fill_value=0).reindex(index=FAMILIES,columns=STAGES,fill_value=0))
     if table.to_numpy().sum()!=421: raise AssertionError("421 reports not conserved")
     long=table.stack().rename("Reports").reset_index()
     long.columns=["Algorithm_family","Primary_functional_stage","Reports"]
     long.to_csv(out/"Figure_02_family_stage_counts.csv",index=False)
     long.to_csv(out/"figure_02_algorithm_stage.csv",index=False)
-    df[["Report ID","DOI","Primary functional stage","Revised allocation"]].to_csv(
+    df[["Report ID","DOI","Primary functional stage","Algorithm family"]].to_csv(
         out/"Figure_02_report_allocation.csv",index=False)
     plt.rcParams.update({"font.family":"Liberation Serif","font.size":8.6,
         "svg.fonttype":"none","pdf.fonttype":42,"figure.facecolor":"white"})
@@ -82,7 +80,7 @@ def render(df,out):
         for x,stage in enumerate(STAGES):
             n=int(table.loc[family,stage])
             if not n: continue
-            ax.scatter(x,y,s=46+365*(n/85)**.5,color=[cmap(norm(n))],
+            ax.scatter(x,y,s=46+365*(n/max(1,int(table.to_numpy().max())))**.5,color=[cmap(norm(n))],
                        edgecolors="white",linewidths=.45,zorder=3)
             ax.text(x,y,str(n),fontsize=8.4,ha="center",va="center",
                     color="#122127" if norm(n)>=.70 else "white",zorder=4)
@@ -95,7 +93,7 @@ def render(df,out):
     ax.tick_params(length=0)
     for spine in ax.spines.values(): spine.set_visible(False)
     ax.set_xlabel("Primary functional stage",fontsize=9.5,labelpad=7)
-    ax.set_ylabel("Algorithm family / identification status",fontsize=9.5,labelpad=12)
+    ax.set_ylabel("Principal algorithm classification",fontsize=9.5,labelpad=12)
     for ext in ("png","pdf","svg"):
         fig.savefig(out/("Figure_02."+ext),
                     dpi=330 if ext=="png" else None,facecolor="white")
@@ -105,9 +103,9 @@ def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--input",type=Path,default=ROOT/"Supplementary_Data_S1_simplificado_421.xlsx")
     p.add_argument("--allocation",type=Path,default=ROOT/"rq1_algorithm_family_421.csv")
-    p.add_argument("--output-dir",type=Path,default=ROOT/"figures_revised_421")
+    p.add_argument("--output-dir",type=Path,default=ROOT/"figures")
     a=p.parse_args(argv)
     render(load_inventory(a.input,a.allocation),a.output_dir)
-    print("Revised Figure 2 generated; all 421 reports included.")
+    print("Current Figure 2 generated from all 421 reports.")
 
 if __name__=="__main__":main()

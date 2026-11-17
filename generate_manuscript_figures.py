@@ -1,11 +1,8 @@
-"""Recompute AI-ASD manuscript Figures 2-8 from the final 421-report supplement.
+"""Render manuscript Figures 2-8 from the current 421-report corpus.
 
-The **exact artwork already inserted in the Word manuscript** is versioned separately
-under ``figures_manuscript_421``. This script makes a fresh, data-derived rendering (including revised RQ1 allocation) in
-``figures_recomputed_421`` and exports the aggregate tables for independent auditing.
-
-It deliberately does not regenerate Figure 1 (PRISMA), because the historical search
-flow is not yet reconciled. No data are inferred for unknown charting fields.
+Current RQ1 uses the 21-category allocation CSV, with three identification
+states. All rendered figures and count tables live in figures/.
+Figure 1 (PRISMA) is outside this generator.
 """
 from __future__ import annotations
 
@@ -27,7 +24,7 @@ import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parent
 SOURCE = BASE_DIR / 'Supplementary_Data_S1_simplificado_421.xlsx'
-OUTPUT = BASE_DIR / 'figures_recomputed_421'
+OUTPUT = BASE_DIR / 'figures'
 FIGURES = (2, 3, 4, 5, 6, 7, 8)
 STAGES = ('Prescreening', 'Screening', 'Diagnosis', 'Prognosis', 'Monitoring/intervention', 'Not specified')
 METHODS = ('Machine Learning', 'Deep Learning', 'Hybrid', 'Not specified')
@@ -36,12 +33,6 @@ SOURCES = (
     'Behavioral images/video/gaze/movement', 'Physiological signals',
     'Multiple source categories', 'Biological/omics', 'Text/language',
     'Not specified', 'Audio/voice', 'Other biomedical/digital data',
-)
-ALGORITHMS = (
-    'Other specified method', 'Multiple/not uniquely specified',
-    'Composite/ensemble pipeline', 'CNN', 'SVM', 'Random forest', 'Transformer',
-    'Decision tree/rules', 'GNN', 'Logistic regression', 'Gradient boosting',
-    'Clustering', 'MLP/ANN', 'Recurrent network', 'Autoencoder', 'k-nearest neighbors',
 )
 PRACTICES = (
     ('External validation', 'External validation'),
@@ -125,21 +116,19 @@ def simplify_stage(s):
 
 
 def draw_figure2(df, out):
-    """Reclassified 421-report RQ1 figure, matched to the original bubble plot.
-
-    Uses an explicit, independently auditable per-report allocation CSV.
-    Never changes or rewrites the frozen embedded manuscript assets.
-    """
+    """Current report-level algorithm-family x primary stage matrix."""
     from plot_figure2_reclassified import render, FAMILIES, COUNTS
     mapping = pd.read_csv(BASE_DIR / 'rq1_algorithm_family_421.csv', dtype='string')
+    if mapping.columns.tolist() != ['Report ID', 'Algorithm family']:
+        raise ValueError('Unexpected family-allocation fields')
     if len(mapping) != 421 or mapping['Report ID'].tolist() != df['Report ID'].tolist():
-        raise ValueError('RQ1 revised classification must match all 421 report IDs')
-    if set(mapping['Revised allocation']) != set(FAMILIES):
-        raise ValueError('Unexpected family in RQ1 revised allocation')
+        raise ValueError('Family allocation must match all 421 report IDs')
+    if set(mapping['Algorithm family']) != set(FAMILIES):
+        raise ValueError('Unexpected RQ1 algorithm family')
     work = df.copy()
-    work['Revised allocation'] = mapping['Revised allocation'].to_numpy()
-    if [int((work['Revised allocation'] == f).sum()) for f in FAMILIES] != COUNTS:
-        raise ValueError('RQ1 category totals differ from audited 421-report allocation')
+    work['Algorithm family'] = mapping['Algorithm family'].to_numpy()
+    if [int((work['Algorithm family'] == family).sum()) for family in FAMILIES] != COUNTS:
+        raise ValueError('RQ1 family totals differ from current report-level allocation')
     render(work, out)
 
 
@@ -296,13 +285,11 @@ def figure_table(df,out):
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--input',type=Path,default=SOURCE,help='421-report Supplementary Data S1 (.xlsx)')
-    p.add_argument('--output-dir',type=Path,default=OUTPUT,help='Generated outputs; never overwrites frozen Word graphics')
+    p.add_argument('--output-dir',type=Path,default=OUTPUT,help='Single directory for manuscript Figures 2-8')
     p.add_argument('--figures',nargs='*',type=int,default=list(FIGURES),help='Subset from Figures 2..8')
     p.add_argument('--check-only',action='store_true',help='Validate source and print counts without rendering')
     a=p.parse_args(argv)
     df=load_data(a.input)
-    if not a.check_only and a.output_dir.resolve()==(BASE_DIR/'figures_manuscript_421').resolve():
-        raise ValueError('Refusing to overwrite the exact figures extracted from the Word manuscript.')
     if not a.check_only: a.output_dir.mkdir(parents=True,exist_ok=True)
     summary=figure_table(df,a.output_dir) if not a.check_only else {'N':len(df),'stages':df['Primary functional stage'].value_counts().to_dict(),'maturity':df['Maturity'].value_counts().to_dict(),'profile_count':len(profiles(df))}
     if a.check_only:

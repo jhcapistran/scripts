@@ -1,18 +1,37 @@
-name: Verify final 421-report figures
+name: Rebuild and verify final 421-report figures
 on:
   push:
     branches: [master]
-  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   verify:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: pip
-      - run: python -m pip install -r requirements.txt
-      - run: python generate_manuscript_figures.py --check-only
-      - run: python generate_manuscript_figures.py
-      - run: python verify_figures_421.py
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Synchronize the current RQ1 allocation in Supplementary Data S1
+        run: python sync_supplement.py
+      - name: Rebuild Figures 2-8 in the single figures directory
+        run: python generate_manuscript_figures.py
+      - name: Verify all figures and counts
+        run: python verify_figures_421.py
+      - name: Commit current outputs
+        if: github.ref == 'refs/heads/master'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- figures/ Supplementary_Data_S1_simplificado_421.xlsx
+          if ! git diff --cached --quiet; then
+            git commit -m "figures: regenerate 421-report charts [skip ci]"
+            git push
+          fi
