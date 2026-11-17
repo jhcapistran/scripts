@@ -86,7 +86,8 @@ def main():
     for sheet in wb:
         for row in sheet:
             for cell in row:
-                cell.comment = None
+                if getattr(cell, "comment", None) is not None:
+                    cell.comment = None
     cb = wb["03_Coding_framework"]
     for r in range(3, cb.max_row + 1):
         field = cb.cell(r, 2).value
