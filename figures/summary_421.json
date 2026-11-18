@@ -9,10 +9,10 @@
     "Prescreening": 8
   },
   "method_counts": {
-    "Machine Learning": 215,
+    "Machine Learning": 217,
     "Deep Learning": 160,
     "Hybrid": 26,
-    "Not specified": 20
+    "Not specified": 18
   },
   "integration_counts": {
     "Research only": 307,
@@ -26,9 +26,9 @@
     "Evaluated care-delivery platform": 2
   },
   "practices_reported": {
-    "External validation": 25,
-    "Multisource integration": 74,
-    "Explainability (broad)": 128,
+    "External validation": 26,
+    "Multisource integration": 75,
+    "Explainability (broad)": 136,
     "Cross-site / cross-dataset evaluation": 17
   },
   "selected_profiles": {

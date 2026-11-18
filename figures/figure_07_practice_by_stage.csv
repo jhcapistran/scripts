@@ -3,23 +3,23 @@ Prescreening,External validation,8,0
 Prescreening,Multisource integration,8,1
 Prescreening,Explainability (broad),8,5
 Prescreening,Cross-site / cross-dataset evaluation,8,0
-Screening,External validation,110,6
+Screening,External validation,110,7
 Screening,Multisource integration,110,14
-Screening,Explainability (broad),110,34
+Screening,Explainability (broad),110,35
 Screening,Cross-site / cross-dataset evaluation,110,3
 Diagnosis,External validation,214,15
 Diagnosis,Multisource integration,214,36
-Diagnosis,Explainability (broad),214,70
+Diagnosis,Explainability (broad),214,76
 Diagnosis,Cross-site / cross-dataset evaluation,214,14
 Prognosis,External validation,22,0
 Prognosis,Multisource integration,22,10
 Prognosis,Explainability (broad),22,7
 Prognosis,Cross-site / cross-dataset evaluation,22,0
 Monitoring/intervention,External validation,38,0
-Monitoring/intervention,Multisource integration,38,7
+Monitoring/intervention,Multisource integration,38,8
 Monitoring/intervention,Explainability (broad),38,3
 Monitoring/intervention,Cross-site / cross-dataset evaluation,38,0
 Not specified,External validation,29,4
 Not specified,Multisource integration,29,6
-Not specified,Explainability (broad),29,9
+Not specified,Explainability (broad),29,10
 Not specified,Cross-site / cross-dataset evaluation,29,0

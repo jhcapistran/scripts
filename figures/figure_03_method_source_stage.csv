@@ -47,7 +47,7 @@ Screening,Machine Learning,Multiple source categories,1
 Screening,Machine Learning,Biological/omics,2
 Screening,Machine Learning,Text/language,1
 Screening,Machine Learning,Not specified,1
-Screening,Machine Learning,Audio/voice,0
+Screening,Machine Learning,Audio/voice,1
 Screening,Machine Learning,Other biomedical/digital data,1
 Screening,Deep Learning,Neuroimaging,1
 Screening,Deep Learning,Structured clinical/questionnaire data,11
@@ -77,7 +77,7 @@ Screening,Not specified,Multiple source categories,0
 Screening,Not specified,Biological/omics,0
 Screening,Not specified,Text/language,1
 Screening,Not specified,Not specified,0
-Screening,Not specified,Audio/voice,1
+Screening,Not specified,Audio/voice,0
 Screening,Not specified,Other biomedical/digital data,0
 Diagnosis,Machine Learning,Neuroimaging,34
 Diagnosis,Machine Learning,Structured clinical/questionnaire data,17
@@ -87,7 +87,7 @@ Diagnosis,Machine Learning,Multiple source categories,9
 Diagnosis,Machine Learning,Biological/omics,19
 Diagnosis,Machine Learning,Text/language,0
 Diagnosis,Machine Learning,Not specified,1
-Diagnosis,Machine Learning,Audio/voice,1
+Diagnosis,Machine Learning,Audio/voice,2
 Diagnosis,Machine Learning,Other biomedical/digital data,1
 Diagnosis,Deep Learning,Neuroimaging,47
 Diagnosis,Deep Learning,Structured clinical/questionnaire data,1
@@ -117,7 +117,7 @@ Diagnosis,Not specified,Multiple source categories,1
 Diagnosis,Not specified,Biological/omics,0
 Diagnosis,Not specified,Text/language,0
 Diagnosis,Not specified,Not specified,1
-Diagnosis,Not specified,Audio/voice,1
+Diagnosis,Not specified,Audio/voice,0
 Diagnosis,Not specified,Other biomedical/digital data,0
 Prognosis,Machine Learning,Neuroimaging,2
 Prognosis,Machine Learning,Structured clinical/questionnaire data,6
@@ -163,10 +163,10 @@ Monitoring/intervention,Machine Learning,Neuroimaging,0
 Monitoring/intervention,Machine Learning,Structured clinical/questionnaire data,2
 Monitoring/intervention,Machine Learning,Behavioral images/video/gaze/movement,1
 Monitoring/intervention,Machine Learning,Physiological signals,1
-Monitoring/intervention,Machine Learning,Multiple source categories,0
+Monitoring/intervention,Machine Learning,Multiple source categories,1
 Monitoring/intervention,Machine Learning,Biological/omics,1
 Monitoring/intervention,Machine Learning,Text/language,0
-Monitoring/intervention,Machine Learning,Not specified,1
+Monitoring/intervention,Machine Learning,Not specified,0
 Monitoring/intervention,Machine Learning,Audio/voice,0
 Monitoring/intervention,Machine Learning,Other biomedical/digital data,0
 Monitoring/intervention,Deep Learning,Neuroimaging,0

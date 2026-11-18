@@ -11,7 +11,7 @@ Screening,Behavioral images/video/gaze/movement,Deep Learning,17,External valida
 Screening,Behavioral images/video/gaze/movement,Deep Learning,17,Multisource integration,0
 Screening,Behavioral images/video/gaze/movement,Deep Learning,17,Explainability (broad),3
 Screening,Behavioral images/video/gaze/movement,Deep Learning,17,Cross-site / cross-dataset evaluation,1
-Screening,Behavioral images/video/gaze/movement,Machine Learning,12,External validation,1
+Screening,Behavioral images/video/gaze/movement,Machine Learning,12,External validation,2
 Screening,Behavioral images/video/gaze/movement,Machine Learning,12,Multisource integration,3
 Screening,Behavioral images/video/gaze/movement,Machine Learning,12,Explainability (broad),2
 Screening,Behavioral images/video/gaze/movement,Machine Learning,12,Cross-site / cross-dataset evaluation,0
@@ -25,11 +25,11 @@ Diagnosis,Neuroimaging,Deep Learning,47,Explainability (broad),15
 Diagnosis,Neuroimaging,Deep Learning,47,Cross-site / cross-dataset evaluation,4
 Diagnosis,Neuroimaging,Machine Learning,34,External validation,2
 Diagnosis,Neuroimaging,Machine Learning,34,Multisource integration,3
-Diagnosis,Neuroimaging,Machine Learning,34,Explainability (broad),10
+Diagnosis,Neuroimaging,Machine Learning,34,Explainability (broad),12
 Diagnosis,Neuroimaging,Machine Learning,34,Cross-site / cross-dataset evaluation,2
 Diagnosis,Biological/omics,Machine Learning,19,External validation,2
 Diagnosis,Biological/omics,Machine Learning,19,Multisource integration,2
-Diagnosis,Biological/omics,Machine Learning,19,Explainability (broad),10
+Diagnosis,Biological/omics,Machine Learning,19,Explainability (broad),11
 Diagnosis,Biological/omics,Machine Learning,19,Cross-site / cross-dataset evaluation,2
 Diagnosis,Physiological signals,Deep Learning,17,External validation,0
 Diagnosis,Physiological signals,Deep Learning,17,Multisource integration,0
@@ -41,7 +41,7 @@ Diagnosis,Structured clinical/questionnaire data,Machine Learning,17,Explainabil
 Diagnosis,Structured clinical/questionnaire data,Machine Learning,17,Cross-site / cross-dataset evaluation,0
 Diagnosis,Physiological signals,Machine Learning,14,External validation,0
 Diagnosis,Physiological signals,Machine Learning,14,Multisource integration,0
-Diagnosis,Physiological signals,Machine Learning,14,Explainability (broad),5
+Diagnosis,Physiological signals,Machine Learning,14,Explainability (broad),6
 Diagnosis,Physiological signals,Machine Learning,14,Cross-site / cross-dataset evaluation,0
 Diagnosis,Behavioral images/video/gaze/movement,Deep Learning,9,External validation,0
 Diagnosis,Behavioral images/video/gaze/movement,Deep Learning,9,Multisource integration,0
