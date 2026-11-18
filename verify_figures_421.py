@@ -4,6 +4,7 @@ from collections import Counter
 import json
 import hashlib
 import pandas as pd
+from openpyxl import load_workbook
 
 from generate_manuscript_figures import BASE_DIR, SOURCE, PRACTICES, profiles, load_data
 from plot_figure2_reclassified import FAMILIES, COUNTS, DOI_SHA256
@@ -18,6 +19,15 @@ EXPECTED_PRACTICES = {
 
 def main():
     df = load_data(SOURCE)
+    book = load_workbook(SOURCE, read_only=True, data_only=True)
+    if book.sheetnames != ['01_Search_strategies', '02_Included_reports', '03_Coding_framework']:
+        raise AssertionError('Supplement must contain the three publication sheets')
+    cols = list(next(book['02_Included_reports'].iter_rows(min_row=2, max_row=2, values_only=True)))
+    if len(cols) != 20 or cols[10] != 'Algorithm family / identification status' or cols[-1] != 'Model configuration':
+        raise AssertionError('Supplement must retain all 20 charting columns')
+    config = [r[0] for r in book['02_Included_reports'].iter_rows(min_row=3, min_col=20, max_col=20, values_only=True)]
+    if len(config) != 421 or len(set(config)) != 6:
+        raise AssertionError('Missing independent model-configuration coding')
     practice_counts = {label: int((df[col] == "Reported").sum())
                        for col, label in PRACTICES}
     if practice_counts != EXPECTED_PRACTICES:

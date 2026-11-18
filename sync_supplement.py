@@ -1,7 +1,8 @@
 """Synchronize the current 421-report RQ1 allocation in Supplementary Data S1.
 
-Only the 34 adjudicated principal-algorithm descriptions and algorithm-family
-labels change. RQ2/RQ3, bibliographic records and functional stages are preserved.
+The current 421-report RQ1 classification is synchronized without changing
+bibliographic records or RQ2/RQ3. The 20-field/three-sheet publication
+layout includes an independent Model configuration code.
 """
 from __future__ import annotations
 
@@ -57,86 +58,173 @@ METHODS = {
 "S421": "Stakeholder evaluation of ML-assisted platform; classifier family undisclosed.",
 }
 
+
+from copy import copy
+from openpyxl.styles import Alignment
+
+MODEL_LABELS = {
+    "A": "One principal family/method; full configuration not established",
+    "B": "Integrated pipeline or architecture",
+    "C": "Independent comparisons or separate tasks",
+    "D": "Configuration not established",
+    "E": "Prediction ensemble",
+    "F": "Integrated pipeline and prediction ensemble",
+}
+# Current study-level configuration codes from the 421-report supplementary template.
+MODEL_CODES = (
+    "ACDCCEAEDDDAAACAAAACCCBAACAACCAAACCCDABDBAAACAAAAAAACAAADAAADAAAABBAAAADABBDAABC"
+    "BADBBAAAAADACABECAADAAAAAAAABBAAAAAAADBDACACAAAABAAAAAABCCAAABAAABABABBAEDCAAACA"
+    "BBEABAAAAAABAAADDAEACAEFABAADDDAACAAAAAAAAABBDAAAAAAADACAAECDAAABAAAADBAADAAAADA"
+    "AAAADADBDAECACAAAABAACAAACCCAAAEBDAAAACEEBACACAACCBBAEAADBCEBCAABDABEABBBAABDABB"
+    "BBABBBAABAAACBABADBDABABAEAABBAAABAABABAABBAAFAAACDCAEACDCEAEDAABADABADFBAAAACAA"
+    "CEDCAABCAAFBCCBAAABAD"
+)
+METHOD_LABEL_FIXES = {
+    "S007": "Shallow feedforward neural network",
+    "S012": "Linear SVM",
+    "S020": "Random forest selected after comparison with SVM and MLP; two-stage severity classification",
+    "S040": "Transformer-family language model proposed; implemented architecture not specified",
+    "S058": "Clustering-based analysis; subtype not specified",
+    "S081": "Elastic-net classifier; logistic-regression ablation; polynomial gaze regression",
+    "S120": "Support vector machines / regression; precise diagnostic-boundary estimator configuration not specified",
+    "S137": "Regularized Greedy Forest; ET/RF comparators",
+    "S141": "Gradient boosting classifier",
+    "S146": "DecisionTreeClassifier on computer-vision gaze measurements",
+    "S162": "Supervised canonical graph matching with support-vector classification; graph construction upstream",
+    "S164": "SVM for case-control prediction from static/dynamic connectivity; Louvain analysis ancillary",
+    "S168": "Random forest on EEG and baseline clinical features",
+    "S183": "Convolutional-network classification with atlas-specific majority-vote aggregation; backbone not specified",
+    "S194": "Linear SVM with nested principal-component reduction",
+    "S216": "XGBoost selected by AU-PRC; RF/DT comparators; k-means on SHAP embeddings for subgroup analysis",
+    "S217": "Regression tree with adaptive selection of follow-up questions",
+    "S281": "Bagged L2-regularized logistic regression classifiers"
+}
+
 def main():
     mapping = pd.read_csv(ALLOCATION, dtype="string")
-    assert mapping.columns.tolist() == ["Report ID", "Algorithm family"]
-    ids = [f"S{i:03}" for i in range(1, 422)]
-    if mapping["Report ID"].tolist() != ids:
-        raise ValueError("Missing or out-of-order included report identifiers")
-    assignment = dict(zip(ids, mapping["Algorithm family"].tolist()))
-    counts = Counter(assignment.values())
+    ids = [f"S{i:03d}" for i in range(1, 422)]
+    if mapping.columns.tolist() != ["Report ID", "Algorithm family"] or mapping["Report ID"].tolist() != ids:
+        raise ValueError("RQ1 allocation must include 421 reports with current columns")
+    allocation = dict(zip(ids, mapping["Algorithm family"].tolist()))
+    counts = Counter(allocation.values())
     if len(counts) != 21 or (counts[UNRESOLVED], counts[MULTIPLE], counts[NEURAL]) != (9, 95, 32):
-        raise ValueError("Wrong RQ1 category distribution")
-    assert len(METHODS) == 34
+        raise ValueError("Inconsistent algorithm-family counts")
+    if len(MODEL_CODES) != 421 or set(MODEL_CODES) != set(MODEL_LABELS):
+        raise ValueError("Model configuration codes must cover all 421 reports")
+
     wb = load_workbook(SUPPLEMENT)
     ws = wb["02_Included_reports"]
-    fields = {ws.cell(2, j).value: j for j in range(1, 20)}
-    actual = [ws.cell(r, fields["Report ID"]).value for r in range(3, 424)]
+    fields = {ws.cell(2, col).value: col for col in range(1, 21) if ws.cell(2, col).value is not None}
+    family_col = fields.get("Algorithm family / identification status", fields.get("Algorithm family"))
+    if family_col != 11:
+        raise ValueError("The 11th report field must be the algorithm-family allocation")
+    for col, label in ((1, "Report ID"), (6, "DOI"), (10, "Principal algorithm")):
+        if fields.get(label) != col:
+            raise ValueError(f"Unexpected field position for {label}")
+
+    actual = [ws.cell(row, 1).value for row in range(3, 424)]
     if ws.max_row != 423 or actual != ids:
-        raise ValueError("Workbook must contain S001-S421 exactly once")
-    dois = [str(ws.cell(r, fields["DOI"]).value or "").strip().lower().removeprefix("https://doi.org/")
-            for r in range(3, 424)]
+        raise ValueError("The workbook must include each report S001-S421 once")
+    dois = [str(ws.cell(row, 6).value or "").strip().lower().removeprefix("https://doi.org/")
+            for row in range(3, 424)]
     fingerprint = hashlib.sha256(("\n".join(dois) + "\n").encode()).hexdigest()
     if fingerprint != DOI_SHA:
-        raise ValueError("Report DOI fingerprint does not match the frozen corpus")
-    for r, rid in enumerate(ids, 3):
-        ws.cell(r, fields["Algorithm family"], assignment[rid])
+        raise ValueError("The DOI inventory does not match the retained corpus")
+
+    # Restore the manuscript's 20-field charting layout; the model-configuration
+    # field is independent of the mutually exclusive principal-family allocation.
+    ws["A1"] = "Included reports and data charting"
+    ws["K2"] = "Algorithm family / identification status"
+    ws["T2"] = "Model configuration"
+    ws["T2"]._style = copy(ws["S2"]._style)
+    ws.column_dimensions["T"].width = 46
+    for row, rid in enumerate(ids, 3):
+        ws.cell(row, 11, allocation[rid])
         if rid in METHODS:
-            ws.cell(r, fields["Principal algorithm"], METHODS[rid])
+            ws.cell(row, 10, METHODS[rid])
+        if rid in METHOD_LABEL_FIXES:
+            ws.cell(row, 10, METHOD_LABEL_FIXES[rid])
+        cell = ws.cell(row, 20, MODEL_LABELS[MODEL_CODES[row - 3]])
+        cell._style = copy(ws.cell(row, 19)._style)
+        cell.alignment = copy(ws.cell(row, 19).alignment)
+    if "IncludedReports" in ws.tables:
+        ws.tables["IncludedReports"].ref = "A2:T423"
+
+    # The coding framework matches the three-sheet publication version.
+    cb = wb["03_Coding_framework"]
+    rows = [list(r) for r in cb.iter_rows(min_row=3, max_col=5, values_only=True)
+            if r[1] is not None]
+    for row in rows:
+        if row[1] in ("Algorithm family", "Algorithm family / identification status"):
+            row[1] = "Algorithm family / identification status"
+            row[2] = "One mutually exclusive current principal-family category or identification state per bibliographic report."
+            row[3] = "; ".join(sorted(counts))
+            row[4] = "Each report contributes once. The three identification states are not additional algorithm families."
+        elif row[1] == "Principal algorithm":
+            row[2] = "Principal model or computational approach recorded for the report-level objective."
+            row[4] = "Auxiliary preprocessing, feature selection and embedding methods are not automatically the final classifier."
+        elif row[1] == "Model configuration":
+            row[2] = "Study-level arrangement of computational methods, separate from principal algorithm family."
+            row[3] = "; ".join(MODEL_LABELS.values())
+        elif row[1] == "Publication year":
+            row[4] = "Bibliographic year of publication; no temporal trend analysis is reported."
+    if not any(r[1] == "Model configuration" for r in rows):
+        at = next(i for i, r in enumerate(rows) if r[1] == "Algorithm family / identification status")
+        rows.insert(at + 1, ["RQ1", "Model configuration",
+                    "Study-level arrangement of computational methods, separate from principal algorithm family.",
+                    "; ".join(MODEL_LABELS.values()),
+                    "Model comparisons are not necessarily prediction ensembles; sequential pipelines can integrate methods without aggregating predictions."])
+    if not any(r[1] == "Source-scope limitation" for r in rows):
+        at = next(i for i, r in enumerate(rows) if r[1] == "Search documentation")
+        rows.insert(at, ["Interpretation", "Source-scope limitation",
+                         "The scope and detail of assessed source material vary across reports.",
+                         "Report-level charting and source notes",
+                         "Field-level assessments are limited to the available evidence."])
+    states = {
+        MULTIPLE: "Multiple model families with no unique supportable principal family.",
+        NEURAL: "A neural network is identified without an established architectural subtype.",
+        UNRESOLVED: "The principal decision-producing estimator family cannot be established.",
+    }
+    for state, definition in states.items():
+        if not any(r[1] == state for r in rows):
+            rows.append(["RQ1 identification state", state, definition, state,
+                         "The report remains in the denominator; no principal family is inferred."])
+
+    styles = [copy(cb.cell(3, c)._style) for c in range(1, 6)]
+    cb.delete_rows(3, cb.max_row - 2)
+    for data in rows:
+        cb.append(data)
+        for c in range(1, 6):
+            cell = cb.cell(cb.max_row, c)
+            cell._style = copy(styles[c - 1])
+            cell.alignment = Alignment(vertical="center", wrap_text=True)
+        cb.row_dimensions[cb.max_row].height = 90 if data[1] == "Algorithm family / identification status" else 75
+    cb["A1"] = "Coding framework"
+    cb.row_dimensions[13].height = 178
+    cb.row_dimensions[14].height = 110
+    if "CodingFramework" in cb.tables:
+        cb.tables["CodingFramework"].ref = f"A2:E{cb.max_row}"
+
+    for sheet in list(wb):
+        if sheet.title not in ("01_Search_strategies", "02_Included_reports", "03_Coding_framework"):
+            del wb[sheet.title]
+    wb["01_Search_strategies"]["A1"] = " Search strategies"
     for sheet in wb:
         for row in sheet:
             for cell in row:
                 if getattr(cell, "comment", None) is not None:
                     cell.comment = None
-    cb = wb["03_Coding_framework"]
-    for r in range(3, cb.max_row + 1):
-        field = cb.cell(r, 2).value
-        if field == "Publication year":
-            cb.cell(r, 5, "Publication year reported in the bibliographic record.")
-        if field == "Principal algorithm":
-            cb.cell(r, 3, "Principal algorithm or computational method used for the report objective.")
-            cb.cell(r, 5, "Feature extraction or selection does not necessarily identify the final model.")
-        if field == "Algorithm family":
-            cb.cell(r, 3, "One of 21 mutually exclusive current principal-family categories or identification states.")
-            cb.cell(r, 4, "; ".join(sorted(counts)))
-            cb.cell(r, 5, "One report contributes once; the three identification states are not algorithm families.")
-    for r in range(cb.max_row, 2, -1):
-        if cb.cell(r, 2).value == "Source-scope limitation":
-            cb.delete_rows(r)
-    for label, definition in {
-        MULTIPLE: "Multiple model families with no unique supportable principal family.",
-        NEURAL: "A neural network is documented, but architectural subtype cannot be identified.",
-        UNRESOLVED: "AI application or auxiliary algorithms are described, but the principal estimator family cannot be established.",
-    }.items():
-        if not any(cb.cell(r, 2).value == label for r in range(3, cb.max_row + 1)):
-            cb.append(["RQ1", label, definition, label, "This state remains in the denominator."])
-    if "04_Current_RQ1_counts" in wb.sheetnames:
-        del wb["04_Current_RQ1_counts"]
-    summary = wb.create_sheet("04_Current_RQ1_counts")
-    stages = ["Prescreening", "Screening", "Diagnosis", "Prognosis", "Monitoring/intervention", "Not specified"]
-    summary.append(["Current algorithm-family classification", "Reports", "Share", *stages])
-    for family in sorted(counts):
-        values = [sum(ws.cell(r, fields["Algorithm family"]).value == family
-                      and ws.cell(r, fields["Primary functional stage"]).value == stage
-                      for r in range(3, 424)) for stage in stages]
-        summary.append([family, counts[family], counts[family] / 421, *values])
-    summary.append(["TOTAL", 421, 1.0, *[
-        sum(ws.cell(r, fields["Primary functional stage"]).value == stage for r in range(3, 424))
-        for stage in stages]])
-    summary.column_dimensions["A"].width = 50
-    for name in "BCDEFGHI":
-        summary.column_dimensions[name].width = 23
-    summary.freeze_panes = "B2"
-    summary.auto_filter.ref = f"A1:I{summary.max_row}"
-    for r in range(2, summary.max_row + 1):
-        summary.cell(r, 3).number_format = "0.0%"
-    wb.properties.creator = "Research team"
-    wb.properties.lastModifiedBy = "Research team"
-    wb.properties.title = "Supplementary Data S1: 421 included ASD AI reports"
-    wb.properties.subject = "Current study-level codings for RQ1-RQ3"
-    wb.properties.description = "Current 421-report inventory; no adjudication history."
+
+    assert wb.sheetnames == ["01_Search_strategies", "02_Included_reports", "03_Coding_framework"]
+    assert cb.max_row == 35 and ws.max_column == 20
+    wb.properties.title = "Supplementary Data S1: Search strategies and included-report charting"
+    wb.properties.creator = "Authors"
+    wb.properties.lastModifiedBy = "Authors"
+    wb.properties.subject = "ASD and AI: 421 included reports"
+    wb.properties.description = "Current report-level algorithms and model configurations"
     wb.save(SUPPLEMENT)
-    print("S1 synchronized:", sum(counts.values()), "reports;", len(counts), "families/states")
+    print("S1 publication layout synchronized: 421 reports, 20 fields, 3 sheets, 21 RQ1 states")
+
 
 if __name__ == "__main__":
     main()

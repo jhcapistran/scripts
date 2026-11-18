@@ -54,6 +54,8 @@ def load_data(path: Path) -> pd.DataFrame:
         raise FileNotFoundError('The 421-report supplement is required: ' + str(path))
     # Title occupies row 1 and column headings row 2.
     df = pd.read_excel(path, sheet_name='02_Included_reports', header=1)
+    if 'Algorithm family / identification status' in df.columns:
+        df['Algorithm family'] = df['Algorithm family / identification status']
     df = df.loc[df['Report ID'].astype(str).str.match(r'^S\d{3}$')].copy()
     df = df.fillna('Not ascertainable')
     if len(df) != 421:

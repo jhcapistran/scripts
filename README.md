@@ -7,7 +7,7 @@ managed in the manuscript and is intentionally not generated here.
 
 ## Data
 
-- [`Supplementary_Data_S1_simplificado_421.xlsx`](Supplementary_Data_S1_simplificado_421.xlsx): 421 bibliographic reports S001–S421, including their current algorithm-family assignments and RQ2/RQ3 coding.
+- [`Supplementary_Data_S1_simplificado_421.xlsx`](Supplementary_Data_S1_simplificado_421.xlsx): 421 bibliographic reports S001–S421, supplied in the publication's three-sheet layout with 20 fields, including current RQ1 families, independent model configurations and RQ2/RQ3 coding.
 - [`rq1_algorithm_family_421.csv`](rq1_algorithm_family_421.csv): report-level current RQ1 family assignment (21 categories).
 
 RQ1: 285 reports have an identifiable principal family or computational method;
