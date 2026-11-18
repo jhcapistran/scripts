@@ -1,8 +1,8 @@
 """Synchronize the current 421-report RQ1 allocation in Supplementary Data S1.
 
-The current 421-report RQ1 classification is synchronized without changing
-bibliographic records or RQ2/RQ3. The 20-field/three-sheet publication
-layout includes an independent Model configuration code.
+Synchronizes the final 421-report classifications after direct review of 19
+full texts, retaining the three-sheet publication layout and all 20 fields.
+Only evidence-supported coding fields are revised; no records are added.
 """
 from __future__ import annotations
 
@@ -100,6 +100,49 @@ METHOD_LABEL_FIXES = {
     "S281": "Bagged L2-regularized logistic regression classifiers"
 }
 
+# Evidence-supported amendments from the original Methods/Results of 19 PDFs.
+# RQ3 labels are mutually exclusive reporting statuses; these edits are idempotent.
+EVIDENCE_UPDATES = {
+    "S003": {
+        "External validation": "Not reported in assessed sources",
+        "Explainability: broad": "Reported"
+    },
+    "S009": {
+        "AI category": "Machine Learning",
+        "Explainability: broad": "Reported"
+    },
+    "S057": {
+        "Explainability: broad": "Reported"
+    },
+    "S075": {
+        "Explainability: broad": "Reported"
+    },
+    "S154": {
+        "Primary data source": "Multiple source categories",
+        "Multisource integration": "Reported"
+    },
+    "S176": {
+        "External validation": "Reported"
+    },
+    "S190": {
+        "Explainability: broad": "Reported"
+    },
+    "S245": {
+        "AI category": "Machine Learning"
+    },
+    "S306": {
+        "Functional role": "Automated measurement/classification",
+        "External validation": "Not reported in assessed sources",
+        "Explainability: broad": "Reported"
+    },
+    "S317": {
+        "Explainability: broad": "Reported"
+    },
+    "S362": {
+        "Explainability: broad": "Reported"
+    }
+}
+
 def main():
     mapping = pd.read_csv(ALLOCATION, dtype="string")
     ids = [f"S{i:03d}" for i in range(1, 422)]
@@ -144,9 +187,27 @@ def main():
             ws.cell(row, 10, METHODS[rid])
         if rid in METHOD_LABEL_FIXES:
             ws.cell(row, 10, METHOD_LABEL_FIXES[rid])
+        for field, label in EVIDENCE_UPDATES.get(rid, {}).items():
+            if field not in fields:
+                raise KeyError("Missing supplementary coding field: " + field)
+            ws.cell(row, fields[field], label)
         cell = ws.cell(row, 20, MODEL_LABELS[MODEL_CODES[row - 3]])
         cell._style = copy(ws.cell(row, 19)._style)
         cell.alignment = copy(ws.cell(row, 19).alignment)
+    expected_practice_counts = {
+        "External validation": ("Reported", 26, "Not ascertainable", 5),
+        "Multisource integration": ("Reported", 75, "Not ascertainable", 15),
+        "Explainability: broad": ("Reported", 136, "Not ascertainable", 8),
+        "Cross-site or cross-dataset evaluation": ("Reported", 17, "Not ascertainable", 3),
+    }
+    for field, (positive, n_positive, uncertain, n_uncertain) in expected_practice_counts.items():
+        values = Counter(ws.cell(i, fields[field]).value for i in range(3, 424))
+        if values[positive] != n_positive or values[uncertain] != n_uncertain:
+            raise ValueError(f"Incorrect current reporting counts for {field}: {values}")
+    ai_counts = Counter(ws.cell(i, fields["AI category"]).value for i in range(3, 424))
+    source_counts = Counter(ws.cell(i, fields["Primary data source"]).value for i in range(3, 424))
+    assert ai_counts["Machine Learning"] == 217 and ai_counts["Not specified"] == 18
+    assert source_counts["Multiple source categories"] == 44 and source_counts["Not specified"] == 14
     if "IncludedReports" in ws.tables:
         ws.tables["IncludedReports"].ref = "A2:T423"
 
@@ -223,7 +284,7 @@ def main():
     wb.properties.subject = "ASD and AI: 421 included reports"
     wb.properties.description = "Current report-level algorithms and model configurations"
     wb.save(SUPPLEMENT)
-    print("S1 publication layout synchronized: 421 reports, 20 fields, 3 sheets, 21 RQ1 states")
+    print("S1 final: 421 reports, 20 fields, 3 sheets, 16 verified coding corrections")
 
 
 if __name__ == "__main__":

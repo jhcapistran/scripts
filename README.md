@@ -29,14 +29,18 @@ To generate a subset: `python generate_manuscript_figures.py --figures 2 3`.
 The compatibility entry points for RQ1, RQ2, RQ3 and all figures still use
 the same `figures/` directory. No additional results folders are generated.
 
+The supplementary workbook incorporates 16 evidence-supported field updates
+from direct assessment of 19 original full texts. The report inventory, RQ2
+application-evidence classes and the six functional stages are unchanged.
+
 Figures 2–8 use the prior visual design, with current underlying numbers.
 The bubble matrix in Figure 2 displays 21 rows by six functional stages,
 with report counts in the circles and a divider before the three
 identification states.
 
 The verifier checks unique report IDs and DOI fingerprint, 21 RQ1 category
-counts, the matrix total (421), methodological-practice reporting (25 external
-validation, 74 multisource integration, 128 explainability, 17 cross-site),
+counts, the matrix total (421), methodological-practice reporting (26 external
+validation, 75 multisource integration, 136 explainability, 17 cross-site),
 17 selected RQ3 profiles (275 reports), and all exported figure formats.
 Neither the figure directory nor the counts represent clinical validation
 of the underlying AI systems.

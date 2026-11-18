@@ -11,9 +11,9 @@ from plot_figure2_reclassified import FAMILIES, COUNTS, DOI_SHA256
 
 FIGURES = BASE_DIR / "figures"
 EXPECTED_PRACTICES = {
-    "External validation": 25,
-    "Multisource integration": 74,
-    "Explainability (broad)": 128,
+    "External validation": 26,
+    "Multisource integration": 75,
+    "Explainability (broad)": 136,
     "Cross-site / cross-dataset evaluation": 17,
 }
 
